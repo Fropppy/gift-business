@@ -65,7 +65,7 @@ if (indexHtml) {
   // script must be one of these: synchronous, pre-paint, not type=module.
   const plainHeadScripts = [...head.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
   const themeScript = plainHeadScripts.find((s) => s.includes('data-theme')) ?? null;
-  const themeScriptMatch = themeScript === null ? null : [null, themeScript];
+  
 
   assert(
     'theme script present in <head> (plain, pre-paint <script>, not type=module)',
@@ -76,28 +76,28 @@ if (indexHtml) {
   );
   assert(
     'theme script persists manual choice via localStorage nm:theme',
-    themeScriptMatch !== null && themeScriptMatch[0].includes("localStorage") && themeScriptMatch[0].includes('nm:theme')
+    themeScript !== null && themeScript.includes("localStorage") && themeScript.includes('nm:theme')
   );
   assert(
     'theme whitelist covers base/tet/trung-thu',
-    themeScriptMatch !== null &&
-      themeScriptMatch[0].includes("'base'") &&
-      themeScriptMatch[0].includes("'tet'") &&
-      themeScriptMatch[0].includes("'trung-thu'")
+    themeScript !== null &&
+      themeScript.includes("'base'") &&
+      themeScript.includes("'tet'") &&
+      themeScript.includes("'trung-thu'")
   );
   assert(
     'data-theme handling: script sets data-theme attribute',
-    themeScriptMatch !== null && themeScriptMatch[0].includes("setAttribute('data-theme'")
+    themeScript !== null && themeScript.includes("setAttribute('data-theme'")
   );
   assert(
     'script enables the switcher via data-theme-ui',
-    themeScriptMatch !== null && themeScriptMatch[0].includes("data-theme-ui")
+    themeScript !== null && themeScript.includes("data-theme-ui")
   );
   assert(
     'seasonal auto map: Nov–Feb → tet, September → trung-thu',
-    themeScriptMatch !== null &&
-      /getMonth\(\)\s*\+\s*1/.test(themeScriptMatch[0]) &&
-      themeScriptMatch[0].includes("'trung-thu'")
+    themeScript !== null &&
+      /getMonth\(\)\s*\+\s*1/.test(themeScript) &&
+      themeScript.includes("'trung-thu'")
   );
 
   /* --- 2. theme switcher control rendered --- */

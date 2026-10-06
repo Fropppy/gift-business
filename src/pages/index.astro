@@ -6,7 +6,6 @@ import CategoryGrid from '../components/CategoryGrid.astro';
 import ProductGrid from '../components/ProductGrid.astro';
 import Steps from '../components/Steps.astro';
 import Commitments from '../components/Commitments.astro';
-import Testimonials from '../components/Testimonials.astro';
 import ContactForm from '../components/ContactForm.astro';
 import SectionHead from '../components/SectionHead.astro';
 import { site } from '../utils/site';
@@ -82,8 +81,35 @@ const featured = [...withBadge, ...products.filter((p) => !p.badge)].slice(0, 8)
     </div>
   </section>
 
-  <!-- 8. Khách nói về shop -->
-  <Testimonials />
+  <!-- 8. Real proof only (§1.4/§6.3): the invented-customer testimonials are
+       gone. This band renders nothing but facts the site already owns —
+       years in business, real phone + hours, the reply promise. Real quotes
+       return only per the §6.3 go-live criterion (real customers, with
+       permission; no star ratings or review counts until there are real
+       reviews to count). -->
+  <section class="section section--surface" id="ve-shop-minh" aria-label="Về shop mình">
+    <div class="container">
+      <SectionHead
+        eyebrow="Chuyện thật của shop"
+        title="Mình chỉ nói điều mình làm được"
+        lead="Không có review giả ở đây — khi có khách thật đồng ý chia sẻ, mình mới đưa lên."
+      />
+      <div class="proof-band">
+        <div class="proof-item">
+          <strong>{site.yearsInBusiness} năm</strong>
+          <span>gia đình mình gói quà thủ công, giao tận nơi.</span>
+        </div>
+        <div class="proof-item">
+          <strong>{site.phoneDisplay}</strong>
+          <span>hotline · mở cửa {site.hours}.</span>
+        </div>
+        <div class="proof-item">
+          <strong>{site.replyWithin}</strong>
+          <span>trả lời tin nhắn và gọi lại khi bạn để lại số qua form.</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- 9. Liên hệ & đặt quà ngay -->
   <section class="section section--surface" id="lien-he">

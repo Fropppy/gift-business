@@ -887,37 +887,50 @@ button { font-family: inherit; }
 
 @media (max-width: 860px) { .story-grid { grid-template-columns: 1fr; } }
 
-/* ---------- testimonials ---------- */
-.testi-grid {
+/* ---------- FAQ (contact page) ---------- */
+.faq-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.1rem;
+  gap: var(--space-5);
 }
 
-.testi {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
+.faq-card {
   padding: 1.4rem 1.45rem;
   border-radius: var(--radius);
   background: var(--surface);
   border: 1px solid var(--border);
 }
 
-.stars { display: flex; gap: 0.15rem; color: var(--gold); }
+@media (max-width: 920px) { .faq-grid { grid-template-columns: 1fr; } }
 
-.testi blockquote {
-  margin: 0;
+/* ---------- real-proof band (§1.4/§6.3) ---------- */
+/* Renders only facts the site already owns (site.json): years in business,
+   real phone + hours, reply promise. Never invented social proof. */
+.proof-band {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+
+.proof-item {
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--border);
+  /* --accent is the decorative role: borders, never text (§3.1) */
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.proof-item strong {
+  display: block;
   font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.02rem;
-  line-height: 1.55;
+  font-size: 1.25rem;
   color: var(--text);
 }
 
-.testi figcaption { color: var(--muted); font-size: 0.88rem; }
+.proof-item span { color: var(--muted); font-size: var(--font-size-sm); }
 
-@media (max-width: 920px) { .testi-grid { grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .proof-band { grid-template-columns: 1fr; } }
 
 /* ---------- contact ---------- */
 .contact-grid {
