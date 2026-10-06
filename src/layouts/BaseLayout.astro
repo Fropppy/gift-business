@@ -21,6 +21,21 @@ const base = import.meta.env.BASE_URL;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light" />
+    <!-- Content-Security-Policy — meta form because GitHub Pages serves no
+         response headers. Honest about its limits: the theme engine must stay
+         is:inline (§2.5) and Astro inlines every bundled module script, so
+         nonces/hashes are impossible without restructuring — script-src
+         therefore carries 'unsafe-inline' and this policy does NOT stop
+         inline XSS. What it does: deny by default and allow-list exactly
+         the origins the site loads (Google Fonts CSS + font files, the
+         Apps Script webhook), so any injected payload cannot pull remote
+         code or exfiltrate to an attacker origin. form-action is 'self'
+         (not 'none') so the no-JS form POST keeps its current behaviour —
+         it POSTs to the page itself; the JS path uses fetch → connect-src. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src https://script.google.com; base-uri 'self'; form-action 'self'"
+    />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={pageTitle} />

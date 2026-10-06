@@ -20,6 +20,9 @@
  *   5. The invented testimonials are gone site-wide: no "Chị Hương", no
  *      class="stars", zero class="testi… anywhere under dist/ (step 6).
  *   6. The carousel is gone: no data-carousel / hero-dot markup (step 5).
+ *   7. The Content-Security-Policy meta ships on EVERY page under dist/
+ *      and denies by default (default-src 'none') — the policy's whole
+ *      value is that it is present in the shipped HTML.
  *
  * Exit 1 on any failed assertion.
  */
@@ -179,6 +182,18 @@ assert(
   'no class="testi…" / class="stars" anywhere under dist/',
   offenders.length === 0,
   offenders.length ? `found in: ${offenders.map((f) => path.relative(distDir, f)).join(', ')}` : `${allHtml.length} HTML files swept`
+);
+
+/* --- 7. CSP meta on every page, defaulting to deny --- */
+const noCsp = allHtml.filter((f) => {
+  const html = readFileSync(f, 'utf8');
+  const meta = html.match(/<meta\s+http-equiv="Content-Security-Policy"/);
+  return !(meta && html.includes("default-src 'none'"));
+});
+assert(
+  'Content-Security-Policy meta (default-src none) on every page',
+  noCsp.length === 0,
+  noCsp.length ? `missing on: ${noCsp.map((f) => path.relative(distDir, f)).join(', ')}` : `${allHtml.length}/${allHtml.length} pages`
 );
 
 console.log(`\ncheck-output: ${allHtml.length} HTML files checked under ${distDir}`);
