@@ -21,8 +21,6 @@ Now/Later stay honest).
   needs the corrected version now in operations.md.
 - Flip docs/design-language.md:3 `Status: proposed` → implemented (all 10
   plan steps shipped; contrast/output gates green).
-- Act on dependabot PR #1 (actions/setup-node 4.4.0 → 7.0.0): check.yml:23
-  pins the v4 SHA — update the pin in the same merge.
 - Decide the fate of gift-business-site.zip (unknown provenance,
   gitignored) — delete or archive outside the repo.
 
@@ -46,3 +44,6 @@ Now/Later stay honest).
 - 2026-10-06: platform research promoted verbatim from untracked out/ to
   docs/research/ecommerce-platform-research.md — ADR-0001's evidence is
   now tracked in git, no longer machine-local.
+- 2026-10-06: dependabot PR #1 resolved — setup-node pin bumped to the
+  v7.0.0 SHA (820762786026740c76f36085b0efc47a31fe5020) in check.yml;
+  dependabot PR closed in favor of the manual pin.
