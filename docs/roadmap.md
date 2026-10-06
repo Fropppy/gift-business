@@ -19,9 +19,6 @@ Now/Later stay honest).
 - Fix the stale README.md:29 row — it tells the reader to replace a site URL
   that astro.config.mjs:14 already has correct; the whole placeholder table
   needs the corrected version now in operations.md.
-- Raise the `.card-zalo` tap target to ≥24px (WCAG 2.5.8): it measures
-  123×22 on a 390px viewport (`src/components/ProductCard.astro:41`) —
-  pre-existing, found by the mobile-pass tap-target audit.
 - Decide the fate of gift-business-site.zip (unknown provenance,
   gitignored) — delete or archive outside the repo.
 
@@ -38,6 +35,11 @@ Now/Later stay honest).
 - An Apps Script test harness if order volume justifies it.
 
 ## Done
+
+- 2026-10-06: `.card-zalo` tap target raised to a 24px floor on
+  hover-pointer viewports (global.css base rule; touch devices already
+  had the 44px §8.3 pill) — closes the WCAG 2.5.8 flag from the
+  mobile-pass audit; all four gates green.
 
 - 2026-10-06: documentation + memory system built (AGENTS.md, ZCODE.md,
   docs tree, ADR-0001..0007 backfilled); `npm run check:docs` gate added to
