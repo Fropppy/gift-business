@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 24" role="img" aria-label="Đường nóc nhà (mái ngói) — họa tiết phân cách mục">
+  <!-- Mai-nha roofline (§6.1 #4): the name itself ("nhà") licenses the
+       family-home gable — abstract, one line, real negative space. -->
+  <g fill="none" stroke="#1e5c46" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="52" y1="20" x2="88" y2="20" opacity="0.55" />
+    <path d="M 88,20 L 120,5 L 152,20" />
+    <line x1="152" y1="20" x2="188" y2="20" opacity="0.55" />
+  </g>
+</svg>
