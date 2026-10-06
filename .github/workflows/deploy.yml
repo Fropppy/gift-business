@@ -15,9 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout your repository using git
-        uses: actions/checkout@v7
+        # Pinned to the commit the v7 tag resolved to (git ls-remote) — a
+        # mutable tag can be retagged upstream; a SHA cannot. Dependabot
+        # (.github/dependabot.yml) keeps these current.
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Install, build, and upload your site output
-        uses: withastro/action@v6
+        uses: withastro/action@3eafd002e65cc31b4f0eae0bb05450d521562247 # v6
         # withastro/action does install + build + artifact upload in one step.
         # Optional inputs (defaults shown):
         #   path: ./
@@ -33,7 +36,7 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
 
 # ONE-TIME REPO SETTING (required or nothing publishes):
 #   Settings → Pages → Build and deployment → Source = "GitHub Actions"

@@ -1,0 +1,10 @@
+# The workflow action refs are pinned to full commit SHAs (a mutable tag
+# can be retagged upstream — see deploy.yml / check.yml). Dependabot opens
+# a PR bumping each SHA whenever the tracked tag moves, so the pins still
+# receive security updates instead of rotting.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
