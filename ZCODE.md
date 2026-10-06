@@ -137,6 +137,10 @@ Non-derivable facts — things an agent cannot safely infer from a quick read.
   (.github/workflows/check.yml:15); main's branch protection requires that
   exact status context. Renaming the job silently breaks the required check
   on main.
+- **PR-only checks.** check.yml triggers on `pull_request` only
+  (.github/workflows/check.yml:7-8) — pushing to develop produces no CI
+  run. Match a run's headSha (`gh run list --json headSha`) to the commit
+  before citing it as that commit's verification.
 - **Node version.** >= 22.12, never 23 (Astro 7; pinned in deploy.yml and
   check.yml).
 - **Theme calendar.** Nov–Feb → tet; Sep → trung-thu — a Gregorian

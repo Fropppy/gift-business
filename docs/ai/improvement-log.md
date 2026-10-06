@@ -128,3 +128,14 @@ Mark promoted entries with → where they landed.
   real pre-existing gap (card CTA 123×22 < 24px, ProductCard.astro:41) →
   roadmap Next.
 - Promoted to → nothing yet (first occurrence).
+
+## 2026-10-06 — Cite CI runs by head SHA, not recency
+
+- Observation: PR #3's body credited run 37488956279 to f2b34d9, but its
+  headSha was d04c810 — check.yml fires on pull_request only
+  (check.yml:7-8), so the push of f2b34d9 created no run at all; gh run
+  list right after the push showed the previous PR's checks, and the
+  misattribution read like verification.
+- Change: PR #4's flow matched runs by --json headSha before citing them;
+  trigger nuance recorded in ZCODE.md Project facts.
+- Promoted to → ZCODE.md Project facts (PR-only checks).
