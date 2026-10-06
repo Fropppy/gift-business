@@ -60,6 +60,8 @@ without changing the site.
 - Order IDs: `GQ-YYYYMMDD-####`, per-day counter, race-safe via LockService.
 - Dedupe: same phone + message within 5 minutes returns the existing order ID.
 - Honeypot: a filled `company` field is dropped silently.
+- Rate limit: max 3 submissions per phone per 10 minutes (CacheService);
+  the 4th gets `{"ok":false,"error":"too many requests"}`.
 - Formula guard: any field whose text starts with `=`, `+`, `-`, `@` (or a
   tab/CR) is stored as plain text via a leading apostrophe, so formulas
   pasted into the form never execute when the sheet is opened. This also

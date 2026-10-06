@@ -54,6 +54,18 @@ function doPost(e) {
       return json({ ok: true, orderId: null, note: 'honeypot' });
     }
 
+    // Per-phone rate limit — max 3 submissions per 10 minutes, checked
+    // BEFORE any sheet access so a flood cannot burn URL-fetch/quota on
+    // the range read or starve the script lock and fail real orders.
+    // Check-then-increment is not atomic, but CacheService is enough
+    // against casual spam; the dedupe below still absorbs honest retries.
+    const cache = CacheService.getScriptCache();
+    const rlKey = 'rl:' + phone;
+    if (Number(cache.get(rlKey) || 0) >= 3) {
+      return json({ ok: false, error: 'too many requests' });
+    }
+    cache.put(rlKey, String(Number(cache.get(rlKey) || 0) + 1), 600);
+
     const duplicate = findRecentDuplicate(phone, String(body.message || '').trim());
     if (duplicate) {
       return json({ ok: true, orderId: duplicate, duplicate: true });
