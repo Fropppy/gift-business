@@ -113,11 +113,24 @@
   --border-strong: #dec9ae;
 }
 
-/* Mid-Autumn variant, ready for later — same mechanism:
+/* Trung Thu variant (auto September + manual any time): moonlit paper +
+   night blue + moon gold. Same mechanism as tet — tokens only, zero
+   layout/typography changes. */
 [data-theme='trung-thu'] {
-  --bg: #f4f1ea; --primary: #1e3a5f; --primary-deep: #162c49;
-  --accent: #c89b3c; --accent-ink: #2b2118;
-} */
+  --bg: #f4f1ea;             /* moonlit paper */
+  --primary: #1e3a5f;        /* night blue — white ink 11.50:1 */
+  --primary-deep: #162c49;
+  --primary-ink: #ffffff;
+  --accent: #c89b3c;         /* moon gold, decorative */
+  --accent-strong: #7a611f;  /* on #f4f1ea: 5.23:1 */
+  --accent-deep: #6a541d;    /* on #f4f1ea: 6.42:1 */
+  --accent-fill: #b0872f;    /* cocoa ink 4.76:1 */
+  --accent-fill-hover: #c89b3c; /* cocoa ink 6.16:1 — lighter fill raises
+                                contrast in this dark-ink theme */
+  --accent-ink: #2b2118;
+  --border: #ddd6c6;
+  --border-strong: #cbc2ad;
+}
 
 /* ---------- reset & base ---------- */
 *,

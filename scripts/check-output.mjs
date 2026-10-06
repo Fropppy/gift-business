@@ -61,12 +61,18 @@ assert('dist/index.html exists', indexHtml !== null);
 if (indexHtml) {
   const headEnd = indexHtml.indexOf('</head>');
   const head = headEnd === -1 ? '' : indexHtml.slice(0, headEnd);
-  const themeScriptMatch = head.match(/<script>\s*\(\s*function[\s\S]*?data-theme[\s\S]*?<\/script>/);
+  // Plain (attribute-less) <script> blocks in <head> — the is:inline theme
+  // script must be one of these: synchronous, pre-paint, not type=module.
+  const plainHeadScripts = [...head.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
+  const themeScript = plainHeadScripts.find((s) => s.includes('data-theme')) ?? null;
+  const themeScriptMatch = themeScript === null ? null : [null, themeScript];
 
   assert(
     'theme script present in <head> (plain, pre-paint <script>, not type=module)',
-    /<script>\s*\(function[\s\S]*?data-theme[\s\S]*?<\/script>/.test(head),
-    `head script found before </head> at offset ${headEnd}`
+    themeScript !== null,
+    `${plainHeadScripts.length} plain <script> block(s) in <head>; theme block ${
+      themeScript === null ? 'NOT found' : 'found'
+    }`
   );
   assert(
     'theme script persists manual choice via localStorage nm:theme',

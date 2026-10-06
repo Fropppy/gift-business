@@ -40,26 +40,53 @@ const base = import.meta.env.BASE_URL;
     />
 
     <script is:inline>
-      // Seasonal hooks (Tết, Nov–Feb).
-      // 1) Color tokens: [data-theme="tet"] in global.css re-skins the whole
-      //    site with zero layout/typography changes.
-      // 2) Hero imagery tokens (--hero-1 / --hero-2 / --hero-tile): Hero.astro
-      //    references only these vars, so swapping seasonal photos later is a
-      //    file drop, never a markup edit. Defaults are set here rather than
-      //    in CSS because a CSS url() cannot carry import.meta.env.BASE_URL
-      //    and public/ assets need the /gift-business prefix.
-      // 3) The hoa-mai watermark URL is set here for the same reason.
+      // Theme engine — renders exactly as written (is:inline: no TypeScript,
+      // no bundling, no dedup) and executes synchronously before first paint,
+      // so the right palette resolves with no flash (§2.5).
+      // Precedence (§2.7): 1) stored manual choice → 2) seasonal auto →
+      // 3) 'base'. One effective id, one attribute.
       (function () {
         var root = document.documentElement;
         var base = (root.dataset.base || '/').replace(/\/$/, '');
 
+        // Whitelist duplicated by necessity: an is:inline script cannot
+        // import. Exists in exactly two places: here + the switcher.
+        var WHITELIST = ['base', 'tet', 'trung-thu'];
+
+        // 1) stored manual choice — validate before writing to the DOM;
+        //    localStorage can throw SecurityError when persistence is blocked.
+        var stored = null;
+        try { stored = localStorage.getItem('nm:theme'); } catch (e) {}
+        var effective = WHITELIST.indexOf(stored) !== -1 ? stored : null;
+
+        // 2) seasonal auto (Nov–Feb → tet; September → trung-thu, a
+        //    Gregorian approximation of rằm tháng 8 âm lịch that occasionally
+        //    falls in early October — the manual switch is the escape hatch).
+        if (!effective) {
+          var month = new Date().getMonth() + 1; // 1–12
+          if (month === 11 || month === 12 || month === 1 || month === 2) {
+            effective = 'tet';
+          } else if (month === 9) {
+            effective = 'trung-thu';
+          }
+        }
+
+        // 3) default — the complete base palette carries every token, so
+        //    no-JS never renders a hole.
+        if (!effective) effective = 'base';
+
+        root.setAttribute('data-theme', effective);
+
+        // Runtime art tokens (L4): a CSS url() cannot carry
+        // import.meta.env.BASE_URL and public/ assets need the
+        // /gift-business prefix. Year-round files first…
         root.style.setProperty('--hero-1', 'url("' + base + '/images/hero-1.svg")');
         root.style.setProperty('--hero-2', 'url("' + base + '/images/hero-2.svg")');
         root.style.setProperty('--hero-tile', 'url("' + base + '/images/hero-tile.svg")');
 
-        var month = new Date().getMonth() + 1; // 1–12
-        if (month === 11 || month === 12 || month === 1 || month === 2) {
-          root.setAttribute('data-theme', 'tet');
+        // …then the full Tết dressing — one code path regardless of whether
+        // 'tet' came from the calendar or a manual pick in July.
+        if (effective === 'tet') {
           root.style.setProperty('--motif-image', 'url("' + base + '/images/hoa-mai.svg")');
           root.style.setProperty('--motif-opacity', '0.08');
 
@@ -75,6 +102,10 @@ const base = import.meta.env.BASE_URL;
             probe.src = url;
           });
         }
+
+        // Reveal the theme switcher only when JS can run (§2.4) — inert
+        // buttons would be worse than absent ones.
+        root.setAttribute('data-theme-ui', 'on');
       })();
     </script>
   </head>
