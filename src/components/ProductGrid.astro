@@ -13,14 +13,24 @@ const { products, showFilter = false } = Astro.props;
 
 {
   showFilter && (
-    <div class="filter-row" role="group" aria-label="Lọc giỏ quà theo nhóm">
-      <button class="chip chip--active" data-filter-cat="">Tất cả</button>
-      {categories.map((c) => (
-        <button class="chip" data-filter-cat={c.slug}>
-          <span aria-hidden="true">{c.icon}</span> {c.name}
-        </button>
-      ))}
-    </div>
+    <>
+      <div class="filter-row" role="group" aria-label="Lọc giỏ quà theo nhóm">
+        <button class="chip chip--active" data-filter-cat="">Tất cả</button>
+        {categories.map((c) => (
+          <button class="chip" data-filter-cat={c.slug}>
+            <span aria-hidden="true">{c.icon}</span> {c.name}
+          </button>
+        ))}
+      </div>
+      {/* Price tiers — the domestic budget-band convention: in biếu culture
+          the budget band IS the decision (§5.5). Boundaries 500k / 1M VND. */}
+      <div class="filter-row" role="group" aria-label="Lọc theo mức giá">
+        <span class="filter-label">Mức giá:</span>
+        <button class="chip" data-filter-price="duoi-500">Dưới 500k</button>
+        <button class="chip" data-filter-price="500-1tr">500k – 1tr</button>
+        <button class="chip" data-filter-price="tren-1tr">Trên 1tr</button>
+      </div>
+    </>
   )
 }
 
@@ -37,33 +47,52 @@ const { products, showFilter = false } = Astro.props;
 </p>
 
 <script>
-  // Category/tag filtering on the catalog page. Supports deep links:
+  // Category/tag/price filtering on the catalog page. Supports deep links:
   //   /products/?category=<slug>  (from category cards)
   //   /products/?tag=<tag>        (from the occasion strip)
+  //   /products/?price=<tier>     (price tiers: duoi-500 | 500-1tr | tren-1tr)
   const grid = document.querySelector('[data-product-grid]');
   if (grid) {
     const cards = Array.from(grid.querySelectorAll<HTMLElement>('.card'));
-    const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter-cat]'));
+    const catChips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter-cat]'));
+    const priceChips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter-price]'));
     const empty = document.querySelector<HTMLElement>('[data-filter-empty]');
     const params = new URLSearchParams(window.location.search);
 
-    function apply(cat: string, tag: string | null) {
+    // Boundaries per §5.5: 500,000 and 1,000,000 VND.
+    const PRICE_TIERS: Record<string, (amount: number) => boolean> = {
+      'duoi-500': (a) => a < 500000,
+      '500-1tr': (a) => a >= 500000 && a <= 1000000,
+      'tren-1tr': (a) => a > 1000000,
+    };
+
+    let currentCat = '';
+    let currentTag: string | null = null;
+    let currentPrice = '';
+
+    function apply(cat: string, tag: string | null, price: string) {
       let shown = 0;
+      const tier = price ? PRICE_TIERS[price] : undefined;
       cards.forEach((card) => {
         const matchCat = !cat || card.dataset.cat === cat;
         const tags = (card.dataset.tags || '').split(' ');
         const matchTag = !tag || tags.includes(tag);
-        const visible = matchCat && matchTag;
+        const amount = Number(card.dataset.price ?? '');
+        const matchPrice = !tier || (Number.isFinite(amount) && tier(amount));
+        const visible = matchCat && matchTag && matchPrice;
         card.hidden = !visible;
         if (visible) shown += 1;
       });
-      chips.forEach((chip) =>
+      catChips.forEach((chip) =>
         chip.classList.toggle('chip--active', (chip.dataset.filterCat || '') === cat)
+      );
+      priceChips.forEach((chip) =>
+        chip.classList.toggle('chip--active', chip.dataset.filterPrice === price)
       );
       if (empty) empty.hidden = shown > 0;
     }
 
-    chips.forEach((chip) => {
+    catChips.forEach((chip) => {
       chip.addEventListener('click', () => {
         const cat = chip.dataset.filterCat || '';
         const url = new URL(window.location.href);
@@ -71,13 +100,30 @@ const { products, showFilter = false } = Astro.props;
         else url.searchParams.delete('category');
         url.searchParams.delete('tag');
         history.replaceState(null, '', url);
-        apply(cat, null);
+        currentCat = cat;
+        currentTag = null;
+        apply(currentCat, currentTag, currentPrice);
       });
     });
 
-    // initial state from URL (?category= wins over ?tag=)
-    const cat = params.get('category') || '';
-    const tag = cat ? null : params.get('tag');
-    if (cat || tag) apply(cat, tag);
+    priceChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        // click the active tier again to clear it
+        const price = chip.dataset.filterPrice === currentPrice ? '' : (chip.dataset.filterPrice ?? '');
+        const url = new URL(window.location.href);
+        if (price) url.searchParams.set('price', price);
+        else url.searchParams.delete('price');
+        history.replaceState(null, '', url);
+        currentPrice = price;
+        apply(currentCat, currentTag, currentPrice);
+      });
+    });
+
+    // initial state from URL (?category= wins over ?tag=; ?price= combines)
+    currentCat = params.get('category') || '';
+    currentTag = currentCat ? null : params.get('tag');
+    const priceParam = params.get('price');
+    currentPrice = priceParam && priceParam in PRICE_TIERS ? priceParam : '';
+    if (currentCat || currentTag || currentPrice) apply(currentCat, currentTag, currentPrice);
   }
 </script>

@@ -678,8 +678,17 @@ button { font-family: inherit; }
 .filter-row {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.6rem;
   margin-bottom: 1.75rem;
+}
+
+.filter-row + .filter-row { margin-top: -1rem; }
+
+.filter-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--muted);
 }
 
 .grid-products {

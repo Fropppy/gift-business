@@ -16,6 +16,7 @@ const category = categoryBySlug(product.category);
   class="card"
   data-cat={product.category}
   data-tags={product.tags.join(' ')}
+  data-price={product.price.amount}
 >
   <div class="card-media">
     {
