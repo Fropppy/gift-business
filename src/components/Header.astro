@@ -42,6 +42,15 @@ import ThemeSwitcher from './ThemeSwitcher.astro';
     <ThemeSwitcher class="theme-switch--bar" />
 
     <a class="header-hotline" href={site.phoneHref}>
+      {/* Compact mobile glyph (§8.2) — hidden on desktop via CSS; the
+          "Hotline · hours" subline stays desktop-only. */}
+      <svg class="header-hotline__ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M5.5 4h3.6l1.7 4.3-2.3 1.5a11.5 11.5 0 0 0 5.7 5.7l1.5-2.3 4.3 1.7v3.6a2 2 0 0 1-2 2A15.9 15.9 0 0 1 3.5 6a2 2 0 0 1 2-2Z"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linejoin="round"></path>
+      </svg>
       <strong>{site.phoneDisplay}</strong>
       <small>Hotline · {site.hoursShort}</small>
     </a>
@@ -54,19 +63,35 @@ import ThemeSwitcher from './ThemeSwitcher.astro';
 </header>
 
 <script>
-  // Mobile nav toggle. Query all instances defensively; there is one header.
-  document.querySelectorAll('.nav-toggle').forEach((btn) => {
-    const nav = document.getElementById('site-nav');
-    if (!nav) return;
-    btn.addEventListener('click', () => {
+  // Mobile nav toggle. Query defensively; there is one header.
+  // The panel closes on: toggle tap, nav-link navigation, Escape key, and
+  // any document-level tap whose target is outside .site-header (§8.2) —
+  // every path syncs aria-expanded="false" on the toggle.
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const nav = document.getElementById('site-nav');
+  const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+
+  const closePanel = () => {
+    nav?.classList.remove('is-open');
+    toggle?.setAttribute('aria-expanded', 'false');
+  };
+
+  if (header && nav && toggle) {
+    toggle.addEventListener('click', () => {
       const open = nav.classList.toggle('is-open');
-      btn.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-expanded', String(open));
     });
-    nav.querySelectorAll('a').forEach((a) =>
-      a.addEventListener('click', () => {
-        nav.classList.remove('is-open');
-        btn.setAttribute('aria-expanded', 'false');
-      })
-    );
-  });
+
+    nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', closePanel));
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && nav.classList.contains('is-open')) closePanel();
+    });
+
+    document.addEventListener('click', (event) => {
+      if (nav.classList.contains('is-open') && !header.contains(event.target as Node)) {
+        closePanel();
+      }
+    });
+  }
 </script>

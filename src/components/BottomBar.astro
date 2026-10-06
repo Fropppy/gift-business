@@ -1,0 +1,200 @@
+---
+import { site } from '../utils/site';
+import { asset } from '../utils/asset';
+
+// Thumb-zone quick-access bar (docs/design-language.md §8.1) — mobile only
+// (≤900px; display:none above). Three DESTINATIONS (Trang chủ / Giỏ quà /
+// Đặt quà → the /contact/#dat-qua form anchor) plus two ACTIONS styled as
+// actions, not tabs: Zalo (raised pill, the .btn--primary token pair) and
+// Gọi (the .btn--ghost pair). Actions never take an active state.
+// Mounted AFTER the float-zalo anchor in BaseLayout so the check-docs line
+// pins above it stay put.
+const homeHref = asset('/');
+const productsHref = asset('/products/');
+const orderHref = asset('/contact/') + '#dat-qua';
+---
+
+<nav class="bottom-bar" aria-label="Truy cập nhanh">
+  <a class="bottom-bar__item" data-nav-item href={homeHref}>
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M4.5 10.8 12 4.5l7.5 6.3"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+      <path
+        d="M6.5 9.8V19a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9.8"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+    <span>Trang chủ</span>
+  </a>
+
+  <a class="bottom-bar__item" data-nav-item href={productsHref}>
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="4.5" y="9.5" width="15" height="10" rx="2" stroke="currentColor" stroke-width="2"></rect>
+      <path d="M12 9.5v10M4.5 13.5h15" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+      <path
+        d="M12 9.5c-1.9 0-3.4-1-3.4-2.5S9.8 4.8 10.8 4.8c1.4 0 1.2 3 1.2 4.7Zm0 0c1.9 0 3.4-1 3.4-2.5s-1.2-2.2-2.2-2.2c-1.4 0-1.2 3-1.2 4.7Z"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linejoin="round"></path>
+    </svg>
+    <span>Giỏ quà</span>
+  </a>
+
+  {/* Action: raised pill on the .btn--primary pair. Never marked active. */}
+  <a
+    class="bottom-bar__item bottom-bar__item--zalo"
+    href={site.zaloUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M4 5h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"
+        fill="currentColor"
+        opacity="0.35"></path>
+      <text x="12" y="13.6" text-anchor="middle" font-size="9" font-weight="700" fill="currentColor">Z</text>
+    </svg>
+    <span>Zalo</span>
+  </a>
+
+  {/* Action: ghost treatment (the .btn--ghost roles). Never marked active. */}
+  <a class="bottom-bar__item bottom-bar__item--call" href={site.phoneHref}>
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M5.5 4h3.6l1.7 4.3-2.3 1.5a11.5 11.5 0 0 0 5.7 5.7l1.5-2.3 4.3 1.7v3.6a2 2 0 0 1-2 2A15.9 15.9 0 0 1 3.5 6a2 2 0 0 1 2-2Z"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linejoin="round"></path>
+    </svg>
+    <span>Gọi</span>
+  </a>
+
+  <a class="bottom-bar__item" data-nav-item href={orderHref}>
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M7 3.5h10A1.5 1.5 0 0 1 18.5 5v14A1.5 1.5 0 0 1 17 20.5H7A1.5 1.5 0 0 1 5.5 19V5A1.5 1.5 0 0 1 7 3.5Z"
+        stroke="currentColor"
+        stroke-width="2"></path>
+      <path d="M9 8.5h6M9 12h6M9 15.5h3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <span>Đặt quà</span>
+  </a>
+</nav>
+
+<style>
+  /* Rides ONLY already-audited token pairs (check-contrast §3.4 table):
+     --primary-ink on --primary / --primary-deep (the .btn--primary pair),
+     --primary / --muted on --surface, --primary-ink ring on the primary
+     fill (the .cta-band dark-panel exception, §3.3). No new tokens. */
+  .bottom-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40; /* under .site-header's 50 — an open nav panel overlays it */
+    display: none; /* mobile only — enabled at ≤900px below */
+    grid-template-columns: repeat(5, 1fr);
+    height: calc(56px + env(safe-area-inset-bottom, 0px));
+    padding: 0 0.25rem env(safe-area-inset-bottom, 0px) 0.25rem;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 900px) {
+    .bottom-bar { display: grid; }
+  }
+
+  .bottom-bar__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem;
+    min-width: 48px;
+    min-height: 48px;
+    padding-block: 0.15rem;
+    font-size: 0.72rem; /* ~11.5px semibold label */
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--muted);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .bottom-bar__item svg { width: 24px; height: 24px; }
+
+  /* Current destination (set by the script): --primary label + a 3px
+     --primary top indicator — inset shadow, so no layout shift. */
+  .bottom-bar__item[aria-current='page'] {
+    color: var(--primary);
+    box-shadow: inset 0 3px 0 var(--primary);
+  }
+
+  /* Zalo action — the .btn--primary pair as a raised pill (56 − 2×4 = 48px
+     tall, still clearing the 48px tap floor). */
+  .bottom-bar__item--zalo {
+    margin-block: 0.25rem;
+    border-radius: var(--radius-pill);
+    background: var(--primary);
+    color: var(--primary-ink);
+    box-shadow: var(--shadow-lift);
+  }
+
+  .bottom-bar__item--zalo:hover {
+    background: var(--primary-deep);
+    color: var(--primary-ink);
+  }
+
+  /* A --primary ring would vanish on the --primary fill — ink ring (§3.3). */
+  .bottom-bar__item--zalo:focus-visible { outline-color: var(--primary-ink); }
+
+  /* Gọi action — the .btn--ghost roles: --border-strong border, --primary
+     icon + label on --surface. */
+  .bottom-bar__item--call {
+    margin-block: 0.25rem;
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    color: var(--primary);
+  }
+
+  .bottom-bar__item--call:hover {
+    border-color: var(--primary);
+    color: var(--primary-deep);
+  }
+</style>
+
+<script>
+  // Two jobs (§8.1): (1) mark the current DESTINATION with
+  // aria-current="page" — comparing location.pathname against each link's
+  // asset()-prefixed href; Zalo and Gọi are actions and never take it.
+  // (2) Inject <meta name="theme-color"> from the computed --bg so mobile
+  // chrome follows base cream / Tết / Trung-thu. Runtime DOM injection
+  // only — the <head> markup itself is pinned by check-docs and untouched.
+  const bar = document.querySelector<HTMLElement>('.bottom-bar');
+
+  if (bar) {
+    const here = window.location.pathname;
+    bar.querySelectorAll<HTMLAnchorElement>('[data-nav-item]').forEach((link) => {
+      try {
+        if (new URL(link.href).pathname === here) link.setAttribute('aria-current', 'page');
+      } catch {
+        /* unresolvable href — leave unmarked */
+      }
+    });
+
+    const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+    if (bg) {
+      const meta = document.createElement('meta');
+      meta.setAttribute('name', 'theme-color');
+      meta.setAttribute('content', bg);
+      document.head.appendChild(meta);
+    }
+  }
+</script>

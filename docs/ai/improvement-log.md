@@ -114,3 +114,17 @@ Mark promoted entries with → where they landed.
   history with the working form — zero hits, now a true result.
 - Promoted to → ZCODE.md Commands (corrected command + both pitfalls) and
   docs/architecture.md Security posture.
+
+## 2026-10-06 — Visual flags need geometric confirmation
+
+- Observation: a vision pass over the mobile preview flagged a "possibly
+  clipped" filter chip on /products/; rect math showed the price-chip row
+  simply sits inset (scrollLeft 22.5 of a 22px overflow) — nothing clipped.
+  Mid-pass both vision MCP servers hit quota caps, leaving 2 of 5 pages
+  unvisioned; bounding-box checks (tap targets vs 24/44px, bottom-bar
+  height vs body padding-bottom) closed those pages deterministically.
+- Change: visual results reported per page as vision-verified vs
+  geometry-verified; the false chip flag dropped; the same audit found a
+  real pre-existing gap (card CTA 123×22 < 24px, ProductCard.astro:41) →
+  roadmap Next.
+- Promoted to → nothing yet (first occurrence).
