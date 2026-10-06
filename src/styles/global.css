@@ -50,13 +50,43 @@
   /* type */
   --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
   --font-body: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-size-xs: 0.75rem;                            /* badges, .card-cat */
+  --font-size-sm: 0.875rem;                           /* .card-desc, notes */
+  --font-size-base: 1rem;                             /* body — 16px floor, never lower */
+  --font-size-lg: 1.125rem;                           /* .lead */
+  --font-size-xl: clamp(1.5rem, 3.2vw, 2.2rem);       /* h2 */
+  --font-size-2xl: clamp(1.9rem, 4.5vw, 2.9rem);      /* h1 on inner pages */
+  --font-size-display: clamp(2.25rem, 6vw + 1rem, 4.5rem); /* hero display */
+  --leading-tight: 1.15;                              /* display headlines */
+  --leading-body: 1.65;
+  --tracking-caps: 0.14em;                            /* .eyebrow, .badge */
 
-  /* shape & depth */
-  --radius: 14px;
-  --radius-lg: 22px;
+  /* space — 4px base scale */
+  --space-1: 0.25rem;   /* icon gaps */
+  --space-2: 0.5rem;    /* chip/badge gutters */
+  --space-3: 0.75rem;   /* card body rows */
+  --space-4: 1rem;      /* card padding unit */
+  --space-5: 1.5rem;    /* grid gaps */
+  --space-6: 2.25rem;   /* section head offset */
+  --space-7: 3.5rem;    /* section padding start */
+  --space-8: 5rem;      /* section padding max / footer top */
+
+  /* radius & depth */
+  --radius: 14px;        /* cards, chips-rect, steps */
+  --radius-lg: 22px;     /* hero panels, forms */
+  --radius-pill: 999px;  /* buttons, chips */
   --shadow-soft: 0 10px 30px rgba(43, 33, 24, 0.08);
   --shadow-lift: 0 16px 40px rgba(43, 33, 24, 0.14);
+
+  /* motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 120ms;    /* hovers, chips, zalo reveal */
+  --dur-base: 200ms;    /* buttons, cards, theme swap */
+  --dur-slow: 700ms;    /* imagery crossfades */
+
+  /* layout */
   --container: 1140px;
+  --container-prose: 640px;   /* prose measure ≈ 70 chars */
 }
 
 /* Tết variant (Nov–Feb): tokens only — zero layout/typography changes.
@@ -103,8 +133,8 @@ html {
 body {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.65;
+  font-size: var(--font-size-base);
+  line-height: var(--leading-body);
   color: var(--text);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
@@ -118,8 +148,8 @@ h1, h2, h3, h4 {
   color: var(--text);
 }
 
-h1 { font-size: clamp(1.9rem, 4.5vw, 2.9rem); }
-h2 { font-size: clamp(1.5rem, 3.2vw, 2.2rem); }
+h1 { font-size: var(--font-size-2xl); }
+h2 { font-size: var(--font-size-xl); }
 h3 { font-size: 1.2rem; }
 
 p { margin: 0 0 1em; }
@@ -168,38 +198,39 @@ button { font-family: inherit; }
   border-block: 1px solid var(--border);
 }
 
-.section-head { max-width: 640px; margin-bottom: clamp(1.75rem, 3vw, 2.5rem); }
+.section-head { max-width: var(--container-prose); margin-bottom: clamp(1.75rem, 3vw, 2.5rem); }
 
 .section-head--center { margin-inline: auto; text-align: center; }
 
 .eyebrow {
   display: inline-block;
-  font-size: 0.78rem;
+  font-size: var(--font-size-xs);
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
   color: var(--accent-strong);
   margin-bottom: 0.6rem;
 }
 
-.lead { color: var(--muted); font-size: 1.05rem; }
+.lead { color: var(--muted); font-size: var(--font-size-lg); }
 
 /* ---------- buttons ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   padding: 0.72rem 1.35rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   border: 1.5px solid transparent;
   font-weight: 600;
   font-size: 0.95rem;
   line-height: 1.2;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease,
-    transform 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
 }
 
 .btn:hover { transform: translateY(-1px); }
@@ -236,9 +267,9 @@ button { font-family: inherit; }
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: var(--space-2);
   padding: 0.45rem 0.95rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   border: 1px solid var(--border-strong);
   background: var(--surface);
   color: var(--text);
@@ -246,7 +277,8 @@ button { font-family: inherit; }
   font-weight: 500;
   text-decoration: none;
   cursor: pointer;
-  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  transition: border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
 
 .chip:hover { border-color: var(--accent); color: var(--accent-deep); }
@@ -262,7 +294,7 @@ button { font-family: inherit; }
   display: inline-block;
   padding: 0.28rem 0.65rem;
   border-radius: 8px;
-  font-size: 0.72rem;
+  font-size: var(--font-size-xs);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -390,7 +422,7 @@ button { font-family: inherit; }
 .hero-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 1.25rem;
+  gap: var(--space-5);
   padding-block: clamp(1.5rem, 3vw, 2.5rem);
 }
 
@@ -407,7 +439,7 @@ button { font-family: inherit; }
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 0.7s ease;
+  transition: opacity var(--dur-slow) var(--ease-out);
   pointer-events: none;
 }
 
@@ -466,18 +498,19 @@ button { font-family: inherit; }
   bottom: 1rem;
   z-index: 3;
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .hero-dot {
   width: 11px;
   height: 11px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   border: none;
   padding: 0;
   background: rgba(255, 255, 255, 0.55);
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
 }
 
 .hero-dot.is-active { background: #fff; transform: scale(1.15); }
@@ -537,7 +570,7 @@ button { font-family: inherit; }
 .occ-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 
 .occ-chip {
@@ -550,7 +583,8 @@ button { font-family: inherit; }
   background: var(--surface);
   text-decoration: none;
   color: var(--text);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition: border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
 }
 
 .occ-chip:hover {
@@ -569,7 +603,7 @@ button { font-family: inherit; }
 .cat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.1rem;
+  gap: var(--space-5);
 }
 
 .cat-card {
@@ -582,7 +616,8 @@ button { font-family: inherit; }
   background: var(--surface);
   text-decoration: none;
   color: var(--text);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition: border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
 }
 
 .cat-card:hover {
@@ -620,8 +655,8 @@ button { font-family: inherit; }
 
 .grid-products {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-5);
 }
 
 .card {
@@ -632,7 +667,8 @@ button { font-family: inherit; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition: border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
 }
 
 .card:hover {
@@ -663,7 +699,7 @@ button { font-family: inherit; }
 .card-body { display: flex; flex-direction: column; gap: 0.35rem; padding: 1rem 1.1rem 1.2rem; flex: 1; }
 
 .card-cat {
-  font-size: 0.75rem;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -680,7 +716,7 @@ button { font-family: inherit; }
 
 .card-desc {
   color: var(--muted);
-  font-size: 0.88rem;
+  font-size: var(--font-size-sm);
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -715,7 +751,7 @@ button { font-family: inherit; }
   text-decoration: none;
   opacity: 0;
   transform: translateY(4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
 
 .card:hover .card-zalo,
@@ -730,7 +766,7 @@ button { font-family: inherit; }
 .steps-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.1rem;
+  gap: var(--space-5);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -753,7 +789,7 @@ button { font-family: inherit; }
   width: 40px;
   height: 40px;
   margin-bottom: 0.8rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--primary);
   color: var(--primary-ink);
   font-weight: 700;
@@ -771,7 +807,7 @@ button { font-family: inherit; }
 .commit-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.1rem;
+  gap: var(--space-5);
 }
 
 .commit {
@@ -798,6 +834,9 @@ button { font-family: inherit; }
   gap: clamp(1.5rem, 4vw, 3rem);
   align-items: center;
 }
+
+/* prose measure cap ≈ 70 chars (§4.2) */
+.story-copy { max-width: var(--container-prose); }
 
 .story-copy p { color: var(--muted); }
 
@@ -870,7 +909,7 @@ button { font-family: inherit; }
   background: var(--surface);
   text-decoration: none;
   color: var(--text);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
 }
 
 a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
@@ -1067,16 +1106,17 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
   z-index: 60;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   padding: 0.65rem 1.05rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--primary);
   color: var(--primary-ink);
   font-weight: 700;
   font-size: 0.92rem;
   text-decoration: none;
   box-shadow: var(--shadow-lift);
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
 }
 
 .float-zalo:hover { background: var(--primary-deep); color: var(--primary-ink); transform: translateY(-2px); }
