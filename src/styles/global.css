@@ -947,6 +947,11 @@ button { font-family: inherit; }
 .card-zalo {
   position: relative;
   z-index: 2;
+  /* target-size floor for hover-pointer viewports; touch (hover: none)
+     already raises this to the 44px pill below (§8.3) */
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--accent-strong);
