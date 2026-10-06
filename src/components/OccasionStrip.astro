@@ -11,10 +11,18 @@ import SectionHead from './SectionHead.astro';
       title="Chọn theo dịp tặng quà"
       lead="Mình gợi sẵn theo từng dịp để bạn khỏi phải nghĩ — bấm vào dịp là thấy ngay những giỏ phù hợp."
     />
-    <div class="occ-grid">
+    {/* ALL 12 chips are server-rendered (a build-time "next 3" would freeze
+        at the deploy month on static hosting; no-JS visitors see every
+        occasion). The script below filters client-side: the four all-year
+        occasions + the next 3 by the visitor's calendar month (§4.2, cap 8). */}
+    <div class="occ-grid" data-occ-grid>
       {
         occasions.map((o) => (
-          <a class="occ-chip" href={`${asset('/products/')}?tag=${o.tag}`}>
+          <a
+            class="occ-chip"
+            href={`${asset('/products/')}?tag=${o.tag}`}
+            data-months={(o.months ?? []).join(' ')}
+          >
             <span class="occ-ico" aria-hidden="true">
               {o.icon}
             </span>
@@ -28,3 +36,36 @@ import SectionHead from './SectionHead.astro';
     </div>
   </div>
 </section>
+
+<script>
+  // Occasion chip filter (§4.2): keep the all-year occasions (months == [])
+  // plus the 3 seasonal occasions nearest by calendar month — cyclic distance
+  // from the visitor's current month, so in October that is 20/10, 20/11 and
+  // Tết. 4 + 3 = 7 visible chips, under the 8-chip cap. Runs client-side so
+  // the selection follows the visitor's date, not the build date.
+  const grid = document.querySelector<HTMLElement>('[data-occ-grid]');
+  if (grid) {
+    const chips = Array.from(grid.querySelectorAll<HTMLElement>('.occ-chip'));
+    const now = new Date().getMonth() + 1; // 1–12
+
+    const cyclicDistance = (months: number[]) =>
+      Math.min(...months.map((m) => (m - now + 12) % 12));
+
+    const seasonal = chips
+      .filter((chip) => (chip.dataset.months ?? '').trim() !== '')
+      .map((chip) => ({
+        chip,
+        months: (chip.dataset.months ?? '')
+          .trim()
+          .split(/\s+/)
+          .map(Number),
+      }))
+      .sort((a, b) => cyclicDistance(a.months) - cyclicDistance(b.months));
+
+    const keep = new Set(seasonal.slice(0, 3).map((s) => s.chip));
+    for (const chip of chips) {
+      const allYear = (chip.dataset.months ?? '').trim() === '';
+      if (!allYear && !keep.has(chip)) chip.hidden = true;
+    }
+  }
+</script>

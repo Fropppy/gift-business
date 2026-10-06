@@ -1,14 +1,14 @@
 [
-  { "name": "Tết Nguyên Đán", "month": "Tháng 1–2", "tag": "tet", "icon": "🧧" },
-  { "name": "Lễ Tình nhân (14/2)", "month": "Tháng 2", "tag": "valentine", "icon": "🌹" },
-  { "name": "Quốc tế Phụ nữ (8/3)", "month": "Tháng 3", "tag": "8-3", "icon": "🌷" },
-  { "name": "Quốc tế Thiếu nhi (1/6)", "month": "Tháng 6", "tag": "1-6", "icon": "🎈" },
-  { "name": "Tết Trung Thu", "month": "Tháng 9 (rằm tháng 8 âm lịch)", "tag": "trung-thu", "icon": "🌕" },
-  { "name": "Phụ nữ Việt Nam (20/10)", "month": "Tháng 10", "tag": "20-10", "icon": "🌸" },
-  { "name": "Nhà giáo Việt Nam (20/11)", "month": "Tháng 11", "tag": "20-11", "icon": "📒" },
-  { "name": "Sinh nhật", "month": "Cả năm", "tag": "sinh-nhat", "icon": "🎂" },
-  { "name": "Khai trương – tân gia", "month": "Cả năm", "tag": "khai-truong", "icon": "🎉" },
-  { "name": "Cưới hỏi", "month": "Cả năm", "tag": "cuoi-hoi", "icon": "💍" },
-  { "name": "Thăm bệnh", "month": "Cả năm", "tag": "tham-benh", "icon": "🍎" },
-  { "name": "Tốt nghiệp – tri ân", "month": "Tháng 6–8", "tag": "tri-an", "icon": "🎓" }
+  { "name": "Tết Nguyên Đán", "month": "Tháng 1–2", "months": [1, 2], "tag": "tet", "icon": "🧧" },
+  { "name": "Lễ Tình nhân (14/2)", "month": "Tháng 2", "months": [2], "tag": "valentine", "icon": "🌹" },
+  { "name": "Quốc tế Phụ nữ (8/3)", "month": "Tháng 3", "months": [3], "tag": "8-3", "icon": "🌷" },
+  { "name": "Quốc tế Thiếu nhi (1/6)", "month": "Tháng 6", "months": [6], "tag": "1-6", "icon": "🎈" },
+  { "name": "Tết Trung Thu", "month": "Tháng 9 (rằm tháng 8 âm lịch)", "months": [9], "tag": "trung-thu", "icon": "🌕" },
+  { "name": "Phụ nữ Việt Nam (20/10)", "month": "Tháng 10", "months": [10], "tag": "20-10", "icon": "🌸" },
+  { "name": "Nhà giáo Việt Nam (20/11)", "month": "Tháng 11", "months": [11], "tag": "20-11", "icon": "📒" },
+  { "name": "Sinh nhật", "month": "Cả năm", "months": [], "tag": "sinh-nhat", "icon": "🎂" },
+  { "name": "Khai trương – tân gia", "month": "Cả năm", "months": [], "tag": "khai-truong", "icon": "🎉" },
+  { "name": "Cưới hỏi", "month": "Cả năm", "months": [], "tag": "cuoi-hoi", "icon": "💍" },
+  { "name": "Thăm bệnh", "month": "Cả năm", "months": [], "tag": "tham-benh", "icon": "🍎" },
+  { "name": "Tốt nghiệp – tri ân", "month": "Tháng 6–8", "months": [6, 7, 8], "tag": "tri-an", "icon": "🎓" }
 ]

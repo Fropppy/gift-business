@@ -143,6 +143,14 @@ html {
   scroll-behavior: smooth;
 }
 
+/* The hidden attribute must always win: components like .occ-chip/.card
+   set their own display, which otherwise overrides the UA [hidden] rule
+   and leaves "hidden" cards rendered (this silently broke the shipped
+   category filter — chips set hidden but cards stayed visible). */
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);
@@ -486,94 +494,59 @@ button { font-family: inherit; }
   padding-block: clamp(1.5rem, 3vw, 2.5rem);
 }
 
-.hero-carousel {
-  position: relative;
-  aspect-ratio: 16 / 10;
+/* hero main: one static type-led composition on a flat token-colored
+   panel — no scrim (a legibility scrim over a flat color is a leftover
+   photo idiom; --scrim stays reserved for real imagery panels that carry
+   overlay text, §4.2). */
+.hero-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: clamp(1.75rem, 4vw, 3rem);
   border-radius: var(--radius-lg);
-  overflow: hidden;
   border: 1px solid var(--border);
+  background: var(--surface);
   box-shadow: var(--shadow-soft);
 }
 
-.hero-slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity var(--dur-slow) var(--ease-out);
-  pointer-events: none;
+.hero-title {
+  font-size: var(--font-size-display);
+  line-height: var(--leading-tight);
+  margin: 0;
 }
 
-.hero-slide.is-active { opacity: 1; pointer-events: auto; }
-
-/* hero art: background-image comes from the --hero-* tokens set by the
-   season script in BaseLayout (year-round files by default, hero-tet-*.svg
-   during Tết season when those files exist) — swapping photos needs no markup */
-.hero-slide-art {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
+.hero-promise {
+  color: var(--muted);
+  font-size: var(--font-size-lg);
+  margin: 0;
+  max-width: 34em;
 }
-
-.hero-slide::after {
-  /* scrim so overlay text stays readable on any photo */
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    rgba(43, 33, 24, 0.62) 0%,
-    rgba(43, 33, 24, 0.34) 46%,
-    rgba(43, 33, 24, 0.05) 78%
-  );
-}
-
-.hero-slide-content {
-  position: absolute;
-  inset: auto auto 0 0;
-  z-index: 2;
-  width: min(560px, 88%);
-  padding: clamp(1.25rem, 3vw, 2.5rem);
-  color: #fff;
-}
-
-.hero-slide-content .eyebrow { color: var(--gold); }
-
-.hero-slide-content h1,
-.hero-slide-content h2 {
-  color: #fff;
-  margin-bottom: 0.45em;
-}
-
-.hero-slide-content h1 { font-size: clamp(1.6rem, 3.6vw, 2.6rem); }
-.hero-slide-content h2 { font-size: clamp(1.4rem, 3vw, 2.1rem); }
-
-.hero-slide-content p { color: rgba(255, 255, 255, 0.92); margin-bottom: 1em; }
 
 .hero-cta-row { display: flex; flex-wrap: wrap; gap: 0.7rem; }
 
-.hero-dots {
-  position: absolute;
-  right: 1rem;
-  bottom: 1rem;
-  z-index: 3;
+/* compact doanh nghiệp band under the hero grid (was carousel slide 2) */
+.hero-band {
   display: flex;
-  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  margin-block: 0 clamp(1.5rem, 3vw, 2.5rem);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--surface) 55%, var(--bg));
 }
 
-.hero-dot {
-  width: 11px;
-  height: 11px;
-  border-radius: var(--radius-pill);
-  border: none;
-  padding: 0;
-  background: rgba(255, 255, 255, 0.55);
-  cursor: pointer;
-  transition: background-color var(--dur-base) var(--ease-out),
-    transform var(--dur-base) var(--ease-out);
+.hero-band-copy strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--text);
 }
 
-.hero-dot.is-active { background: #fff; transform: scale(1.15); }
+.hero-band-copy p { margin: 0.15rem 0 0; color: var(--muted); font-size: 0.95rem; }
 
 .hero-tile {
   display: flex;
@@ -618,10 +591,6 @@ button { font-family: inherit; }
 
 @media (max-width: 860px) {
   .hero-grid { grid-template-columns: 1fr; }
-
-  .hero-carousel { aspect-ratio: 4 / 5; }
-
-  .hero-slide-content { width: 100%; }
 
   .hero-tile-media { display: none; }
 }
