@@ -37,14 +37,18 @@ function parseDeclarations(block) {
 function parseThemes(source) {
   const themes = new Map();
   let base = {};
-  for (const m of source.matchAll(/:root\s*\{([^}]*)\}/g)) {
+  // Strip comments first: token DOCUMENTATION often contains pseudo-selector
+  // text like "--accent:hover …" that would otherwise be parsed as (and
+  // swallow) real declarations.
+  const noComments = source.replace(/\/\*[\s\S]*?\*\//g, '');
+  for (const m of noComments.matchAll(/:root\s*\{([^}]*)\}/g)) {
     base = { ...base, ...parseDeclarations(m[1]) };
   }
   if (Object.keys(base).length === 0) {
     fail(`no :root token block found in ${cssPath}`);
   }
   themes.set('base', base);
-  for (const m of source.matchAll(/\[data-theme=['"]([\w-]+)['"]\]\s*\{([^}]*)\}/g)) {
+  for (const m of noComments.matchAll(/\[data-theme=['"]([\w-]+)['"]\]\s*\{([^}]*)\}/g)) {
     const [, id, block] = m;
     themes.set(id, { ...base, ...parseDeclarations(block) });
   }
