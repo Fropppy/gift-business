@@ -47,3 +47,8 @@ Sau này muốn tạo lại ảnh minh họa: `npm run generate:placeholders`.
   qua helper `asset()` (`src/utils/asset.ts`) để thêm tiền tố `/gift-business`.
 - **Form đặt quà**: tĩnh, gửi `POST` tới Apps Script (xem TODO trong
   `ContactForm.astro`); kênh chính của shop là nút Zalo/hotline đặt khắp trang.
+
+## Tài liệu & quy trình
+
+- Tài liệu đầy đủ — kiến trúc, quyết định thiết kế, vận hành, roadmap: [docs/README.md](docs/README.md)
+- Làm việc cùng AI trong repo này: đọc [ZCODE.md](ZCODE.md) trước (tự động qua AGENTS.md).
