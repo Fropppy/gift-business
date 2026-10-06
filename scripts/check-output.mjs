@@ -20,9 +20,12 @@
  *   5. The invented testimonials are gone site-wide: no "Chị Hương", no
  *      class="stars", zero class="testi… anywhere under dist/ (step 6).
  *   6. The carousel is gone: no data-carousel / hero-dot markup (step 5).
- *   7. The Content-Security-Policy meta ships on EVERY page under dist/
- *      and denies by default (default-src 'none') — the policy's whole
- *      value is that it is present in the shipped HTML.
+ *   7. The Content-Security-Policy meta ships on EVERY page under dist/,
+ *      denies by default (default-src 'none'), and allow-lists BOTH Apps
+ *      Script fetch hops (script.google.com AND its 302 target
+ *      script.googleusercontent.com) — the redirect hop is CSP-enforced,
+ *      so omitting it breaks every order-form submit once the webhook is
+ *      activated.
  *
  * Exit 1 on any failed assertion.
  */
@@ -184,16 +187,20 @@ assert(
   offenders.length ? `found in: ${offenders.map((f) => path.relative(distDir, f)).join(', ')}` : `${allHtml.length} HTML files swept`
 );
 
-/* --- 7. CSP meta on every page, defaulting to deny --- */
+/* --- 7. CSP meta on every page, defaulting to deny, webhook hops allowed --- */
 const noCsp = allHtml.filter((f) => {
   const html = readFileSync(f, 'utf8');
   const meta = html.match(/<meta\s+http-equiv="Content-Security-Policy"/);
-  return !(meta && html.includes("default-src 'none'"));
+  return !(
+    meta &&
+    html.includes("default-src 'none'") &&
+    /connect-src[^";]*https:\/\/script\.google\.com[^";]*https:\/\/script\.googleusercontent\.com/.test(html)
+  );
 });
 assert(
-  'Content-Security-Policy meta (default-src none) on every page',
+  'Content-Security-Policy meta (default-src none; both Apps Script connect hops) on every page',
   noCsp.length === 0,
-  noCsp.length ? `missing on: ${noCsp.map((f) => path.relative(distDir, f)).join(', ')}` : `${allHtml.length}/${allHtml.length} pages`
+  noCsp.length ? `missing/failing on: ${noCsp.map((f) => path.relative(distDir, f)).join(', ')}` : `${allHtml.length}/${allHtml.length} pages`
 );
 
 console.log(`\ncheck-output: ${allHtml.length} HTML files checked under ${distDir}`);

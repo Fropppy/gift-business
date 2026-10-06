@@ -31,10 +31,19 @@ const base = import.meta.env.BASE_URL;
          Apps Script webhook), so any injected payload cannot pull remote
          code or exfiltrate to an attacker origin. form-action is 'self'
          (not 'none') so the no-JS form POST keeps its current behaviour —
-         it POSTs to the page itself; the JS path uses fetch → connect-src. -->
+         it POSTs to the page itself; the JS path uses fetch → connect-src.
+         connect-src lists BOTH Apps Script hops: the /exec URL answers
+         with a 302 to a one-time script.googleusercontent.com URL
+         (documented in Google's Content service guide), and CSP is
+         enforced against every redirect hop — allow-listing only
+         script.google.com would make every order-form fetch reject and
+         show customers the error branch even though the row was
+         appended. script.googleusercontent.com only mirrors
+         script.google.com content (already an attacker-deployable
+         Google endpoint), so this adds no exfil class. -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src https://script.google.com; base-uri 'self'; form-action 'self'"
+      content="default-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src https://script.google.com https://script.googleusercontent.com; base-uri 'self'; form-action 'self'"
     />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
