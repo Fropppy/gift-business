@@ -19,8 +19,9 @@ Now/Later stay honest).
 - Fix the stale README.md:29 row — it tells the reader to replace a site URL
   that astro.config.mjs:14 already has correct; the whole placeholder table
   needs the corrected version now in operations.md.
-- Flip docs/design-language.md:3 `Status: proposed` → implemented (all 10
-  plan steps shipped; contrast/output gates green).
+- Raise the `.card-zalo` tap target to ≥24px (WCAG 2.5.8): it measures
+  123×22 on a 390px viewport (`src/components/ProductCard.astro:41`) —
+  pre-existing, found by the mobile-pass tap-target audit.
 - Decide the fate of gift-business-site.zip (unknown provenance,
   gitignored) — delete or archive outside the repo.
 
@@ -44,6 +45,11 @@ Now/Later stay honest).
 - 2026-10-06: platform research promoted verbatim from untracked out/ to
   docs/research/ecommerce-platform-research.md — ADR-0001's evidence is
   now tracked in git, no longer machine-local.
+- 2026-10-06: mobile-first UX pass — sticky compact header, bottom
+  quick-access bar (home / catalog / Zalo / call / order form), safe-area
+  padding, skip link, tap-target floor in global.css; designed from VN
+  mobile-commerce research + yvesrocher.vn patterns (docs/design-language.md
+  §8), all four gates green. design-language.md flipped to implemented.
 - 2026-10-06: dependabot PR #1 resolved — setup-node pin bumped to the
   v7.0.0 SHA (820762786026740c76f36085b0efc47a31fe5020) in check.yml;
   dependabot PR closed in favor of the manual pin.

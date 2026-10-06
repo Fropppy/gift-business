@@ -551,7 +551,7 @@ const CITED_FACTS = [
   ['README.md', 31, 32, 'ContactForm.astro'],
   ['apps-script/SETUP.md', 17, 19, 'Anyone'],
   ['src/data/site.json', 6, 10, 'zaloUrl'],
-  ['docs/design-language.md', 3, 3, 'proposed'],
+  ['docs/design-language.md', 3, 3, 'implemented'],
   ['.github/workflows/check.yml', 23, 23, 'actions/setup-node'],
 ];
 

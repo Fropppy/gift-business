@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import BottomBar from '../components/BottomBar.astro';
 import { site } from '../utils/site';
 import { asset } from '../utils/asset';
 
@@ -19,7 +20,7 @@ const base = import.meta.env.BASE_URL;
 <html lang="vi" data-base={base}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light" />
     <!-- Content-Security-Policy — meta form because GitHub Pages serves no
          response headers. Honest about its limits: the theme engine must stay
@@ -134,6 +135,7 @@ const base = import.meta.env.BASE_URL;
     </script>
   </head>
   <body>
+    <a class="skip-link" href="#main">Nhảy tới nội dung</a>
     <div class="motif-layer" aria-hidden="true"></div>
     <Header />
     <main id="main">
@@ -158,5 +160,9 @@ const base = import.meta.env.BASE_URL;
       </svg>
       <span>Zalo</span>
     </a>
+
+    {/* Mobile thumb-zone bar (§8.1) — mounted AFTER the float-zalo anchor
+        so the check-docs line pins above stay put. */}
+    <BottomBar />
   </body>
 </html>

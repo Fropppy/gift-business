@@ -142,6 +142,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* In-page anchors (#dat-qua, #lien-he, #dip-tang-qua, #gio-noi-bat) land
+     below the ~60px sticky header, plus focus-ring space (§8.4). */
+  scroll-padding-top: 4.5rem;
 }
 
 /* The hidden attribute must always win: components like .occ-chip/.card
@@ -205,6 +208,30 @@ button { font-family: inherit; }
   clip: rect(0 0 0 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Skip link (§8.4): first focusable element in <body>, before the header.
+   Off-screen until keyboard focus, then a --primary-filled bar top-left.
+   The ring uses the ink exception (§3.3): a --primary ring would vanish
+   on the --primary fill. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 70; /* above the header (50) and float-zalo (45) */
+  padding: 0.7rem 1.2rem;
+  border-radius: var(--radius-pill);
+  background: var(--primary);
+  color: var(--primary-ink);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+  outline-color: var(--primary-ink);
 }
 
 /* ---------- layout helpers ---------- */
@@ -336,7 +363,11 @@ button { font-family: inherit; }
   position: sticky;
   top: 0;
   z-index: 50;
+  /* Plain --bg first: older WebViews without color-mix() dropped the
+     declaration entirely and rendered a transparent sticky bar (§8.2). */
+  background: var(--bg);
   background: color-mix(in srgb, var(--bg) 88%, var(--surface));
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
 }
@@ -401,6 +432,16 @@ button { font-family: inherit; }
 .header-hotline strong { color: var(--primary); font-variant-numeric: tabular-nums; }
 .header-hotline small { color: var(--muted); font-size: 0.72rem; }
 
+/* Compact mobile glyph (§8.2): hidden on desktop, shown ≤900px next to the
+   number — the subline stays desktop-only. */
+.header-hotline__ico {
+  display: none;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  color: var(--primary);
+}
+
 /* ---------- theme switcher (§2.4) ---------- */
 /* Hidden until the head script proves JS can run (data-theme-ui="on"):
    inert buttons would be worse than absent ones. */
@@ -462,7 +503,14 @@ button { font-family: inherit; }
 }
 
 @media (max-width: 900px) {
-  .nav-toggle { display: block; }
+  .nav-toggle {
+    display: block;
+    margin-left: 0; /* the compact hotline takes the auto margin now */
+    min-width: 48px;
+    min-height: 48px;
+    padding: 0.55rem 0.8rem;
+    font-size: 1.25rem;
+  }
 
   .site-nav {
     display: none;
@@ -481,10 +529,54 @@ button { font-family: inherit; }
 
   .site-nav.is-open { display: flex; }
 
-  .site-nav a:not(.btn) { padding: 0.55rem 0.25rem; border-bottom: none; }
+  /* Full-width 44px rows in the open panel (§8.2). */
+  .site-nav a:not(.btn) {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.55rem 0.5rem;
+    border-bottom: none;
+  }
   .site-nav a:not(.btn):hover { background: var(--bg); }
 
-  .header-hotline { display: none; }
+  .site-nav .btn { min-height: 44px; }
+
+  .site-nav .theme-switch-btn { min-height: 44px; padding-inline: 1.1rem; }
+
+  /* Compact tel: row between brand and hamburger: glyph + --primary
+     tabular-nums number at the 44px floor — a phone visitor sees a
+     contact affordance in the persistent bar (§8.2). */
+  .header-hotline {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+    min-height: 44px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .header-hotline__ico { display: block; }
+
+  .header-hotline small { display: none; }
+}
+
+/* Narrow-phone tiers for the compact bar (§8.2): keep brand + number +
+   48px hamburger on one line down to 320px. */
+@media (max-width: 560px) {
+  .header-inner { gap: 0.8rem; }
+
+  .brand-text small { display: none; }
+
+  .header-hotline strong { font-size: 0.95rem; }
+}
+
+@media (max-width: 330px) {
+  .header-inner { gap: 0.6rem; }
+
+  /* the glyph drops; the NUMBER stays — it is the trust element */
+  .header-hotline__ico { display: none; }
 }
 
 /* ---------- hero ---------- */
@@ -629,6 +721,28 @@ button { font-family: inherit; }
 
 .occ-chip small { color: var(--muted); font-size: 0.75rem; }
 
+/* Phones (§8.3): the occasion strip becomes one horizontal snap row of
+   fixed-min-width chips. All 12 chips stay server-rendered and the
+   client-side [hidden] cap keeps working (the global [hidden] rule still
+   wins over this display:flex). */
+@media (max-width: 700px) {
+  .occ-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    gap: var(--space-2);
+    padding-block: 0.35rem;
+  }
+
+  .occ-chip {
+    flex: 0 0 auto;
+    min-width: 180px;
+    scroll-snap-align: start;
+  }
+}
+
 /* ---------- category grid ---------- */
 .cat-grid {
   display: grid;
@@ -690,6 +804,27 @@ button { font-family: inherit; }
   font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--muted);
+}
+
+/* Phones (§8.3): the two filter rows stop wrapping — each becomes ONE
+   horizontally scrollable snap row of 44px chips, so the first product
+   card renders near the fold instead of after 4–5 wrapped chip lines.
+   Pure CSS overflow — no carousel machinery (check-output). */
+@media (max-width: 560px) {
+  .filter-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    padding-block: 0.3rem;
+    padding-inline: 0.15rem;
+  }
+
+  .filter-row .chip {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    min-height: 44px;
+  }
 }
 
 .grid-products {
@@ -787,6 +922,19 @@ button { font-family: inherit; }
   gap: 0.5rem;
 }
 
+/* Phones (§8.3): cards slim vertically — the 2-line description hides (the
+   PDP carries it in full) and the body padding/gap tighten, cutting the
+   single-column scroll. The grid keeps minmax(260px, 1fr): the §4.2
+   slow-browsing floor is NOT shrunk. */
+@media (max-width: 560px) {
+  .card-body { gap: 0.25rem; padding: 0.75rem 0.85rem 0.9rem; }
+
+  .card-desc { display: none; }
+
+  /* the 44px Zalo pill can outgrow a narrow foot — wrap, never clip */
+  .card-foot { flex-wrap: wrap; }
+}
+
 .price {
   font-weight: 700;
   font-size: 1.05rem;
@@ -811,9 +959,23 @@ button { font-family: inherit; }
 .card:hover .card-zalo,
 .card:focus-within .card-zalo { opacity: 1; transform: none; }
 
-/* touch devices have no hover — always show the CTA */
+/* touch devices have no hover — always show the CTA, and make it a real
+   target (§8.3): bordered pill at the 44px floor, --accent-strong text on
+   the card surface (an audited pair), still z-index: 2 (base rule) above
+   the stretched .card-link::after so a thumb mis-tap can't open the PDP
+   instead of chat */
 @media (hover: none) {
-  .card-zalo { opacity: 1; transform: none; }
+  .card-zalo {
+    opacity: 1;
+    transform: none;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    color: var(--accent-strong);
+  }
 }
 
 /* ---------- steps ---------- */
@@ -1017,7 +1179,9 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
 .field select,
 .field textarea {
   font-family: inherit;
-  font-size: 0.95rem;
+  /* 16px floor: iOS Safari stops auto-zooming on focus (§8.4) — also the
+     §1.5 body floor. */
+  font-size: var(--font-size-base);
   color: var(--text);
   padding: 0.65rem 0.85rem;
   border: 1px solid var(--border-strong);
@@ -1192,11 +1356,14 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
 @media (max-width: 860px) { .footer-grid { grid-template-columns: 1fr; } }
 
 /* ---------- floating Zalo ---------- */
+/* z-index 45 (was 60): below .site-header's 50, so it can never overlay an
+   open mobile nav panel (§8.4). Retired on phones at ≤900px below — the
+   bottom bar's Zalo pill replaces it; ≥901px it renders exactly as today. */
 .float-zalo {
   position: fixed;
   right: 1.1rem;
   bottom: 1.1rem;
-  z-index: 60;
+  z-index: 45;
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
@@ -1213,6 +1380,27 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
 }
 
 .float-zalo:hover { background: var(--primary-deep); color: var(--primary-ink); transform: translateY(-2px); }
+
+/* ---------- mobile thumb-zone pass (§8) ----------
+   One consolidated ≤900px block: everything the fixed bottom quick-access
+   bar (BottomBar.astro) needs from the document level. Desktop is
+   untouched — each rule here is mobile-only by design. */
+@media (max-width: 900px) {
+  /* Reserved space for the 56px bar + home-indicator inset, so the
+     footer's last row is never covered. The fallback 0px matters:
+     viewport-fit=cover opts the page into the notch area. */
+  body { padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)); }
+
+  /* the bar's Zalo pill replaces the floating pill on phones */
+  .float-zalo { display: none; }
+
+  /* the footer is the last-resort contact block (phone, Zalo, Messenger):
+     every row clears the 44px tap floor */
+  .site-footer li { min-height: 44px; padding-block: 0.55rem; }
+
+  /* breadcrumb crumbs clear the 44px tap floor too */
+  .breadcrumb a { display: inline-block; padding-block: 0.55rem; }
+}
 
 /* ---------- Tết watermark layer ---------- */
 .motif-layer {

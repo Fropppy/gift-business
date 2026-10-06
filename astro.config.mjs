@@ -13,4 +13,13 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://fropppy.github.io',
   base: '/gift-business',
+  // CSS minify target: esbuild's default prunes -webkit-backdrop-filter,
+  // but iOS Safari ≤ 17 still needs the prefix (backdrop-filter went
+  // unprefixed only in Safari 18). global.css ships both declarations for
+  // the sticky header — keep the prefix in the built stylesheet.
+  vite: {
+    build: {
+      cssTarget: ['safari14'],
+    },
+  },
 });

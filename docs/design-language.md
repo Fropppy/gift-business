@@ -1,6 +1,6 @@
 # Nhà Mai — Design Language
 
-**Status:** proposed · **Date:** 2026-10-06 · **Stack:** Astro static, GitHub Pages (`astro.config.mjs:13-16`: `site: fropppy.github.io`, `base: /gift-business`, no adapter — pure static output)
+**Status:** implemented · **Date:** 2026-10-06 · **Stack:** Astro static, GitHub Pages (`astro.config.mjs:13-16`: `site: fropppy.github.io`, `base: /gift-business`, no adapter — pure static output)
 
 This document turns four research studies (2026 ecommerce trends, gift-retail conversion patterns, theme-switching mechanics for this exact stack, Vietnamese cultural design cases) into one buildable design language for Nhà Mai. It is an **evolution of what already exists** — the current cream/pine/terracotta token system (`src/styles/global.css:10-42`) is kept and extended, not replaced.
 
@@ -451,6 +451,44 @@ Ordered, each step one small commit. Steps 1–4 are the foundation (tokens + th
 | 10 | `chore(verif): PR checks` | `.github/workflows/check.yml` (new) | New `pull_request` workflow: checkout → setup-node (≥22.12, matching the deploy workflow's Astro requirement, `deploy.yml:24`) → `npm ci` → `node scripts/contrast.mjs` → `npm run build`. The existing `deploy.yml` stays untouched: it runs `withastro/action@v6` (`deploy.yml:20`), which does install+build+upload in one step and cannot run a custom script — and it triggers on `push` only (`deploy.yml:3-5`). |
 
 **Verification for every step:** `npm run build` (21 pages today) + `scripts/contrast.mjs` green + manual no-JS check (JS disabled → base theme, no switcher visible) + `?theme=tet` manual-pick-in-offseason spot check once step 3 lands + at step 5, a browser check of the display headline's line count at 390px (§4.2).
+
+---
+
+## 8. Mobile thumb-zone pass (2026-10-06)
+
+The site shipped desktop-first; this section records the mobile pass built on top of §1–§7 without reopening any of their decisions. Containment rule: every rule here lives inside `@media (max-width: 900px / 700px / 560px / 330px)` or `(hover: none)` blocks. The only all-width changes are `html { scroll-padding-top: 4.5rem }` and the 16px form-control font — both strict improvements. No new tokens (the 56-token contract holds); every new surface rides an already-audited §3.4 pair.
+
+### 8.1 Bottom quick-access bar (`src/components/BottomBar.astro`)
+
+- Mobile-only fixed bar, `display: none` above 900px: 56px tall + `env(safe-area-inset-bottom, 0px)` padding, `--surface` fill, 1px `--border` top edge, `z-index: 40` — under the header's 50, so an open nav panel overlays it. `body` reserves `calc(56px + env(safe-area-inset-bottom, 0px))` at ≤900px so the footer's last row is never covered. The viewport meta carries `viewport-fit=cover` so the inset resolves.
+- Five equal slots, each ≥48×48 (24px icon + ~11.5px semibold label): **Trang chủ** · **Giỏ quà** · **Zalo** · **Gọi** · **Đặt quà** (→ `/contact/#dat-qua` — the enquiry form's anchor, which `scroll-padding-top` now lands below the sticky header).
+- Stated HIG deviation: Zalo and Gọi are *actions styled as actions*, not tabs — Zalo is a raised pill on the `.btn--primary` pair (`--primary` fill, `--primary-ink` label, hover `--primary-deep`), Gọi is the `.btn--ghost` pair (`--border-strong` border, `--primary` icon+label on `--surface`); neither ever takes an active state or tab semantics. HIG's cited rules are honored: labels always visible, the bar never hides, three destinations (inside the 3–5 range).
+- A small bundled script (no attributes — Astro-processed) marks the current *destination* with `aria-current="page"` by comparing `location.pathname` to each link's `asset()`-prefixed href → `--primary` label + a 3px `--primary` top indicator (inset box-shadow, no layout shift). The same script injects `<meta name="theme-color">` from the computed `--bg` so mobile chrome follows base cream / Tết / Trung-thu — runtime DOM injection, never a `<head>` markup edit (the head is pinned by check-docs).
+- Contrast: the bar adds zero new pairs — `--primary-ink` on `--primary`/`--primary-deep` (audited button pair), `--primary`/`--muted` on `--surface`. The Zalo pill's focus ring uses the §3.3 dark-panel ink exception (`--primary-ink` on a `--primary` fill) since a `--primary` ring there is 1.00:1.
+
+### 8.2 Mobile header (`src/components/Header.astro`)
+
+- `.header-hotline` renders at ≤900px as a compact `tel:` row between brand and hamburger: phone glyph + `--primary` tabular-nums number, min-height 44px; the "Hotline · hours" subline stays desktop-only. Narrow tiers (≤560px hides the brand subline and tightens the gap; ≤330px drops the glyph but keeps the number) keep brand + number + 48px hamburger on one line down to 320px.
+- `.nav-toggle` grows to min 48×48 (1.25rem glyph); open-panel nav links are full-width min-height 44px rows; `.theme-switch-btn` and the panel's Zalo button grow to min-height 44px.
+- The panel closes on Escape and on any document-level tap outside `.site-header`, besides the existing nav-link path — all paths sync `aria-expanded="false"`.
+- `.site-header` gained a plain `var(--bg)` declaration *before* the `color-mix()` line (older WebViews dropped `color-mix()` and rendered a transparent sticky bar) and `-webkit-backdrop-filter` alongside `backdrop-filter`.
+
+### 8.3 Catalog browsing on phones
+
+- ≤560px: the two `.filter-row`s (category chips, price tiers) stop wrapping — each becomes one horizontal snap-scroll row (`overflow-x: auto`, `scroll-snap-type: x proximity`, `-webkit-overflow-scrolling: touch`, chips min-height 44px, `flex: 0 0 auto`), so the first product card renders near the fold instead of after 4–5 wrapped chip lines.
+- ≤700px: `.occ-grid` becomes one horizontal snap row of fixed-min-width (180px) chips. All 12 chips stay server-rendered and the client-side `[hidden]` cap keeps working — the global `[hidden] { display: none !important }` rule still wins over the flex row. Pure CSS overflow; no carousel machinery (check-output bans `data-carousel`/`hero-dot`).
+- ≤560px: cards slim vertically — `.card-desc` hides (the PDP carries the full description), `.card-body` padding/gap tighten, `.card-foot` may wrap. The grid keeps `minmax(260px, 1fr)` — the §4.2 slow-browsing floor is deliberately NOT shrunk; density is bought back vertically, not by gridding 2-up.
+- `.card-zalo` is a real target on `(hover: none)` devices: bordered pill (border `--border-strong`, text `--accent-strong` — the audited card-surface accent pair), min-height 44px, still `z-index: 2` above the stretched `.card-link::after` so a thumb mis-tap can't silently open the PDP instead of chat.
+- `.breadcrumb a` (≤900px, `display: inline-block` + `padding-block: 0.55rem`) and `.site-footer li` (≤900px, min-height 44px) clear the 44px tap floor.
+
+### 8.4 Contact-flow plumbing
+
+- `html { scroll-padding-top: 4.5rem }` — `#dat-qua`, `#lien-he`, `#dip-tang-qua`, `#gio-noi-bat` land below the ~60px sticky header (with `scroll-behavior: smooth` this is what makes the bar's one-tap shortcuts reveal their target).
+- A "Nhảy tới nội dung" skip link is the first focusable element in `<body>`: off-screen until `:focus-visible`, then a `--primary`-filled bar top-left with the ink focus ring (§3.3), jumping to the existing `<main id="main">`.
+- Form controls rise to 16px (`--font-size-base`) — iOS Safari stops auto-zooming on focus. The honesty-gate/no-cors lines in ContactForm are untouched.
+- The floating Zalo pill retires at ≤900px (the bar's Zalo pill replaces it; its fixed corner also covered the footer's last links and the form submit area at scroll end) and its z-index drops 60 → 45, below the header's 50, so it can never overlay an open nav panel even on desktop-width resize. ≥901px it renders exactly as before — the BaseLayout markup is untouched, so every check-docs citation pin survives by design.
+
+Verification for this pass: the four gates (`npm run build` → `npm run check:contrast` → `npm run check:output` → `npm run check:docs`) plus a manual sweep of the new pairs (base / tet / trung-thu) against the §3.4 table — the new selectors ride only pairs already in it.
 
 ---
 
