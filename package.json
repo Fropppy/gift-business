@@ -8,7 +8,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "generate:placeholders": "node scripts/generate-placeholders.mjs"
+    "generate:placeholders": "node scripts/generate-placeholders.mjs",
+    "check:contrast": "node scripts/check-contrast.mjs",
+    "check:output": "node scripts/check-output.mjs"
   },
   "dependencies": {
     "astro": "^7.3.5"
