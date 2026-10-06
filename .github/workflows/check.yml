@@ -28,6 +28,9 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Docs gate (doc index, links, instruction-file integrity)
+        run: npm run check:docs
+
       - name: Contrast gate (WCAG ratios, selector-level, per theme, rest + hover)
         run: node scripts/check-contrast.mjs
 
