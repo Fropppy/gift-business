@@ -1,6 +1,7 @@
 ---
 import { site } from '../utils/site';
 import { asset } from '../utils/asset';
+import ThemeSwitcher from './ThemeSwitcher.astro';
 ---
 
 <header class="site-header">
@@ -32,7 +33,13 @@ import { asset } from '../utils/asset';
         ))
       }
       <a class="btn btn--primary" href={site.zaloUrl} target="_blank" rel="noopener noreferrer">Nhắn Zalo</a>
+      {/* Mobile: the switcher lives INSIDE the nav panel so it never crowds
+          the 900px-and-below bar (§2.4). Desktop bar instance sits between
+          .site-nav and .header-hotline below. */}
+      <ThemeSwitcher class="theme-switch--nav" />
     </nav>
+
+    <ThemeSwitcher class="theme-switch--bar" />
 
     <a class="header-hotline" href={site.phoneHref}>
       <strong>{site.phoneDisplay}</strong>

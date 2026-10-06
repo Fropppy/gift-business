@@ -392,6 +392,53 @@ button { font-family: inherit; }
 .header-hotline strong { color: var(--primary); font-variant-numeric: tabular-nums; }
 .header-hotline small { color: var(--muted); font-size: 0.72rem; }
 
+/* ---------- theme switcher (§2.4) ---------- */
+/* Hidden until the head script proves JS can run (data-theme-ui="on"):
+   inert buttons would be worse than absent ones. */
+.theme-switch {
+  display: none;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+}
+
+[data-theme-ui='on'] .theme-switch { display: inline-flex; }
+
+/* Two instances, one visible per breakpoint: the desktop bar slot (between
+   .site-nav and .header-hotline) and the mobile nav panel. */
+@media (max-width: 900px) {
+  [data-theme-ui='on'] .theme-switch--bar { display: none; }
+}
+
+@media (min-width: 901px) {
+  [data-theme-ui='on'] .theme-switch--nav { display: none; }
+}
+
+.site-nav .theme-switch { align-self: flex-start; margin-block: 0.5rem; }
+
+.theme-switch-btn {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.32rem 0.7rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.theme-switch-btn:hover { color: var(--accent-deep); }
+
+.theme-switch-btn[aria-pressed='true'] {
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+
 .nav-toggle {
   display: none;
   margin-left: auto;

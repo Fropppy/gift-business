@@ -1,0 +1,89 @@
+---
+/**
+ * Theme switcher (docs/design-language.md §2.4).
+ *
+ * Rendered TWICE in the Header (desktop bar slot between .site-nav and
+ * .header-hotline; mobile inside the nav panel) — the processed <script>
+ * below is TypeScript, type=module and deduplicated across component
+ * instances by Astro, so including this component twice is safe.
+ *
+ * Hidden entirely until the head script sets data-theme-ui="on": without JS,
+ * inert buttons would be worse than absent ones.
+ */
+interface Props {
+  /** Layout modifier: 'theme-switch--bar' (desktop) | 'theme-switch--nav' (mobile panel). */
+  class?: string;
+}
+
+const { class: modifier } = Astro.props;
+
+const choices = [
+  { id: 'auto', label: 'Mùa (auto)' },
+  { id: 'tet', label: 'Tết' },
+  { id: 'trung-thu', label: 'Trung Thu' },
+] as const;
+---
+
+<div class:list={['theme-switch', modifier]} role="group" aria-label="Chọn giao diện theo mùa">
+  {
+    choices.map((c) => (
+      <button type="button" class="theme-switch-btn" data-theme-choice={c.id} aria-pressed="false">
+        {c.label}
+      </button>
+    ))
+  }
+</div>
+
+<script>
+  // Switcher interaction (§2.4). The palette itself is decided by the
+  // is:inline head script; a choice here only writes/removes the stored key
+  // and reloads. Reload — not a live attribute flip — because the seasonal
+  // dressing is carried by L4 runtime tokens set once per page load
+  // (--motif-*, --hero-*): flipping the attribute would re-skin colors but
+  // leave stale art. Every navigation on this site is already a full load.
+  const WHITELIST = ['base', 'tet', 'trung-thu']; // duplicate of the head script's (is:inline cannot import)
+
+  function storedTheme(): string | null {
+    try {
+      const value = localStorage.getItem('nm:theme');
+      return WHITELIST.includes(value ?? '') ? value : null;
+    } catch {
+      return null; // SecurityError when persistence is blocked
+    }
+  }
+
+  const THEME_LABELS: Record<string, string> = {
+    base: 'Mùa thường',
+    tet: 'Tết',
+    'trung-thu': 'Trung Thu',
+  };
+
+  document.querySelectorAll<HTMLElement>('.theme-switch').forEach((group) => {
+    // Derive state from the SAME attribute the head script set (§2.4), so
+    // the buttons can never claim a theme that isn't rendered; the stored
+    // key decides which button is pressed (§2.7): the stored choice when
+    // present, otherwise Auto — the calendar stays in control.
+    const rendered = document.documentElement.dataset.theme ?? 'base';
+    const stored = storedTheme();
+
+    group.setAttribute('aria-label', `Chọn giao diện theo mùa (hiện: ${THEME_LABELS[rendered] ?? rendered})`);
+
+    group.querySelectorAll<HTMLButtonElement>('[data-theme-choice]').forEach((btn) => {
+      const choice = btn.dataset.themeChoice ?? 'auto';
+      const pressed = stored
+        ? stored === choice || (stored === 'base' && choice === 'auto')
+        : choice === 'auto';
+      btn.setAttribute('aria-pressed', String(pressed));
+
+      btn.addEventListener('click', () => {
+        try {
+          if (choice === 'auto') localStorage.removeItem('nm:theme');
+          else localStorage.setItem('nm:theme', choice);
+        } catch {
+          /* storage blocked — reload still lands on the seasonal default */
+        }
+        location.reload();
+      });
+    });
+  });
+</script>
