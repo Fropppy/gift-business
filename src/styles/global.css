@@ -38,6 +38,7 @@
   --border-strong: #d8cbb8;  /* Viền Sương darkened (hover) */
   --scrim: 43, 33, 24;       /* rgb triplet for imagery scrims:
                                 rgba(var(--scrim) / 0.62 … 0.05) */
+  --focus-ring-color: color-mix(in srgb, var(--primary) 22%, transparent); /* input focus halo */
 
   /* runtime hooks (set by the head script in BaseLayout; defaults declared
      here so no-JS never renders a hole) */
@@ -1001,6 +1002,9 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
 
 .enquiry .form-note { color: var(--muted); font-size: 0.88rem; }
 
+/* §5.4 delivery promise — the one line above the submit */
+.enquiry .delivery-promise { margin-bottom: var(--space-3); }
+
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
 
 @media (max-width: 560px) { .form-row { grid-template-columns: 1fr; } }
@@ -1029,7 +1033,7 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
 .field textarea:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 22%, transparent);
+  box-shadow: 0 0 0 3px var(--focus-ring-color);
 }
 
 .form-status { margin: 0.75rem 0 0; font-size: 0.92rem; }

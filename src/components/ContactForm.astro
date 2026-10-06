@@ -67,6 +67,17 @@ const { defaultProductSlug = '' } = Astro.props;
       <input id="enq-company" name="company" type="text" tabindex="-1" autocomplete="off" />
     </div>
 
+    {/* §5.4: the one sanctioned form addition — a one-line delivery promise
+        above the submit, sourced ONLY from promises already shipped
+        (site.json deliveryArea; "giao nhanh 2h" from the hero tile;
+        "hẹn khung giờ… giao đúng" from Commitments). A named cutoff hour
+        ships only after the shop owner confirms one — same honesty gate as
+        orderEndpoint. It is copy, not a date-picker the webhook can't honor. */}
+    <p class="form-note delivery-promise">
+      🚚 Giao trong ngày tại {site.deliveryArea} · cần gấp thì giao nhanh 2h (nội thành) · hẹn giờ
+      khi chốt đơn.
+    </p>
+
     <button class="btn btn--primary btn--big" type="submit">Gửi cho shop mình</button>
     <p class="form-status" role="status" aria-live="polite" hidden></p>
     <p class="form-note" style="margin-top: 0.8rem">
