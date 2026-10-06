@@ -743,6 +743,21 @@ button { font-family: inherit; }
 
 .card-body h3 a { color: inherit; text-decoration: none; }
 
+/* recipient subtitle (§5.2): accent text role, audited on surface */
+.card-subtitle {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--accent-strong);
+}
+
+/* contents manifest line (§5.2): text sells the gift while the SVG decorates */
+.card-contents {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--muted);
+}
+
 .card-desc {
   color: var(--muted);
   font-size: var(--font-size-sm);

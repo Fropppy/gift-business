@@ -35,6 +35,8 @@ export interface Product {
   subtitle: string | null;
   category: string;
   description: string;
+  /** Structured contents manifest ("gồm những gì"), sourced from the description. */
+  contents?: string[];
   badge: string | null;
   tags: string[];
   personalization: Personalization;

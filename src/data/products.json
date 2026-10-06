@@ -7,18 +7,44 @@
       "subtitle": "Biếu sếp & đối tác",
       "category": "gio-trai-cay-cao-cap",
       "description": "Nho Mỹ, cherry, việt quất, kiwi xanh… tuyển quả tươi, gói mica màu đỏ sang trọng, hợp biếu sếp và đối tác.",
+      "contents": [
+        "Nho Mỹ",
+        "Cherry",
+        "Việt quất",
+        "Kiwi xanh"
+      ],
       "badge": "Bán chạy",
-      "tags": ["ban-chay", "bieu-sep", "tet", "cuoi-hoi", "tri-an"],
+      "tags": [
+        "ban-chay",
+        "bieu-sep",
+        "tet",
+        "cuoi-hoi",
+        "tri-an"
+      ],
       "personalization": {
         "enabled": true,
         "type": "handwritten-card",
         "label": "Lời chúc viết trên thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 850000, "currency_code": "vnd" },
-      "options": [{ "name": "Kích cỡ", "values": ["Nhỏ", "Vừa", "Lớn"] }],
+      "price": {
+        "amount": 850000,
+        "currency_code": "vnd"
+      },
+      "options": [
+        {
+          "name": "Kích cỡ",
+          "values": [
+            "Nhỏ",
+            "Vừa",
+            "Lớn"
+          ]
+        }
+      ],
       "variants": [],
-      "images": ["/images/products/gio-trai-cay-nhap-khau-cao-cap.svg"],
+      "images": [
+        "/images/products/gio-trai-cay-nhap-khau-cao-cap.svg"
+      ],
       "thumbnail": "/images/products/gio-trai-cay-nhap-khau-cao-cap.svg",
       "inStock": true
     },
@@ -29,18 +55,44 @@
       "subtitle": "Quà biếu gia đình",
       "category": "gio-trai-cay-cao-cap",
       "description": "Ổi ruột đỏ, vú sữa, hồng giòn, xoài cát, táo… quà biếu gia đình vừa đẹp vừa thực.",
+      "contents": [
+        "Ổi ruột đỏ",
+        "Vú sữa",
+        "Hồng giòn",
+        "Xoài cát",
+        "Táo"
+      ],
       "badge": null,
-      "tags": ["tham-benh", "cuoi-hoi", "sinh-nhat", "gia-dinh"],
+      "tags": [
+        "tham-benh",
+        "cuoi-hoi",
+        "sinh-nhat",
+        "gia-dinh"
+      ],
       "personalization": {
         "enabled": true,
         "type": "handwritten-card",
         "label": "Lời chúc viết trên thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 450000, "currency_code": "vnd" },
-      "options": [{ "name": "Kích cỡ", "values": ["Nhỏ", "Vừa", "Lớn"] }],
+      "price": {
+        "amount": 450000,
+        "currency_code": "vnd"
+      },
+      "options": [
+        {
+          "name": "Kích cỡ",
+          "values": [
+            "Nhỏ",
+            "Vừa",
+            "Lớn"
+          ]
+        }
+      ],
       "variants": [],
-      "images": ["/images/products/gio-trai-cay-sach-viet-nam-cho-gia-dinh.svg"],
+      "images": [
+        "/images/products/gio-trai-cay-sach-viet-nam-cho-gia-dinh.svg"
+      ],
       "thumbnail": "/images/products/gio-trai-cay-sach-viet-nam-cho-gia-dinh.svg",
       "inStock": true
     },
@@ -51,18 +103,40 @@
       "subtitle": "Chúc mau khỏe",
       "category": "gio-trai-cay-cao-cap",
       "description": "Táo xanh, nho, ổi, thanh long, cam… chọn quả lành, dễ ăn cho người bệnh và người lớn tuổi.",
+      "contents": [
+        "Táo xanh",
+        "Nho",
+        "Ổi",
+        "Thanh long",
+        "Cam"
+      ],
       "badge": null,
-      "tags": ["tham-benh"],
+      "tags": [
+        "tham-benh"
+      ],
       "personalization": {
         "enabled": true,
         "type": "handwritten-card",
         "label": "Lời chúc viết trên thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 480000, "currency_code": "vnd" },
-      "options": [{ "name": "Kích cỡ", "values": ["Nhỏ", "Vừa"] }],
+      "price": {
+        "amount": 480000,
+        "currency_code": "vnd"
+      },
+      "options": [
+        {
+          "name": "Kích cỡ",
+          "values": [
+            "Nhỏ",
+            "Vừa"
+          ]
+        }
+      ],
       "variants": [],
-      "images": ["/images/products/gio-trai-cay-tham-benh.svg"],
+      "images": [
+        "/images/products/gio-trai-cay-tham-benh.svg"
+      ],
       "thumbnail": "/images/products/gio-trai-cay-tham-benh.svg",
       "inStock": true
     },
@@ -73,18 +147,31 @@
       "subtitle": "Đồng nghiệp & bạn bè",
       "category": "gio-qua-tet",
       "description": "Bánh quy, kẹo, trà gói, hạt điều… gói đẹp, phù hợp biếu đồng nghiệp và bạn bè.",
+      "contents": [
+        "Bánh quy",
+        "Kẹo",
+        "Trà gói",
+        "Hạt điều"
+      ],
       "badge": null,
-      "tags": ["tet"],
+      "tags": [
+        "tet"
+      ],
       "personalization": {
         "enabled": true,
         "type": "handwritten-card",
         "label": "Lời chúc viết trên thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 350000, "currency_code": "vnd" },
+      "price": {
+        "amount": 350000,
+        "currency_code": "vnd"
+      },
       "options": [],
       "variants": [],
-      "images": ["/images/products/gio-qua-tet-vua-tui-tien.svg"],
+      "images": [
+        "/images/products/gio-qua-tet-vua-tui-tien.svg"
+      ],
       "thumbnail": "/images/products/gio-qua-tet-vua-tui-tien.svg",
       "inStock": true
     },
@@ -95,18 +182,33 @@
       "subtitle": "Biếu bố mẹ, họ hàng",
       "category": "gio-qua-tet",
       "description": "Rượu vang, bánh quy ngoại, trà hảo hạng, hạt dinh dưỡng, nho khô… bộ quà biếu bố mẹ và họ hàng trong Tết.",
+      "contents": [
+        "Rượu vang",
+        "Bánh quy ngoại",
+        "Trà hảo hạng",
+        "Hạt dinh dưỡng",
+        "Nho khô"
+      ],
       "badge": "Bán chạy",
-      "tags": ["tet", "gia-dinh"],
+      "tags": [
+        "tet",
+        "gia-dinh"
+      ],
       "personalization": {
         "enabled": true,
         "type": "handwritten-card",
         "label": "Lời chúc viết trên thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 650000, "currency_code": "vnd" },
+      "price": {
+        "amount": 650000,
+        "currency_code": "vnd"
+      },
       "options": [],
       "variants": [],
-      "images": ["/images/products/gio-qua-tet-an-loc.svg"],
+      "images": [
+        "/images/products/gio-qua-tet-an-loc.svg"
+      ],
       "thumbnail": "/images/products/gio-qua-tet-an-loc.svg",
       "inStock": true
     },
@@ -117,18 +219,33 @@
       "subtitle": "Biếu cấp trên, đối tác lớn",
       "category": "gio-qua-tet",
       "description": "Yến sợi, nhân sâm, rượu vang nhập, trà cao cấp… giỏ quà Tết sang trọng dành biếu cấp trên và đối tác lớn.",
+      "contents": [
+        "Yến sợi",
+        "Nhân sâm",
+        "Rượu vang nhập",
+        "Trà cao cấp"
+      ],
       "badge": null,
-      "tags": ["tet", "bieu-sep", "doanh-nghiep"],
+      "tags": [
+        "tet",
+        "bieu-sep",
+        "doanh-nghiep"
+      ],
       "personalization": {
         "enabled": true,
         "type": "handwritten-card",
         "label": "Lời chúc viết trên thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 1450000, "currency_code": "vnd" },
+      "price": {
+        "amount": 1450000,
+        "currency_code": "vnd"
+      },
       "options": [],
       "variants": [],
-      "images": ["/images/products/gio-qua-tet-cao-cap-phuc-loc-tho.svg"],
+      "images": [
+        "/images/products/gio-qua-tet-cao-cap-phuc-loc-tho.svg"
+      ],
       "thumbnail": "/images/products/gio-qua-tet-cao-cap-phuc-loc-tho.svg",
       "inStock": true
     },
@@ -139,18 +256,41 @@
       "subtitle": "Đặt số lượng, gắn logo",
       "category": "qua-tang-doanh-nghiep",
       "description": "Vang, trà, hạt dinh dưỡng, bánh ngoại đóng giỏ cao cấp; đặt từ 10 giỏ gắn logo và thiệp chúc theo yêu cầu.",
+      "contents": [
+        "Rượu vang",
+        "Trà",
+        "Hạt dinh dưỡng",
+        "Bánh ngoại"
+      ],
       "badge": "Đặt số lượng",
-      "tags": ["tet", "doanh-nghiep", "bieu-sep"],
+      "tags": [
+        "tet",
+        "doanh-nghiep",
+        "bieu-sep"
+      ],
       "personalization": {
         "enabled": true,
         "type": "logo-and-card",
         "label": "Logo doanh nghiệp & lời chúc thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 950000, "currency_code": "vnd" },
-      "options": [{ "name": "Kích cỡ", "values": ["Vừa", "Lớn"] }],
+      "price": {
+        "amount": 950000,
+        "currency_code": "vnd"
+      },
+      "options": [
+        {
+          "name": "Kích cỡ",
+          "values": [
+            "Vừa",
+            "Lớn"
+          ]
+        }
+      ],
       "variants": [],
-      "images": ["/images/products/gio-qua-doanh-nghiep-bieu-doi-tac.svg"],
+      "images": [
+        "/images/products/gio-qua-doanh-nghiep-bieu-doi-tac.svg"
+      ],
       "thumbnail": "/images/products/gio-qua-doanh-nghiep-bieu-doi-tac.svg",
       "inStock": true
     },
@@ -161,18 +301,31 @@
       "subtitle": "Quà Tết nhân viên",
       "category": "qua-tang-doanh-nghiep",
       "description": "Bánh kẹo, trà, khăn ấm… đóng hộp đồng bộ; đặt từ 20 set có giá tốt kèm in logo doanh nghiệp.",
+      "contents": [
+        "Bánh kẹo",
+        "Trà",
+        "Khăn ấm"
+      ],
       "badge": null,
-      "tags": ["tet", "doanh-nghiep"],
+      "tags": [
+        "tet",
+        "doanh-nghiep"
+      ],
       "personalization": {
         "enabled": true,
         "type": "logo-and-card",
         "label": "Logo doanh nghiệp & lời chúc thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 350000, "currency_code": "vnd" },
+      "price": {
+        "amount": 350000,
+        "currency_code": "vnd"
+      },
       "options": [],
       "variants": [],
-      "images": ["/images/products/set-hop-qua-tet-cho-nhan-vien.svg"],
+      "images": [
+        "/images/products/set-hop-qua-tet-cho-nhan-vien.svg"
+      ],
       "thumbnail": "/images/products/set-hop-qua-tet-cho-nhan-vien.svg",
       "inStock": true
     },
@@ -183,18 +336,42 @@
       "subtitle": "Sinh nhật đầy đủ",
       "category": "gio-qua-sinh-nhat-hoa",
       "description": "Bánh kem nhỏ, trái cây nhập, hoa hồng, gấu bông và thiệp viết tay theo yêu cầu.",
+      "contents": [
+        "Bánh kem nhỏ",
+        "Trái cây nhập",
+        "Hoa hồng",
+        "Gấu bông",
+        "Thiệp viết tay"
+      ],
       "badge": "Bán chạy",
-      "tags": ["sinh-nhat", "1-6"],
+      "tags": [
+        "sinh-nhat",
+        "1-6"
+      ],
       "personalization": {
         "enabled": true,
         "type": "handwritten-card",
         "label": "Lời chúc viết trên thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 650000, "currency_code": "vnd" },
-      "options": [{ "name": "Kích cỡ", "values": ["Nhỏ", "Vừa", "Lớn"] }],
+      "price": {
+        "amount": 650000,
+        "currency_code": "vnd"
+      },
+      "options": [
+        {
+          "name": "Kích cỡ",
+          "values": [
+            "Nhỏ",
+            "Vừa",
+            "Lớn"
+          ]
+        }
+      ],
       "variants": [],
-      "images": ["/images/products/gio-qua-sinh-nhat-kem-gau-bong.svg"],
+      "images": [
+        "/images/products/gio-qua-sinh-nhat-kem-gau-bong.svg"
+      ],
       "thumbnail": "/images/products/gio-qua-sinh-nhat-kem-gau-bong.svg",
       "inStock": true
     },
@@ -205,18 +382,35 @@
       "subtitle": "Bó hoa + quà",
       "category": "gio-qua-sinh-nhat-hoa",
       "description": "Bó hoa hồng, socola nhập khẩu, kèm bộ bóng bay chữ Happy Birthday và thiệp.",
+      "contents": [
+        "Bó hoa hồng",
+        "Socola nhập khẩu",
+        "Bộ bóng bay Happy Birthday",
+        "Thiệp"
+      ],
       "badge": "Mới",
-      "tags": ["sinh-nhat", "valentine", "8-3", "20-10", "1-6"],
+      "tags": [
+        "sinh-nhat",
+        "valentine",
+        "8-3",
+        "20-10",
+        "1-6"
+      ],
       "personalization": {
         "enabled": true,
         "type": "handwritten-card",
         "label": "Lời chúc viết trên thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 850000, "currency_code": "vnd" },
+      "price": {
+        "amount": 850000,
+        "currency_code": "vnd"
+      },
       "options": [],
       "variants": [],
-      "images": ["/images/products/set-qua-sinh-nhat-hoa-socola-bong-bay.svg"],
+      "images": [
+        "/images/products/set-qua-sinh-nhat-hoa-socola-bong-bay.svg"
+      ],
       "thumbnail": "/images/products/set-qua-sinh-nhat-hoa-socola-bong-bay.svg",
       "inStock": true
     },
@@ -227,18 +421,34 @@
       "subtitle": "Mẹ, vợ, cô giáo",
       "category": "gio-qua-sinh-nhat-hoa",
       "description": "Hoa tươi, trà hoa, socola và hạt dinh dưỡng đóng giỏ nhỏ xinh dành tặng mẹ, vợ, cô giáo, đồng nghiệp nữ.",
+      "contents": [
+        "Hoa tươi",
+        "Trà hoa",
+        "Socola",
+        "Hạt dinh dưỡng"
+      ],
       "badge": null,
-      "tags": ["8-3", "20-10", "20-11", "tri-an"],
+      "tags": [
+        "8-3",
+        "20-10",
+        "20-11",
+        "tri-an"
+      ],
       "personalization": {
         "enabled": true,
         "type": "handwritten-card",
         "label": "Lời chúc viết trên thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 590000, "currency_code": "vnd" },
+      "price": {
+        "amount": 590000,
+        "currency_code": "vnd"
+      },
       "options": [],
       "variants": [],
-      "images": ["/images/products/gio-qua-tri-an-8-3-20-10.svg"],
+      "images": [
+        "/images/products/gio-qua-tri-an-8-3-20-10.svg"
+      ],
       "thumbnail": "/images/products/gio-qua-tri-an-8-3-20-10.svg",
       "inStock": true
     },
@@ -249,18 +459,34 @@
       "subtitle": "Món quà sang trọng",
       "category": "hop-qua-tang-cao-cap",
       "description": "Yến sào chưng sẵn, trà Tân Cương, hạt dinh dưỡng nhập, rượu vang… đóng hộp sang trọng kèm túi giấy.",
+      "contents": [
+        "Yến sào chưng sẵn",
+        "Trà Tân Cương",
+        "Hạt dinh dưỡng nhập",
+        "Rượu vang"
+      ],
       "badge": null,
-      "tags": ["bieu-sep", "tet", "tri-an", "20-11"],
+      "tags": [
+        "bieu-sep",
+        "tet",
+        "tri-an",
+        "20-11"
+      ],
       "personalization": {
         "enabled": true,
         "type": "handwritten-card",
         "label": "Lời chúc viết trên thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 1150000, "currency_code": "vnd" },
+      "price": {
+        "amount": 1150000,
+        "currency_code": "vnd"
+      },
       "options": [],
       "variants": [],
-      "images": ["/images/products/hop-qua-bieu-sep-yen-sao-tra-hao-hang.svg"],
+      "images": [
+        "/images/products/hop-qua-bieu-sep-yen-sao-tra-hao-hang.svg"
+      ],
       "thumbnail": "/images/products/hop-qua-bieu-sep-yen-sao-tra-hao-hang.svg",
       "inStock": true
     },
@@ -271,18 +497,34 @@
       "subtitle": "Quà sức khỏe thiết thực",
       "category": "hop-qua-tang-cao-cap",
       "description": "Hạt dinh dưỡng nhiều loại, táo đỏ, đông trùng, nho khô… món quà thiết thực về sức khỏe, hợp biếu bố mẹ và ông bà.",
+      "contents": [
+        "Hạt dinh dưỡng nhiều loại",
+        "Táo đỏ",
+        "Đông trùng",
+        "Nho khô"
+      ],
       "badge": null,
-      "tags": ["tet", "tham-benh", "gia-dinh", "20-10"],
+      "tags": [
+        "tet",
+        "tham-benh",
+        "gia-dinh",
+        "20-10"
+      ],
       "personalization": {
         "enabled": true,
         "type": "handwritten-card",
         "label": "Lời chúc viết trên thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 750000, "currency_code": "vnd" },
+      "price": {
+        "amount": 750000,
+        "currency_code": "vnd"
+      },
       "options": [],
       "variants": [],
-      "images": ["/images/products/hop-qua-suc-khoe-cho-bo-me.svg"],
+      "images": [
+        "/images/products/hop-qua-suc-khoe-cho-bo-me.svg"
+      ],
       "thumbnail": "/images/products/hop-qua-suc-khoe-cho-bo-me.svg",
       "inStock": true
     },
@@ -293,18 +535,31 @@
       "subtitle": "Chúc phát tài phát lộc",
       "category": "qua-khai-truong-tan-gia",
       "description": "Rượu vang, trà, bánh kèm bình hoa khai trương, chúc thăng hoa, phát tài phát lộc.",
+      "contents": [
+        "Rượu vang",
+        "Trà",
+        "Bánh",
+        "Bình hoa khai trương"
+      ],
       "badge": null,
-      "tags": ["khai-truong"],
+      "tags": [
+        "khai-truong"
+      ],
       "personalization": {
         "enabled": true,
         "type": "handwritten-card",
         "label": "Lời chúc viết trên thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 950000, "currency_code": "vnd" },
+      "price": {
+        "amount": 950000,
+        "currency_code": "vnd"
+      },
       "options": [],
       "variants": [],
-      "images": ["/images/products/gio-qua-khai-truong-tai-loc.svg"],
+      "images": [
+        "/images/products/gio-qua-khai-truong-tai-loc.svg"
+      ],
       "thumbnail": "/images/products/gio-qua-khai-truong-tai-loc.svg",
       "inStock": true
     },
@@ -315,18 +570,31 @@
       "subtitle": "Ấm cúng nhà mới",
       "category": "qua-khai-truong-tan-gia",
       "description": "Trà, hoa khô, nến thơm và rượu vang nhỏ… món quà ấm cúng cho nhà mới.",
+      "contents": [
+        "Trà",
+        "Hoa khô",
+        "Nến thơm",
+        "Rượu vang nhỏ"
+      ],
       "badge": null,
-      "tags": ["khai-truong"],
+      "tags": [
+        "khai-truong"
+      ],
       "personalization": {
         "enabled": true,
         "type": "handwritten-card",
         "label": "Lời chúc viết trên thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 550000, "currency_code": "vnd" },
+      "price": {
+        "amount": 550000,
+        "currency_code": "vnd"
+      },
       "options": [],
       "variants": [],
-      "images": ["/images/products/set-qua-tan-gia-sum-vay.svg"],
+      "images": [
+        "/images/products/set-qua-tan-gia-sum-vay.svg"
+      ],
       "thumbnail": "/images/products/set-qua-tan-gia-sum-vay.svg",
       "inStock": true
     },
@@ -337,18 +605,31 @@
       "subtitle": "Biếu gia đình & khách hàng",
       "category": "set-qua-trung-thu",
       "description": "Bộ bánh trung cao cấp 4–6 hộp kèm trà và rượu vang, đóng giỏ biếu khách hàng và đối tác dịp Trung Thu.",
+      "contents": [
+        "Bánh trung cao cấp 4–6 hộp",
+        "Trà",
+        "Rượu vang"
+      ],
       "badge": null,
-      "tags": ["trung-thu", "doanh-nghiep"],
+      "tags": [
+        "trung-thu",
+        "doanh-nghiep"
+      ],
       "personalization": {
         "enabled": true,
         "type": "handwritten-card",
         "label": "Lời chúc viết trên thiệp",
         "maxChars": 120
       },
-      "price": { "amount": 890000, "currency_code": "vnd" },
+      "price": {
+        "amount": 890000,
+        "currency_code": "vnd"
+      },
       "options": [],
       "variants": [],
-      "images": ["/images/products/set-qua-trung-thu-sang-trong.svg"],
+      "images": [
+        "/images/products/set-qua-trung-thu-sang-trong.svg"
+      ],
       "thumbnail": "/images/products/set-qua-trung-thu-sang-trong.svg",
       "inStock": true
     }

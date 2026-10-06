@@ -29,7 +29,11 @@ const category = categoryBySlug(product.category);
     <h3>
       <a class="card-link" href={asset(`/products/${product.slug}/`)}>{product.name}</a>
     </h3>
+    {product.subtitle && <p class="card-subtitle">{product.subtitle}</p>}
     <p class="card-desc">{product.description}</p>
+    {product.contents && product.contents.length > 0 && (
+      <p class="card-contents">Gồm {product.contents.length} món</p>
+    )}
     <div class="card-foot">
       <span class="price">{formatVnd(product.price.amount)}</span>
       <a

@@ -56,6 +56,21 @@ const related = relatedProducts(product, 3);
         <p>{product.description}</p>
 
         {
+          product.contents && product.contents.length > 0 && (
+            <>
+              <h3 style="font-family: var(--font-body); font-size: 0.95rem; margin-bottom: 0.2rem;">
+                Gồm {product.contents.length} món trong giỏ
+              </h3>
+              <ul class="meta-list">
+                {product.contents.map((item) => (
+                  <li>• {item}</li>
+                ))}
+              </ul>
+            </>
+          )
+        }
+
+        {
           product.options.length > 0 && (
             <>
               <h3 style="font-family: var(--font-body); font-size: 0.95rem; margin-bottom: 0.2rem;">
