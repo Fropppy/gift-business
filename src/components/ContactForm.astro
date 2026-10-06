@@ -21,7 +21,7 @@ const { defaultProductSlug = '' } = Astro.props;
     <div class="form-row">
       <div class="field">
         <label for="enq-name">Tên của bạn *</label>
-        <input id="enq-name" name="name" type="text" autocomplete="name" required placeholder="Ví dụ: My" />
+        <input id="enq-name" name="name" type="text" autocomplete="name" required maxlength="100" placeholder="Ví dụ: My" />
       </div>
       <div class="field">
         <label for="enq-phone">Số điện thoại / Zalo *</label>
@@ -58,6 +58,7 @@ const { defaultProductSlug = '' } = Astro.props;
       <textarea
         id="enq-message"
         name="message"
+        maxlength="1000"
         placeholder="Ví dụ: biếu bố mẹ dịp Tết, ngân sách khoảng 700k, giao quận Phú Nhuận sáng mùng 2 Tết…"></textarea>
     </div>
 

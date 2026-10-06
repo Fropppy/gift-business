@@ -43,8 +43,17 @@ const STATUS_VALUES = ['Mới', 'Đang gọi', 'Đã tư vấn', 'Đã chốt', 
 function doPost(e) {
   try {
     const body = JSON.parse(e.postData.contents);
-    const name = String(body.name || '').trim();
+    // Field caps: without them a single POST can stuff a ~49,000-char cell
+    // (Sheets' per-cell limit) and bloat the sheet the family opens and
+    // copies from — the /exec URL accepts arbitrary JSON lengths. Caps also
+    // bound what findRecentDuplicate has to compare. Phone is already
+    // length-constrained by the regex below.
+    const clip = (v, n) => String(v || '').trim().slice(0, n);
+    const name = clip(body.name, 100);
     const phone = String(body.phone || '').trim();
+    const product = clip(body.product, 200);
+    const message = clip(body.message, 1000);
+    const page = clip(body.page, 500);
 
     if (!name || !/^[0-9+ ]{9,13}$/.test(phone)) {
       return json({ ok: false, error: 'invalid name or phone' });
@@ -66,7 +75,7 @@ function doPost(e) {
     }
     cache.put(rlKey, String(Number(cache.get(rlKey) || 0) + 1), 600);
 
-    const duplicate = findRecentDuplicate(phone, String(body.message || '').trim());
+    const duplicate = findRecentDuplicate(phone, message);
     if (duplicate) {
       return json({ ok: true, orderId: duplicate, duplicate: true });
     }
@@ -84,9 +93,9 @@ function doPost(e) {
       'Mới',
       neutralize(name),
       neutralize(phone),
-      neutralize(String(body.product || '')),
-      neutralize(String(body.message || '')),
-      neutralize(String(body.page || '')),
+      neutralize(product),
+      neutralize(message),
+      neutralize(page),
       '',
       '',
     ]);

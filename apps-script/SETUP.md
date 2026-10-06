@@ -62,6 +62,9 @@ without changing the site.
 - Honeypot: a filled `company` field is dropped silently.
 - Rate limit: max 3 submissions per phone per 10 minutes (CacheService);
   the 4th gets `{"ok":false,"error":"too many requests"}`.
+- Field caps: name 100, product 200, message 1000, page 500 characters —
+  anything longer is trimmed before it reaches the sheet (the form's
+  name/message inputs carry matching maxlength).
 - Formula guard: any field whose text starts with `=`, `+`, `-`, `@` (or a
   tab/CR) is stored as plain text via a leading apostrophe, so formulas
   pasted into the form never execute when the sheet is opened. This also
