@@ -1,0 +1,38 @@
+name: PR checks
+
+# Deterministic gates for every pull request. The deploy workflow
+# (deploy.yml) stays untouched: withastro/action@v6 does install + build +
+# artifact upload in one step and cannot run custom scripts — and it
+# triggers on push only.
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # Astro 7 requires >=22.12.0; never 23 (see deploy.yml)
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Contrast gate (WCAG ratios, selector-level, per theme, rest + hover)
+        run: node scripts/check-contrast.mjs
+
+      - name: Build
+        run: npm run build
+
+      - name: Output gate (dist/ artifact assertions)
+        run: node scripts/check-output.mjs
