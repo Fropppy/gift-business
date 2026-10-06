@@ -8,26 +8,44 @@
    ============================================================ */
 
 :root {
-  /* palette */
+  color-scheme: light;
+
+  /* palette — base "Mùa thường" */
   --bg: #faf6ef;             /* Kem Giấy — page background */
   --surface: #ffffff;        /* Trắng Tuyết — cards, sheets */
   --primary: #1e5c46;        /* Xanh Thông — CTAs, links, wordmark */
-  --primary-deep: #16473a;   /* derived: primary hover (primary + 12% black) */
+  --primary-deep: #16473a;   /* primary hover */
   --primary-ink: #ffffff;    /* text on primary */
-  --accent: #c96f2f;         /* Cam Đất — hover, highlight chips, warm buttons */
-  --accent-deep: #b25d22;    /* derived: accent hover */
-  --accent-ink: #ffffff;     /* text on accent */
-  --tet: #c0272d;            /* Đỏ Tết — HOT/flash tags, seasonal primary */
-  --gold: #c89b3c;           /* Vàng May — stars, premium foil touches */
+  --accent: #c96f2f;         /* Cam Đất — DECORATIVE ONLY: borders, chip hover
+                                borders, large display numerals. Not text-safe
+                                (3.36:1 on cream). */
+  --accent-strong: #a1501a;  /* accent AS TEXT on light: 5.30:1 cream, 5.71:1
+                                white. Eyebrows, .link-more, .card-zalo. */
+  --accent-deep: #8a4418;    /* accent TEXT hover: 6.67:1 cream. a:hover,
+                                .chip:hover, .link-more:hover. (Was #b25d22 —
+                                only 4.35:1 as text on cream.) */
+  --accent-fill: #a1501a;    /* .btn--accent fill (white ink 5.71:1). Same value
+                                as --accent-strong in this white-ink theme; the
+                                roles split in the dark-ink seasonal themes. */
+  --accent-fill-hover: #8a4418; /* .btn--accent:hover fill (white ink 7.19:1). */
+  --accent-ink: #ffffff;     /* text on --accent-fill */
+  --tet: #c0272d;            /* Đỏ Tết — HOT/flash tags, form errors; fills only in tet theme */
+  --gold: #c89b3c;           /* Vàng May — antique/matte gold, never bright foil */
   --gold-ink: #2b2118;       /* text on gold */
   --text: #2b2118;           /* Mực Cacao — headings & body */
-  --muted: #6c6053;          /* derived: text at ~72% over cream */
+  --muted: #6c6053;          /* secondary text — 5.67:1 on cream */
   --border: #e7dcc8;         /* Viền Sương */
   --border-strong: #d8cbb8;  /* Viền Sương darkened (hover) */
+  --scrim: 43, 33, 24;       /* rgb triplet for imagery scrims:
+                                rgba(var(--scrim) / 0.62 … 0.05) */
 
-  /* seasonal hooks (set by the theme script in BaseLayout for Tết) */
+  /* runtime hooks (set by the head script in BaseLayout; defaults declared
+     here so no-JS never renders a hole) */
   --motif-image: none;
   --motif-opacity: 0;
+  --hero-1: none;
+  --hero-2: none;
+  --hero-tile: none;
 
   /* type */
   --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
@@ -47,12 +65,20 @@
    the public/ URL survives the /gift-business subpath). */
 [data-theme='tet'] {
   --bg: #fdf3e7;
-  --primary: #c0272d;
-  --primary-deep: #a11f26;
+  --primary: #c0272d;        /* white ink 5.88:1 */
+  --primary-deep: #a11f26;   /* white ink 7.67:1 */
   --primary-ink: #ffffff;
-  --accent: #c89b3c;
-  --accent-deep: #b0872f;
-  --accent-ink: #2b2118;
+  --accent: #c89b3c;         /* decorative gold: seals, ribbons, borders */
+  --accent-strong: #7a611f;  /* gold AS TEXT on #fdf3e7: 5.38:1. NOT #b0872f —
+                                that is 3.01:1 as text here; it is the fill
+                                value below. */
+  --accent-deep: #6a541d;    /* gold text hover on #fdf3e7: 6.61:1 */
+  --accent-fill: #b0872f;    /* .btn--accent fill, cocoa ink 4.76:1 */
+  --accent-fill-hover: #c89b3c; /* Hover fill is LIGHTER here (cocoa ink 6.16:1).
+                                In a dark-ink theme a lighter fill raises
+                                contrast; the base-theme instinct (darker
+                                hover) would lower it. */
+  --accent-ink: #2b2118;     /* dark ink on gold fills — white on gold fails AA */
   --border: #ebd9c3;
   --border-strong: #dec9ae;
 }
@@ -111,7 +137,10 @@ img { max-width: 100%; display: block; }
 button { font-family: inherit; }
 
 :focus-visible {
-  outline: 3px solid var(--accent);
+  /* Ring sourced from --primary in every theme (base 7.29:1 on cream,
+     tet 5.37, trung-thu 10.2 — all clear the 3:1 non-text minimum).
+     The accent route fails in the seasonal themes (gold 2.33:1 on tet bg). */
+  outline: 3px solid var(--primary);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -149,7 +178,7 @@ button { font-family: inherit; }
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-strong);
   margin-bottom: 0.6rem;
 }
 
@@ -183,11 +212,11 @@ button { font-family: inherit; }
 .btn--primary:hover { background: var(--primary-deep); color: var(--primary-ink); }
 
 .btn--accent {
-  background: var(--accent);
+  background: var(--accent-fill);
   color: var(--accent-ink);
 }
 
-.btn--accent:hover { background: var(--accent-deep); color: var(--accent-ink); }
+.btn--accent:hover { background: var(--accent-fill-hover); color: var(--accent-ink); }
 
 .btn--ghost {
   background: transparent;
@@ -476,7 +505,7 @@ button { font-family: inherit; }
 
 .hero-tile-body .link-more {
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-strong);
   text-decoration: none;
 }
 
@@ -682,7 +711,7 @@ button { font-family: inherit; }
   z-index: 2;
   font-size: 0.82rem;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-strong);
   text-decoration: none;
   opacity: 0;
   transform: translateY(4px);
