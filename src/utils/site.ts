@@ -20,6 +20,8 @@ export interface Site {
   replyWithin: string;
   deliveryArea: string;
   yearsInBusiness: number;
+  /** Apps Script web-app URL the enquiry form POSTs to; empty = form stays in honesty-gate mode. */
+  orderEndpoint: string;
   nav: NavItem[];
 }
 

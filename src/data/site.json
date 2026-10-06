@@ -13,6 +13,7 @@
   "replyWithin": "30 phút trong giờ mở cửa",
   "deliveryArea": "TP. Hồ Chí Minh và các khu vực lân cận",
   "yearsInBusiness": 7,
+  "orderEndpoint": "",
   "nav": [
     { "label": "Trang chủ", "href": "/" },
     { "label": "Giỏ quà", "href": "/products/" },
