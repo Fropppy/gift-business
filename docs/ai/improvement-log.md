@@ -25,6 +25,22 @@ Mark promoted entries with → where they landed.
 - Promoted to → the whole tree; the enforcement lives in
   scripts/check-docs.mjs.
 
+## 2026-10-06 — Review-issue lists can lag the last fix round
+
+- Observation: the docs-system workflow's final report carried 4 "open"
+  review issues; re-verification against the tree showed all 4 already
+  fixed by the last builder round (secret-scan excludes proven by a
+  post-commit zero-hit run; citation coverage = check-docs assertion 18,
+  27 pinned ranges). Cause: the fix round landed after the final review
+  snapshot, and the loop never re-checked.
+- Change: none to gates — the corollary is procedural: treat a workflow's
+  reported issue list as a snapshot of its last review, not of the tree;
+  verify against the tree before re-fixing or reporting.
+- Promoted to → covered by ZCODE.md working rule 9 (verify claims before
+  reporting); logged so future workflow scripts order the final review
+  AFTER the last fix round.
+
+
 ## 2026-10-06 — Token count drifts across docs
 
 - Observation: the `:root` token count was cited as 53, then 55 in older
