@@ -60,4 +60,8 @@ without changing the site.
 - Order IDs: `GQ-YYYYMMDD-####`, per-day counter, race-safe via LockService.
 - Dedupe: same phone + message within 5 minutes returns the existing order ID.
 - Honeypot: a filled `company` field is dropped silently.
+- Formula guard: any field whose text starts with `=`, `+`, `-`, `@` (or a
+  tab/CR) is stored as plain text via a leading apostrophe, so formulas
+  pasted into the form never execute when the sheet is opened. This also
+  keeps phones like `+841234567890` from rendering as `8.41235E+11`.
 - Timezone: Asia/Ho_Chi_Minh, fixed in code regardless of script TZ setting.

