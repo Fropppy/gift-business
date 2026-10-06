@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img">
+<title>Set quà Trung Thu sang trọng</title>
+<rect width="800" height="600" fill="#FAF6EF"/>
+<circle cx="400" cy="290" r="250" fill="#C89B3C" opacity="0.07"/>
+<circle cx="459.97" cy="540.06" r="2.01" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="147.09" cy="55.2" r="2.45" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="245.77" cy="188.11" r="4.75" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="87.92" cy="307.55" r="4.23" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="139.36" cy="526.86" r="3.33" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="154.5" cy="459.94" r="4.29" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="75.39" cy="89.26" r="4.67" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="374.75" cy="479.67" r="2.43" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="194.6" cy="403.96" r="2.96" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="603.75" cy="220.68" r="2.93" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="548.99" cy="423.84" r="4.55" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="315.84" cy="362.66" r="4.8" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="606.3" cy="342.9" r="3.44" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="535.04" cy="55.97" r="2.1" fill="#E7DCC8" opacity="0.7"/>
+
+<ellipse cx="400" cy="520" rx="200" ry="22" fill="#2B2118" opacity="0.08"/>
+<circle cx="636" cy="118" r="58" fill="#C89B3C" opacity="0.9"/><circle cx="620" cy="106" r="10" fill="#FAF6EF" opacity="0.5"/>
+<g>
+<rect x="470" y="330" width="210" height="150" rx="12" fill="#FAF6EF" stroke="#E7DCC8" stroke-width="2"/>
+<rect x="458" y="306" width="234" height="52" rx="12" fill="#C89B3C" opacity="0.9"/>
+<rect x="558" y="306" width="34" height="174" fill="#C0272D" opacity="0.9"/>
+</g>
+<g>
+<rect x="228" y="300" width="300" height="212" rx="14" fill="#FFFFFF" stroke="#E7DCC8" stroke-width="2.5"/>
+<rect x="210" y="258" width="336" height="72" rx="14" fill="#C89B3C" stroke="#E7DCC8" stroke-width="2"/>
+<rect x="346" y="258" width="44" height="254" fill="#C0272D"/>
+</g>
+<g transform="translate(368 262) scale(1.15)">
+<path d="M0 0 C -34 -22 -58 -4 -40 12 C -28 22 -10 12 0 0 Z" fill="#C0272D"/>
+<path d="M0 0 C 34 -22 58 -4 40 12 C 28 22 10 12 0 0 Z" fill="#C0272D"/>
+<path d="M-6 4 C -18 26 -30 34 -38 40 L -28 42 C -16 34 -6 20 2 8 Z" fill="#C0272D" opacity="0.85"/>
+<path d="M6 4 C 18 26 30 34 38 40 L 28 42 C 16 34 6 20 -2 8 Z" fill="#C0272D" opacity="0.85"/>
+<circle r="9" fill="#C0272D" stroke="#FAF6EF" stroke-width="2.5"/>
+</g>
+
+<g transform="rotate(-8 600 420)">
+<rect x="560" y="392" width="86" height="58" rx="8" fill="#FFFFFF" stroke="#D8CBB8" stroke-width="2"/>
+<line x1="574" y1="412" x2="632" y2="412" stroke="#D8CBB8" stroke-width="4" stroke-linecap="round"/>
+<line x1="574" y1="428" x2="618" y2="428" stroke="#D8CBB8" stroke-width="4" stroke-linecap="round"/>
+<circle cx="603" cy="378" r="5" fill="#2B2118"/>
+<line x1="603" y1="383" x2="596" y2="396" stroke="#2B2118" stroke-width="2"/>
+</g>
+</svg>

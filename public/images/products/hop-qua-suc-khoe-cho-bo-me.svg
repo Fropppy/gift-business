@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img">
+<title>Hộp quà sức khỏe cho bố mẹ</title>
+<rect width="800" height="600" fill="#FAF6EF"/>
+<circle cx="400" cy="290" r="250" fill="#C89B3C" opacity="0.07"/>
+<circle cx="693.07" cy="548.93" r="2.25" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="311.64" cy="521.87" r="3.81" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="50.76" cy="497.83" r="4.82" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="710.36" cy="525.67" r="3.82" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="687.82" cy="506.46" r="4.81" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="121.49" cy="428.97" r="2.83" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="392.36" cy="547.73" r="3.62" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="432.95" cy="310.27" r="2.18" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="259.12" cy="493.68" r="4.75" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="720.09" cy="383.7" r="2.26" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="177.18" cy="471.66" r="3.73" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="106.5" cy="424.69" r="3.73" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="456.62" cy="104.43" r="2.7" fill="#E7DCC8" opacity="0.7"/>
+<circle cx="217.71" cy="140.92" r="4.43" fill="#E7DCC8" opacity="0.7"/>
+
+<ellipse cx="400" cy="520" rx="200" ry="22" fill="#2B2118" opacity="0.08"/>
+<circle cx="170" cy="130" r="6" fill="#C89B3C" opacity="0.8"/><circle cx="210" cy="100" r="4" fill="#C0272D" opacity="0.7"/><circle cx="650" cy="140" r="5" fill="#C96F2F" opacity="0.7"/>
+<g>
+<rect x="470" y="330" width="210" height="150" rx="12" fill="#FAF6EF" stroke="#E7DCC8" stroke-width="2"/>
+<rect x="458" y="306" width="234" height="52" rx="12" fill="#C89B3C" opacity="0.9"/>
+<rect x="558" y="306" width="34" height="174" fill="#2B2118" opacity="0.9"/>
+</g>
+<g>
+<rect x="228" y="300" width="300" height="212" rx="14" fill="#FAF6EF" stroke="#E7DCC8" stroke-width="2.5"/>
+<rect x="210" y="258" width="336" height="72" rx="14" fill="#C89B3C" stroke="#E7DCC8" stroke-width="2"/>
+<rect x="346" y="258" width="44" height="254" fill="#2B2118"/>
+</g>
+<g transform="translate(368 262) scale(1.15)">
+<path d="M0 0 C -34 -22 -58 -4 -40 12 C -28 22 -10 12 0 0 Z" fill="#2B2118"/>
+<path d="M0 0 C 34 -22 58 -4 40 12 C 28 22 10 12 0 0 Z" fill="#2B2118"/>
+<path d="M-6 4 C -18 26 -30 34 -38 40 L -28 42 C -16 34 -6 20 2 8 Z" fill="#2B2118" opacity="0.85"/>
+<path d="M6 4 C 18 26 30 34 38 40 L 28 42 C 16 34 6 20 -2 8 Z" fill="#2B2118" opacity="0.85"/>
+<circle r="9" fill="#2B2118" stroke="#FAF6EF" stroke-width="2.5"/>
+</g>
+
+<g transform="rotate(-8 600 420)">
+<rect x="560" y="392" width="86" height="58" rx="8" fill="#FFFFFF" stroke="#D8CBB8" stroke-width="2"/>
+<line x1="574" y1="412" x2="632" y2="412" stroke="#D8CBB8" stroke-width="4" stroke-linecap="round"/>
+<line x1="574" y1="428" x2="618" y2="428" stroke="#D8CBB8" stroke-width="4" stroke-linecap="round"/>
+<circle cx="603" cy="378" r="5" fill="#2B2118"/>
+<line x1="603" y1="383" x2="596" y2="396" stroke="#2B2118" stroke-width="2"/>
+</g>
+</svg>

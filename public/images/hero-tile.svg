@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800" role="img">
+  <title>Thiệp viết tay kèm dấu sáp và cành mai</title>
+  <defs>
+    <linearGradient id="tbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FAF6EF"/>
+      <stop offset="1" stop-color="#F0E6D3"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#tbg)"/>
+  <circle cx="470" cy="160" r="120" fill="#C89B3C" opacity="0.12"/>
+  <circle cx="120" cy="620" r="140" fill="#1E5C46" opacity="0.08"/>
+
+  <circle cx="90" cy="110" r="5" fill="#C89B3C" opacity="0.6"/>
+  <circle cx="500" cy="560" r="6" fill="#C96F2F" opacity="0.5"/>
+  <circle cx="520" cy="640" r="4" fill="#1E5C46" opacity="0.4"/>
+
+  <!-- envelope back -->
+  <g transform="rotate(-4 300 430)">
+    <rect x="120" y="330" width="380" height="250" rx="14" fill="#E7DCC8"/>
+    <!-- greeting card -->
+    <rect x="150" y="250" width="320" height="220" rx="12" fill="#FFFFFF" stroke="#D8CBB8" stroke-width="2.5"/>
+    <!-- handwritten lines -->
+    <path d="M185 310 q22 -12 44 0 t44 0" stroke="#C96F2F" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M185 348 q22 -10 44 0 t44 0 t44 0" stroke="#D8CBB8" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <path d="M185 384 q22 -10 44 0 t44 0" stroke="#D8CBB8" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <path d="M185 420 q14 -8 28 0 t28 0" stroke="#D8CBB8" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <!-- small heart -->
+    <path d="M398 300 c -8 -12 -26 -8 -26 5 c0 10 12 16 26 26 c 14 -10 26 -16 26 -26 c0 -13 -18 -17 -26 -5 Z" fill="#C0272D" opacity="0.9"/>
+    <!-- wax seal -->
+    <circle cx="430" cy="430" r="26" fill="#C0272D"/>
+    <circle cx="430" cy="430" r="19" fill="none" stroke="#C89B3C" stroke-width="2" opacity="0.8"/>
+    <text x="430" y="431" text-anchor="middle" dy="0.36em" font-family="Georgia, 'Times New Roman', serif" font-size="17" fill="#FAF6EF">NM</text>
+  </g>
+
+  <!-- mai sprig over the card -->
+  <g transform="translate(140 180)">
+    <path d="M0 70 C 30 40, 60 16, 96 -4" stroke="#2B2118" stroke-width="3" fill="none" opacity="0.55"/>
+    <g transform="translate(96 -4)">
+      <g fill="#C89B3C">
+        <ellipse rx="7" ry="14" transform="rotate(0) translate(0 -14)"/>
+        <ellipse rx="7" ry="14" transform="rotate(72) translate(0 -14)"/>
+        <ellipse rx="7" ry="14" transform="rotate(144) translate(0 -14)"/>
+        <ellipse rx="7" ry="14" transform="rotate(216) translate(0 -14)"/>
+        <ellipse rx="7" ry="14" transform="rotate(288) translate(0 -14)"/>
+      </g>
+      <circle r="5.5" fill="#C0272D"/>
+    </g>
+    <g transform="translate(44 40) scale(0.62)">
+      <g fill="#C89B3C">
+        <ellipse rx="7" ry="14" transform="rotate(0) translate(0 -14)"/>
+        <ellipse rx="7" ry="14" transform="rotate(72) translate(0 -14)"/>
+        <ellipse rx="7" ry="14" transform="rotate(144) translate(0 -14)"/>
+        <ellipse rx="7" ry="14" transform="rotate(216) translate(0 -14)"/>
+        <ellipse rx="7" ry="14" transform="rotate(288) translate(0 -14)"/>
+      </g>
+      <circle r="5.5" fill="#C0272D"/>
+    </g>
+  </g>
+
+  <!-- ribbon swatch at bottom -->
+  <g transform="translate(300 660)">
+    <path d="M-170 0 q85 -34 170 0 q85 34 170 0" stroke="#1E5C46" stroke-width="16" fill="none" stroke-linecap="round"/>
+    <path d="M-170 0 q85 -34 170 0 q85 34 170 0" stroke="#C89B3C" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="2 14" opacity="0.9"/>
+  </g>
+</svg>

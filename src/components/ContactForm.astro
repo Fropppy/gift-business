@@ -1,0 +1,157 @@
+---
+import { products, categoryBySlug, formatVnd } from '../utils/catalog';
+import { site } from '../utils/site';
+
+interface Props {
+  defaultProductSlug?: string;
+  compact?: boolean;
+}
+
+const { defaultProductSlug = '' } = Astro.props;
+---
+
+<div class="enquiry" id="dat-qua">
+  <h3>Để shop mình gọi lại nhé</h3>
+  <p class="form-note">
+    Bạn điền tên, số điện thoại và giỏ đang xem — mình gọi lại trong {site.replyWithin}.
+    Quá giờ mở cửa thì mình nhắn lại sáng hôm sau.
+  </p>
+
+  <form class="js-enquiry-form" method="post" novalidate>
+    <div class="form-row">
+      <div class="field">
+        <label for="enq-name">Tên của bạn *</label>
+        <input id="enq-name" name="name" type="text" autocomplete="name" required placeholder="Ví dụ: My" />
+      </div>
+      <div class="field">
+        <label for="enq-phone">Số điện thoại / Zalo *</label>
+        <input
+          id="enq-phone"
+          name="phone"
+          type="tel"
+          inputmode="tel"
+          autocomplete="tel"
+          required
+          pattern="[0-9+ ]{9,13}"
+          placeholder="09xx xxx xxx"
+        />
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="enq-product">Giỏ quà bạn đang quan tâm</label>
+      <select id="enq-product" name="product">
+        <option value="">— Mình chưa chọn, nhờ shop tư vấn —</option>
+        {
+          products.map((p) => (
+            <option value={p.name} selected={p.slug === defaultProductSlug}>
+              {p.name} ({formatVnd(p.price.amount)})
+            </option>
+          ))
+        }
+        <option value="Giỏ làm riêng theo ngân sách">Giỏ làm riêng theo ngân sách của mình</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="enq-message">Dịp tặng &amp; lời nhắn</label>
+      <textarea
+        id="enq-message"
+        name="message"
+        placeholder="Ví dụ: biếu bố mẹ dịp Tết, ngân sách khoảng 700k, giao quận Phú Nhuận sáng mùng 2 Tết…"></textarea>
+    </div>
+
+    <!-- honeypot: bots fill it, humans never see it -->
+    <div class="hp" aria-hidden="true">
+      <label for="enq-company">Công ty</label>
+      <input id="enq-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <button class="btn btn--primary btn--big" type="submit">Gửi cho shop mình</button>
+    <p class="form-status" role="status" aria-live="polite" hidden></p>
+    <p class="form-note" style="margin-top: 0.8rem">
+      Hoặc nhắn trực tiếp:
+      <a href={site.zaloUrl} target="_blank" rel="noopener noreferrer">Zalo</a> ·
+      <a href={site.phoneHref}>Hotline {site.phoneDisplay}</a> — nhanh nhất đấy.
+    </p>
+  </form>
+</div>
+
+<script>
+  // ---- Enquiry form → placeholder endpoint --------------------------------
+  // TODO(backend): replace ENDPOINT with the real Google Apps Script Web App
+  // URL that appends rows to the shop's Google Sheet:
+  //   1. Tạo Google Sheet → Extensions → Apps Script
+  //   2. doPost(e) đọc JSON.parse(e.postData.contents) và ghi vào sheet
+  //   3. Deploy → New deployment → Web app → Anyone → copy URL /exec
+  // Apps Script không cho đọc response khi mode:'no-cors', nên mình hiển thị
+  // trạng thái optimistic và luôn kèm fallback hotline cho khách.
+  const ENDPOINT = 'https://script.google.com/macros/s/REPLACE_WITH_YOUR_DEPLOYMENT_ID/exec';
+
+  // Honesty gate: while ENDPOINT is still the placeholder, submissions go
+  // nowhere — never show the "đã nhận được" promise. The Zalo/hotline
+  // fallback below is shown instead. Once the Apps Script URL is pasted in,
+  // this flag flips automatically and the real submit path activates.
+  const ENDPOINT_CONFIGURED = !ENDPOINT.includes('REPLACE_WITH_YOUR_DEPLOYMENT_ID');
+
+  document.querySelectorAll<HTMLFormElement>('.js-enquiry-form').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('.form-status');
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!status || !button) return;
+
+      // honeypot: im lặng nếu bot điền
+      if ((form.querySelector<HTMLInputElement>('[name="company"]')?.value ?? '') !== '') return;
+
+      const data = new FormData(form);
+      const name = String(data.get('name') ?? '').trim();
+      const phone = String(data.get('phone') ?? '').trim();
+
+      status.hidden = false;
+      status.className = 'form-status';
+      if (!name || !/^[0-9+ ]{9,13}$/.test(phone)) {
+        status.classList.add('is-err');
+        status.textContent = 'Bạn kiểm tra lại tên và số điện thoại giúp mình nhé — đủ số mới gọi lại được.';
+        return;
+      }
+
+      const payload = {
+        name,
+        phone,
+        product: String(data.get('product') ?? ''),
+        message: String(data.get('message') ?? ''),
+        page: window.location.href,
+        submittedAt: new Date().toISOString(),
+      };
+
+      if (!ENDPOINT_CONFIGURED) {
+        status.classList.add('is-info');
+        status.textContent =
+          'Form này mình đang hoàn thiện, chưa nhận được tin đâu — bạn nhắn Zalo hoặc gọi hotline giúp mình nhé, mình tư vấn liền!';
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = 'Đang gửi…';
+      try {
+        await fetch(ENDPOINT, {
+          method: 'POST',
+          mode: 'no-cors', // Apps Script chặn CORS đọc response; gửi được là đủ
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+        });
+        status.classList.add('is-ok');
+        status.textContent = 'Mình đã nhận được tin nhắn của bạn rồi — shop sẽ gọi lại trong 30 phút trong giờ mở cửa nhé!';
+        form.reset();
+      } catch {
+        status.classList.add('is-err');
+        status.textContent =
+          'Ơ, gửi chưa được — bạn nhắn Zalo hoặc gọi hotline giúp mình nhé, mình xử lý ngay.';
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+</script>

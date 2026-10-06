@@ -1,0 +1,53 @@
+---
+import SectionHead from './SectionHead.astro';
+
+// SAMPLE REVIEWS — placeholder testimonials (no real customers yet).
+// Replace with real customer quotes + photos of delivered baskets when available.
+const reviews = [
+  {
+    quote:
+      'Đặt giỏ biếu sếp lúc 8 giờ sáng, trưa shop đã giao — giỏ đẹp hơn cả ảnh mẫu. Mình dặn thiệp viết tay, shop viết chữ đẹp lắm.',
+    name: 'Chị Hương',
+    place: 'Quận 3',
+  },
+  {
+    quote:
+      'Công ty mình đặt 25 set quà Tết cho nhân viên, shop gắn logo đều tay, giao đủ đúng hẹn. Sang năm lại ủng hộ tiếp.',
+    name: 'Anh Minh',
+    place: 'Quận 7',
+  },
+  {
+    quote:
+      'Đặt giỏ trái cây đi thăm bà ngoại, trái cây tươi, gói kỹ, bà thích lắm. Nhắn Zalo shop trả lời nhanh mà dễ thương.',
+    name: 'Bạn Lan',
+    place: 'Gò Vấp',
+  },
+];
+---
+
+<section class="section" id="khach-noi">
+  <div class="container">
+    <SectionHead
+      eyebrow="Khách nói về shop"
+      title="Mấy khách quen dặn nhau vậy đó"
+      lead="Đa phần khách của mình là khách quen quay lại và giới thiệu bạn bè — mình giữ giỏ nào cũng như giỏ biếu nhà mình."
+    />
+    <div class="testi-grid">
+      {
+        reviews.map((r) => (
+          <figure class="testi">
+            <span class="stars" aria-label="5 trên 5 sao">
+              {Array.from({ length: 5 }).map(() => (
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2.5 15 9l7 .8-5.2 4.7 1.4 6.9L12 17.9 5.8 21.4 7.2 14.5 2 9.8 9 9Z" />
+                </svg>
+              ))}
+            </span>
+            <blockquote>“{r.quote}”</blockquote>
+            <figcaption>— {r.name}, {r.place}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>

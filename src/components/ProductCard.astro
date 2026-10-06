@@ -1,0 +1,45 @@
+---
+import type { Product } from '../utils/catalog';
+import { categoryBySlug, formatVnd, productImage, badgeClass } from '../utils/catalog';
+import { asset } from '../utils/asset';
+import { site } from '../utils/site';
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const category = categoryBySlug(product.category);
+---
+
+<article
+  class="card"
+  data-cat={product.category}
+  data-tags={product.tags.join(' ')}
+>
+  <div class="card-media">
+    {
+      product.badge && <span class:list={['badge', badgeClass(product.badge)]}>{product.badge}</span>
+    }
+    <img src={productImage(product)} alt={`Ảnh minh họa: ${product.name}`} width="800" height="600" loading="lazy" />
+  </div>
+
+  <div class="card-body">
+    <span class="card-cat">{category?.name ?? 'Giỏ quà'}</span>
+    <h3>
+      <a class="card-link" href={asset(`/products/${product.slug}/`)}>{product.name}</a>
+    </h3>
+    <p class="card-desc">{product.description}</p>
+    <div class="card-foot">
+      <span class="price">{formatVnd(product.price.amount)}</span>
+      <a
+        class="card-zalo"
+        href={site.zaloUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Zalo đặt giỏ này →
+      </a>
+    </div>
+  </div>
+</article>

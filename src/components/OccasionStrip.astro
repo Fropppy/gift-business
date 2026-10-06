@@ -1,0 +1,30 @@
+---
+import occasions from '../data/occasions.json';
+import { asset } from '../utils/asset';
+import SectionHead from './SectionHead.astro';
+---
+
+<section class="section" id="dip-tang-qua">
+  <div class="container">
+    <SectionHead
+      eyebrow="Đang cần quà dịp nào?"
+      title="Chọn theo dịp tặng quà"
+      lead="Mình gợi sẵn theo từng dịp để bạn khỏi phải nghĩ — bấm vào dịp là thấy ngay những giỏ phù hợp."
+    />
+    <div class="occ-grid">
+      {
+        occasions.map((o) => (
+          <a class="occ-chip" href={`${asset('/products/')}?tag=${o.tag}`}>
+            <span class="occ-ico" aria-hidden="true">
+              {o.icon}
+            </span>
+            <span>
+              <strong>{o.name}</strong>
+              <small>{o.month}</small>
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

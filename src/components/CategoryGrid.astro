@@ -1,0 +1,29 @@
+---
+import { categories } from '../utils/catalog';
+import { asset } from '../utils/asset';
+import SectionHead from './SectionHead.astro';
+---
+
+<section class="section section--surface" id="danh-muc">
+  <div class="container">
+    <SectionHead
+      eyebrow="Danh mục"
+      title="Các nhóm quà nhà mình đang làm"
+      lead="Mỗi nhóm mình đều có sẵn vài mẫu cho bạn hình dung — mẫu riêng thì mình làm theo yêu cầu được."
+    />
+    <div class="cat-grid">
+      {
+        categories.map((c) => (
+          <a class="cat-card" href={`${asset('/products/')}?category=${c.slug}`}>
+            <span class="cat-ico" aria-hidden="true">
+              {c.icon}
+            </span>
+            <h3>{c.name}</h3>
+            <p>{c.description}</p>
+            <span class="link-more">Xem các giỏ →</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

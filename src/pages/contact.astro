@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { site } from '../utils/site';
+---
+
+<BaseLayout title="Liên hệ & đặt quà" description={`Liên hệ ${site.name}: Zalo, hotline ${site.phoneDisplay}, Facebook/Messenger, form để shop gọi lại trong ${site.replyWithin}.`}>
+  <section class="section">
+    <div class="container">
+      <SectionHead
+        eyebrow="Liên hệ"
+        title="Mình ở đây, bạn nhắn lúc nào cũng được"
+        lead={`Giờ mở cửa: ${site.hours}. Ngoài giờ bạn cứ nhắn — sáng hôm sau mình trả lời sớm nhất.`}
+      />
+
+      <div class="contact-grid">
+        <div>
+          <ul class="channel-list">
+            <li>
+              <a class="channel" href={site.zaloUrl} target="_blank" rel="noopener noreferrer">
+                <span class="ch-ico" aria-hidden="true">💬</span>
+                <span>
+                  <strong>Zalo — kênh đặt quà chính</strong>
+                  <small>Nhắn tin, gửi ảnh mẫu, tư vấn, báo giá và chốt đơn. Nhắn kèm ngân sách và dịp tặng là mình chọn giúp ngay.</small>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a class="channel" href={site.phoneHref}>
+                <span class="ch-ico" aria-hidden="true">📞</span>
+                <span>
+                  <strong>Hotline {site.phoneDisplay}</strong>
+                  <small>Gọi hoặc nhắn tin trong giờ mở cửa {site.hours}.</small>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a class="channel" href={site.facebookUrl} target="_blank" rel="noopener noreferrer">
+                <span class="ch-ico" aria-hidden="true">🌐</span>
+                <span>
+                  <strong>Facebook</strong>
+                  <small>Shop đăng mẫu mới mỗi ngày — xem ảnh giỏ thật vừa giao, tham khảo rồi nhắn.</small>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a class="channel" href={site.messengerUrl} target="_blank" rel="noopener noreferrer">
+                <span class="ch-ico" aria-hidden="true">✉️</span>
+                <span>
+                  <strong>Messenger</strong>
+                  <small>Nhắn trực tiếp fanpage nếu bạn đang lướt Facebook.</small>
+                </span>
+              </a>
+            </li>
+            <li>
+              <div class="channel">
+                <span class="ch-ico" aria-hidden="true">👨‍👩‍👧</span>
+                <span>
+                  <strong>Nhóm Zalo khách quen</strong>
+                  <small>Shop thông báo mẫu mới và ưu đãi theo mùa — nhắn "cho mình vào nhóm" là được.</small>
+                </span>
+              </div>
+            </li>
+            <li>
+              <div class="channel">
+                <span class="ch-ico" aria-hidden="true">✍️</span>
+                <span>
+                  <strong>Form trên website</strong>
+                  <small>Để lại số điện thoại và nhu cầu, shop gọi lại trong {site.replyWithin}.</small>
+                </span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--surface">
+    <div class="container">
+      <SectionHead eyebrow="Trước khi đặt" title="Vài điều hay được hỏi" center />
+      <div class="testi-grid">
+        <div class="testi">
+          <strong>Giao được khu vực nào?</strong>
+          <p style="margin: 0.4rem 0 0; color: var(--muted); font-size: 0.93rem">
+            {site.deliveryArea}. Nội thành cần gấp mình giao trong 2 giờ; nơi xa hẹn giờ cụ thể
+            khi chốt đơn.
+          </p>
+        </div>
+        <div class="testi">
+          <strong>Giá trên web đã chốt chưa?</strong>
+          <p style="margin: 0.4rem 0 0; color: var(--muted); font-size: 0.93rem">
+            Giá là mức tham khảo theo cỡ vừa. Cỡ nhỏ/lớn, thêm bớt món, đặt số lượng — mình báo
+            giá chính xác qua Zalo ngay.
+          </p>
+        </div>
+        <div class="testi">
+          <strong>Cần giỏ theo ngân sách riêng?</strong>
+          <p style="margin: 0.4rem 0 0; color: var(--muted); font-size: 0.93rem">
+            Được nhé, mình làm giỏ thiết kế riêng theo ngân sách và người nhận — nhắn mình dịp
+            tặng là có ảnh mẫu gửi bạn duyệt.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

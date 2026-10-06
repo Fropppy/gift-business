@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../utils/site';
+import { asset } from '../utils/asset';
+---
+
+<BaseLayout title="Không tìm thấy trang" description="Trang bạn tìm không có trên website Nhà Mai.">
+  <section class="error-page container">
+    <div class="code">404</div>
+    <h1>Ơ, trang này mình chưa có…</h1>
+    <p class="lead">
+      Có thể link cũ rồi hoặc bạn gõ nhầm. Còn giỏ quà thì shop vẫn có đầy — về trang chủ xem
+      mẫu mới, hoặc nhắn Zalo mình gửi ảnh mẫu ngay nhé.
+    </p>
+    <div class="hero-cta-row">
+      <a class="btn btn--primary btn--big" href={asset('/')}>Về trang chủ</a>
+      <a class="btn btn--ghost btn--big" href={site.zaloUrl} target="_blank" rel="noopener noreferrer">Nhắn Zalo hỏi mình</a>
+    </div>
+  </section>
+</BaseLayout>

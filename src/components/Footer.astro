@@ -1,0 +1,57 @@
+---
+import { site } from '../utils/site';
+import { asset } from '../utils/asset';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>{site.name} — {site.wordmarkSub}</h3>
+        <p>
+          Shop nhỏ do gia đình mình trực làm {site.yearsInBusiness} năm. Mình chọn trái cây và quà mỗi
+          sáng, gói mới khi có đơn — bạn nhắn Zalo là mình tư vấn và báo giá ngay.
+        </p>
+        <p style="font-size: 0.88rem">
+          Khu vực giao: {site.deliveryArea}. Giao nhanh trong ngày, gấp thì giao nhanh 2h nội thành.
+        </p>
+      </div>
+
+      <div>
+        <h3>Đi đâu trên site?</h3>
+        <ul>
+          {site.nav.map((item) => (
+            <li><a href={asset(item.href)}>{item.label}</a></li>
+          ))}
+          <li><a href={asset('/products/?category=gio-qua-tet')}>Giỏ quà Tết</a></li>
+          <li><a href={asset('/products/?category=qua-tang-doanh-nghiep')}>Quà doanh nghiệp</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Liên hệ đặt quà</h3>
+        <ul>
+          <li>
+            📞 <a href={site.phoneHref}><strong>{site.phoneDisplay}</strong></a> — gọi hoặc nhắn tin
+          </li>
+          <li>
+            💬 <a href={site.zaloUrl} target="_blank" rel="noopener noreferrer">Zalo (kênh đặt quà chính)</a>
+          </li>
+          <li>
+            🌐 <a href={site.facebookUrl} target="_blank" rel="noopener noreferrer">Facebook</a> ·
+            <a href={site.messengerUrl} target="_blank" rel="noopener noreferrer">Messenger</a>
+          </li>
+          <li>🕒 {site.hours}</li>
+          <li>↩️ Nhắn tin qua form, shop gọi lại trong {site.replyWithin}.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© {year} {site.name}. Giỏ quà gói thủ công bằng cả sự chu đáo.</span>
+      <span>Giá trên site chỉ mang tính tham khảo — giá chốt theo cỡ giỏ &amp; số lượng.</span>
+    </div>
+  </div>
+</footer>

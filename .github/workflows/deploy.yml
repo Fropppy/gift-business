@@ -1,0 +1,39 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v7
+      - name: Install, build, and upload your site output
+        uses: withastro/action@v6
+        # withastro/action does install + build + artifact upload in one step.
+        # Optional inputs (defaults shown):
+        #   path: ./
+        #   node-version: 24   (Astro 7 requires >=22.12.0; never 23)
+        #   package-manager: auto-detected from the committed lockfile
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+
+# ONE-TIME REPO SETTING (required or nothing publishes):
+#   Settings → Pages → Build and deployment → Source = "GitHub Actions"

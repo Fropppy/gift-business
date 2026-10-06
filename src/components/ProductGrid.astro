@@ -1,0 +1,83 @@
+---
+import type { Product } from '../utils/catalog';
+import { categories } from '../utils/catalog';
+import ProductCard from './ProductCard.astro';
+
+interface Props {
+  products: Product[];
+  showFilter?: boolean;
+}
+
+const { products, showFilter = false } = Astro.props;
+---
+
+{
+  showFilter && (
+    <div class="filter-row" role="group" aria-label="Lọc giỏ quà theo nhóm">
+      <button class="chip chip--active" data-filter-cat="">Tất cả</button>
+      {categories.map((c) => (
+        <button class="chip" data-filter-cat={c.slug}>
+          <span aria-hidden="true">{c.icon}</span> {c.name}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+<div class="grid-products" data-product-grid>
+  {
+    products.map((p) => (
+      <ProductCard product={p} />
+    ))
+  }
+</div>
+
+<p class="form-status" data-filter-empty hidden>
+  Nhóm này mình chưa cập nhật mẫu lên web — bạn nhắn Zalo, mình gửi ảnh mẫu mới nhất nhé.
+</p>
+
+<script>
+  // Category/tag filtering on the catalog page. Supports deep links:
+  //   /products/?category=<slug>  (from category cards)
+  //   /products/?tag=<tag>        (from the occasion strip)
+  const grid = document.querySelector('[data-product-grid]');
+  if (grid) {
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>('.card'));
+    const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter-cat]'));
+    const empty = document.querySelector<HTMLElement>('[data-filter-empty]');
+    const params = new URLSearchParams(window.location.search);
+
+    function apply(cat: string, tag: string | null) {
+      let shown = 0;
+      cards.forEach((card) => {
+        const matchCat = !cat || card.dataset.cat === cat;
+        const tags = (card.dataset.tags || '').split(' ');
+        const matchTag = !tag || tags.includes(tag);
+        const visible = matchCat && matchTag;
+        card.hidden = !visible;
+        if (visible) shown += 1;
+      });
+      chips.forEach((chip) =>
+        chip.classList.toggle('chip--active', (chip.dataset.filterCat || '') === cat)
+      );
+      if (empty) empty.hidden = shown > 0;
+    }
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const cat = chip.dataset.filterCat || '';
+        const url = new URL(window.location.href);
+        if (cat) url.searchParams.set('category', cat);
+        else url.searchParams.delete('category');
+        url.searchParams.delete('tag');
+        history.replaceState(null, '', url);
+        apply(cat, null);
+      });
+    });
+
+    // initial state from URL (?category= wins over ?tag=)
+    const cat = params.get('category') || '';
+    const tag = cat ? null : params.get('tag');
+    if (cat || tag) apply(cat, tag);
+  }
+</script>

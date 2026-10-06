@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import OccasionStrip from '../components/OccasionStrip.astro';
+import CategoryGrid from '../components/CategoryGrid.astro';
+import ProductGrid from '../components/ProductGrid.astro';
+import Steps from '../components/Steps.astro';
+import Commitments from '../components/Commitments.astro';
+import Testimonials from '../components/Testimonials.astro';
+import ContactForm from '../components/ContactForm.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { site } from '../utils/site';
+import { asset } from '../utils/asset';
+import { products } from '../utils/catalog';
+
+// Bestsellers: badge-carrying products first, then fill up to 8.
+const withBadge = products.filter((p) => p.badge);
+const featured = [...withBadge, ...products.filter((p) => !p.badge)].slice(0, 8);
+---
+
+<BaseLayout title="Giỏ quà cho mọi dịp">
+  <Hero />
+
+  <!-- 2. Dịp tặng quà -->
+  <OccasionStrip />
+
+  <!-- 3. Danh mục sản phẩm -->
+  <CategoryGrid />
+
+  <!-- 4. Sản phẩm bán chạy -->
+  <section class="section" id="gio-noi-bat">
+    <div class="container">
+      <SectionHead
+        eyebrow="Sản phẩm"
+        title="Giỏ quà khách hay đặt"
+        lead="Giá tham khảo theo cỡ vừa — giỏ nào cũng gói đẹp miễn phí. Bấm vào giỏ xem chi tiết, nhắn Zalo là mình báo giá chốt."
+      />
+      <ProductGrid products={featured} />
+    </div>
+  </section>
+
+  <!-- 5. Quy trình đặt quà 4 bước -->
+  <Steps />
+
+  <!-- 6. Cam kết của shop -->
+  <Commitments />
+
+  <!-- 7. Chuyện gia đình mình -->
+  <section class="section" id="chuyen-gia-dinh">
+    <div class="container">
+      <div class="story-grid">
+        <div class="story-copy">
+          <span class="eyebrow">Chuyện gia đình mình</span>
+          <h2>Shop nhỏ làm nghề gói quà đã {site.yearsInBusiness} năm</h2>
+          <p>
+            {site.name} bắt đầu từ căn bếp nhỏ: mẹ mình là người gói giỏ đầu tiên, có khi nửa đêm
+            còn ngồi buộc nơ cho kịp đơn sáng. Giờ hai mẹ con mình cùng làm, thêm đứa em phụ chụp
+            ảnh và giao hàng.
+          </p>
+          <p>
+            Mình tin quà biếu là lời nói thay mình, nên giỏ nào cũng được gói như tặng người nhà:
+            trái cây chọn quả tươi mỗi sáng, nơ buộc tay từng cái, thiệp viết tay từng câu. Khách
+            quen cứ dịp tới là nhắn — mình thuộc "gu" của khách gần hết rồi.
+          </p>
+          <p>
+            Mình giao ở {site.deliveryArea}, giờ mở cửa {site.hours} — bạn cứ nhắn trước, hẹn giờ
+            mình là đến đúng.
+          </p>
+          <p class="signature">— Mẹ và con gái Nhà Mai 🌿</p>
+          <a class="btn btn--ghost" href={asset('/about/')}>Đọc thêm chuyện nhà mình</a>
+        </div>
+        <div class="story-media">
+          <img
+            src={asset('/images/hero-2.svg')}
+            alt="Hộp quà được gói nơ xanh thông, đặt trên bàn gỗ — ảnh minh họa"
+            width="1200"
+            height="800"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Khách nói về shop -->
+  <Testimonials />
+
+  <!-- 9. Liên hệ & đặt quà ngay -->
+  <section class="section section--surface" id="lien-he">
+    <div class="container">
+      <SectionHead
+        eyebrow="Liên hệ"
+        title="Đặt quà ngay với shop mình"
+        lead="Kênh nhanh nhất là Zalo — nhắn kèm ảnh mẫu bạn thích, mình tư vấn và báo giá liền."
+      />
+      <div class="contact-grid">
+        <div>
+          <ul class="channel-list">
+            <li>
+              <a class="channel" href={site.zaloUrl} target="_blank" rel="noopener noreferrer">
+                <span class="ch-ico" aria-hidden="true">💬</span>
+                <span>
+                  <strong>Zalo — kênh đặt quà chính</strong>
+                  <small>Nhắn tin, gửi ảnh mẫu, tư vấn, báo giá và chốt đơn.</small>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a class="channel" href={site.phoneHref}>
+                <span class="ch-ico" aria-hidden="true">📞</span>
+                <span>
+                  <strong>Hotline {site.phoneDisplay}</strong>
+                  <small>Gọi hoặc nhắn tin, {site.hours}.</small>
+                </span>
+              </a>
+            </li>
+            <li>
+              <a class="channel" href={site.messengerUrl} target="_blank" rel="noopener noreferrer">
+                <span class="ch-ico" aria-hidden="true">🌐</span>
+                <span>
+                  <strong>Facebook / Messenger</strong>
+                  <small>Shop đăng mẫu mới mỗi ngày, nhắn fanpage cũng được.</small>
+                </span>
+              </a>
+            </li>
+            <li>
+              <div class="channel">
+                <span class="ch-ico" aria-hidden="true">✍️</span>
+                <span>
+                  <strong>Form bên cạnh</strong>
+                  <small>Để lại số điện thoại và nhu cầu, shop gọi lại trong {site.replyWithin}.</small>
+                </span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

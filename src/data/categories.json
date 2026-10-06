@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "gio-trai-cay-cao-cap",
+    "name": "Giỏ trái cây cao cấp",
+    "description": "Trái cây nhập khẩu và Việt Nam sạch, tuyển từng quả, gói ghém đẹp mắt, hợp biếu mọi dịp.",
+    "icon": "🧺"
+  },
+  {
+    "slug": "gio-qua-tet",
+    "name": "Giỏ quà Tết",
+    "description": "Giỏ quà biếu Tết từ phổ thông đến cao cấp: bánh kẹo, trà, rượu, hạt dinh dưỡng; đặt sớm có giá tốt.",
+    "icon": "🧧"
+  },
+  {
+    "slug": "qua-tang-doanh-nghiep",
+    "name": "Quà tặng doanh nghiệp",
+    "description": "Giỏ quà biếu đối tác, khách hàng và quà Tết nhân viên; đặt số lượng lớn, gắn logo, tặng thiệp theo yêu cầu.",
+    "icon": "🏢"
+  },
+  {
+    "slug": "gio-qua-sinh-nhat-hoa",
+    "name": "Giỏ quà sinh nhật & hoa tươi",
+    "description": "Giỏ quà kèm hoa tươi, gấu bông, bóng bay, làm theo chủ đề và ngân sách dành cho người nhận.",
+    "icon": "💐"
+  },
+  {
+    "slug": "hop-qua-tang-cao-cap",
+    "name": "Hộp quà tặng cao cấp",
+    "description": "Yến sào, nhân sâm, trà hảo hạng, hạt dinh dưỡng đóng hộp sang trọng, dành biếu bố mẹ, người lớn tuổi và cấp trên.",
+    "icon": "🎁"
+  },
+  {
+    "slug": "qua-khai-truong-tan-gia",
+    "name": "Quà khai trương – tân gia",
+    "description": "Giỏ quà, bình hoa, chậu cây tài lộc chúc mừng ngày khai trương và đón nhà mới.",
+    "icon": "🌿"
+  },
+  {
+    "slug": "set-qua-trung-thu",
+    "name": "Set quà Trung Thu",
+    "description": "Bộ bánh trung thu cao cấp kèm trà, rượu, đóng giỏ sang trọng để biếu gia đình và khách hàng dịp Trung Thu.",
+    "icon": "🥮"
+  }
+]

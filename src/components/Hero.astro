@@ -1,0 +1,112 @@
+---
+import { site } from '../utils/site';
+import { asset } from '../utils/asset';
+---
+
+<section class="hero-grid container" aria-label="Giới thiệu shop">
+  <div class="hero-carousel" data-carousel>
+    <div class="hero-slide is-active" role="group" aria-label="1 / 2: Giỏ quà cho mọi dịp">
+      <div
+        class="hero-slide-art"
+        role="img"
+        aria-label="Giỏ trái cây cao cấp đắp nơ vải, chụp sáng ấm trên nền kem"
+        style="background-image: var(--hero-1)"
+      ></div>
+      <div class="hero-slide-content">
+        <span class="eyebrow">{site.name} · {site.wordmarkSub}</span>
+        <h1>Giỏ quà tươi đẹp, gói chu đáo cho mọi dịp</h1>
+        <p>
+          Bạn nhắn mình dịp tặng với ngân sách, mình chọn giúp giỏ đẹp nhất trong tầm giá —
+          trái cây mình tuyển mỗi sáng, gói mới khi có đơn mới giao.
+        </p>
+        <div class="hero-cta-row">
+          <a class="btn btn--accent btn--big" href={site.zaloUrl} target="_blank" rel="noopener noreferrer">Nhắn Zalo đặt quà</a>
+          <a class="btn btn--ghost btn--big" href={asset('/products/')}>Xem giỏ quà</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-slide" role="group" aria-label="2 / 2: Quà doanh nghiệp">
+      <div
+        class="hero-slide-art"
+        role="img"
+        aria-label="Hộp quà doanh nghiệp đơn sắc xanh thông đắp nơ vàng, kèm thiệp và dấu sáp"
+        style="background-image: var(--hero-2)"
+      ></div>
+      <div class="hero-slide-content">
+        <span class="eyebrow">Quà doanh nghiệp</span>
+        <h2>Quà biếu sếp, đối tác &amp; quà Tết nhân viên</h2>
+        <p>
+          Đặt từ 10 giỏ mình gắn logo và thiệp chúc theo yêu cầu, đóng giỏ đồng bộ,
+          báo giá nhanh trong {site.replyWithin}.
+        </p>
+        <div class="hero-cta-row">
+          <a class="btn btn--accent btn--big" href={asset('/products/?category=qua-tang-doanh-nghiep')}>Xem quà doanh nghiệp</a>
+          <a class="btn btn--ghost btn--big" href={site.phoneHref}>Gọi {site.phoneDisplay}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-dots" role="tablist" aria-label="Chọn slide"></div>
+  </div>
+
+  <aside class="hero-tile">
+    <div class="hero-tile-body">
+      <span class="badge badge--bulk">Giao nhanh 2h</span>
+      <h3>Gói đẹp miễn phí, thiệp viết tay</h3>
+      <p>
+        Mỗi giỏ đều được gói lại ngay trước khi giao, kèm thiệp viết tay theo lời chúc
+        bạn gửi — bạn nhắn Zalo mình là có ngay nhé.
+      </p>
+      <a class="link-more" href={site.zaloUrl} target="_blank" rel="noopener noreferrer">Nhắn mình ngay →</a>
+    </div>
+    <div class="hero-tile-media">
+      <div
+        class="hero-tile-art"
+        role="img"
+        aria-label="Thiệp viết tay kèm dấu sáp đỏ và cành mai nhỏ"
+        style="background-image: var(--hero-tile)"
+      ></div>
+    </div>
+  </aside>
+</section>
+
+<script>
+  // Auto-rotating hero carousel (2/3-wide) — the dominant VN gift-site hero
+  // pattern from the research (MKnow bannerSlider + bannerStaticRight).
+  document.querySelectorAll('[data-carousel]').forEach((root) => {
+    const slides = Array.from(root.querySelectorAll('.hero-slide'));
+    const dotsWrap = root.querySelector('.hero-dots');
+    if (slides.length < 2 || !dotsWrap) return;
+
+    let index = 0;
+    let timer: ReturnType<typeof setInterval> | undefined;
+
+    const dots = slides.map((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'hero-dot' + (i === 0 ? ' is-active' : '');
+      dot.setAttribute('aria-label', `Xem slide ${i + 1}`);
+      dot.addEventListener('click', () => {
+        go(i);
+        restart();
+      });
+      dotsWrap.appendChild(dot);
+      return dot;
+    });
+
+    function go(next: number) {
+      index = (next + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle('is-active', i === index));
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === index));
+    }
+
+    function restart() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(() => go(index + 1), 6000);
+    }
+
+    root.addEventListener('mouseenter', () => timer && clearInterval(timer));
+    root.addEventListener('mouseleave', restart);
+    restart();
+  });
+</script>

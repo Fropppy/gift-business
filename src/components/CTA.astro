@@ -1,0 +1,26 @@
+---
+import { site } from '../utils/site';
+
+interface Props {
+  title?: string;
+  lead?: string;
+}
+
+const {
+  title = 'Bạn đang cần giỏ quà đúng không?',
+  lead = 'Nhắn mình dịp tặng với ngân sách, mình chọn giúp giỏ đẹp nhất trong tầm giá — trả lời trong 30 phút trong giờ mở cửa.',
+} = Astro.props;
+---
+
+<section class="section">
+  <div class="container">
+    <div class="cta-band">
+      <h2>{title}</h2>
+      <p>{lead}</p>
+      <div class="hero-cta-row">
+        <a class="btn btn--accent btn--big" href={site.zaloUrl} target="_blank" rel="noopener noreferrer">Nhắn Zalo đặt quà</a>
+        <a class="btn btn--ghost btn--big" href={site.phoneHref}>Gọi {site.phoneDisplay}</a>
+      </div>
+    </div>
+  </div>
+</section>

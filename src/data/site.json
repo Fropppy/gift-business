@@ -1,0 +1,22 @@
+{
+  "name": "Nhà Mai",
+  "wordmarkSub": "giỏ quà nhà mình",
+  "description": "Nhà Mai — giỏ quà gia đình làm thủ công: giỏ trái cây tươi mỗi sáng, giỏ quà Tết, quà doanh nghiệp, quà sinh nhật. Gói đẹp miễn phí kèm thiệp viết tay, giao nhanh trong ngày.",
+  "tagline": "Giỏ quà tươi đẹp, gói chu đáo cho mọi dịp",
+  "phoneDisplay": "0900 123 456",
+  "phoneHref": "tel:+84900123456",
+  "zaloUrl": "https://zalo.me/84900123456",
+  "facebookUrl": "https://www.facebook.com/nhamai.gioqua",
+  "messengerUrl": "https://m.me/nhamai.gioqua",
+  "hours": "7:30 – 20:30, cả tuần kể cả Chủ nhật",
+  "hoursShort": "7:30–20:30",
+  "replyWithin": "30 phút trong giờ mở cửa",
+  "deliveryArea": "TP. Hồ Chí Minh và các khu vực lân cận",
+  "yearsInBusiness": 7,
+  "nav": [
+    { "label": "Trang chủ", "href": "/" },
+    { "label": "Giỏ quà", "href": "/products/" },
+    { "label": "Về shop mình", "href": "/about/" },
+    { "label": "Liên hệ", "href": "/contact/" }
+  ]
+}

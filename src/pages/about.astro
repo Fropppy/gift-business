@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Commitments from '../components/Commitments.astro';
+import Steps from '../components/Steps.astro';
+import CTA from '../components/CTA.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { site } from '../utils/site';
+import { asset } from '../utils/asset';
+---
+
+<BaseLayout title="Về shop mình" description={`Chuyện gia đình làm nghề gói quà ${site.yearsInBusiness} năm — ${site.name}, khu vực giao hàng ${site.deliveryArea}.`}>
+  <section class="section">
+    <div class="container">
+      <div class="story-grid">
+        <div class="story-copy">
+          <span class="eyebrow">Về shop mình</span>
+          <h2>Chuyện gia đình mình</h2>
+          <p>
+            {site.name} không bắt đầu như một cửa hàng. Năm mẹ mình nghỉ việc, bàn tay đâu hay
+            buôn bán — chỉ có mỗi việc gói quà là đẹp. Người thân nhờ gói hộ giỏ trái cây đi đám,
+            hàng xóm nhờ gói hộp quà biếu sếp, rồi bạn của hàng xóm cũng nhờ… vậy mà {site.yearsInBusiness} năm
+            trôi qua, cái bếp nhỏ thành xưởng gói của nhà mình.
+          </p>
+          <p>
+            Giờ nhà mình chia nhau việc rõ ràng: mẹ vẫn là người gói đẹp nhất (khách khen nơ của
+            mẹ buộc "ôm" tay giỏ nhất), con gái lo tư vấn và chốt đơn qua Zalo, đứa em út phụ
+            chụp ảnh và chạy giao hàng. Mỗi sáng cả nhà cùng đi chọn trái cây và nguyên liệu —
+            giỏ nào cũng gói mới ngay trước khi giao, không gói sẵn để đấy.
+          </p>
+          <p>
+            Mình làm chậm mà chắc: một ngày nhà mình chỉ nhận vừa đủ đơn để gói đẹp được. Vì vậy
+            dịp cao điểm (Tết, 20/10, 20/11, Trung Thu) bạn đặt sớm giúp mình — vừa được giá tốt,
+            vừa chắc chắn có giỏ đẹp như ý.
+          </p>
+          <p>
+            <strong>Khu vực giao hàng:</strong> {site.deliveryArea}. Đơn nội thành mình giao
+            nhanh trong 2 giờ nếu cần, các khu vực khác hẹn giờ cụ thể khi chốt đơn.
+          </p>
+        </div>
+        <div class="story-media">
+          <img
+            src={asset('/images/hero-1.svg')}
+            alt="Giỏ trái cây gói nơ terracotta trên nền kem — ảnh minh họa"
+            width="1200"
+            height="800"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Commitments />
+  <Steps />
+  <CTA
+    title="Muốn mình kể bằng ảnh chứ không phải chữ?"
+    lead="Nhắn Zalo, mình gửi ảnh mấy giỏ nhà mình vừa giao trong tuần cho bạn tham khảo."
+  />
+</BaseLayout>

@@ -1,0 +1,65 @@
+---
+import { site } from '../utils/site';
+import { asset } from '../utils/asset';
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href={asset('/')}>
+      <svg class="brand-ico" viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="16" fill="var(--primary)"></rect>
+        <g transform="translate(32 32)">
+          <g fill="var(--gold)">
+            <ellipse rx="6" ry="13" transform="rotate(0) translate(0 -13)"></ellipse>
+            <ellipse rx="6" ry="13" transform="rotate(72) translate(0 -13)"></ellipse>
+            <ellipse rx="6" ry="13" transform="rotate(144) translate(0 -13)"></ellipse>
+            <ellipse rx="6" ry="13" transform="rotate(216) translate(0 -13)"></ellipse>
+            <ellipse rx="6" ry="13" transform="rotate(288) translate(0 -13)"></ellipse>
+          </g>
+          <circle r="6.5" fill="var(--tet)"></circle>
+        </g>
+      </svg>
+      <span class="brand-text">
+        <strong>{site.name}</strong>
+        <small>{site.wordmarkSub}</small>
+      </span>
+    </a>
+
+    <nav class="site-nav" id="site-nav" aria-label="Điều hướng chính">
+      {
+        site.nav.map((item) => (
+          <a href={asset(item.href)}>{item.label}</a>
+        ))
+      }
+      <a class="btn btn--primary" href={site.zaloUrl} target="_blank" rel="noopener noreferrer">Nhắn Zalo</a>
+    </nav>
+
+    <a class="header-hotline" href={site.phoneHref}>
+      <strong>{site.phoneDisplay}</strong>
+      <small>Hotline · {site.hoursShort}</small>
+    </a>
+
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+      <span aria-hidden="true">☰</span>
+      <span class="visually-hidden">Mở / đóng menu</span>
+    </button>
+  </div>
+</header>
+
+<script>
+  // Mobile nav toggle. Query all instances defensively; there is one header.
+  document.querySelectorAll('.nav-toggle').forEach((btn) => {
+    const nav = document.getElementById('site-nav');
+    if (!nav) return;
+    btn.addEventListener('click', () => {
+      const open = nav.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+    nav.querySelectorAll('a').forEach((a) =>
+      a.addEventListener('click', () => {
+        nav.classList.remove('is-open');
+        btn.setAttribute('aria-expanded', 'false');
+      })
+    );
+  });
+</script>

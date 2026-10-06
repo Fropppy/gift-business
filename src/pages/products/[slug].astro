@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import { site } from '../../utils/site';
+import { asset } from '../../utils/asset';
+import { products, categoryBySlug, formatVnd, productImage, badgeClass, relatedProducts } from '../../utils/catalog';
+
+export function getStaticPaths() {
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const category = categoryBySlug(product.category);
+const related = relatedProducts(product, 3);
+---
+
+<BaseLayout title={product.name} description={`${product.name} — ${product.description} Giá tham khảo ${formatVnd(product.price.amount)}. Gói đẹp miễn phí kèm thiệp viết tay.`}>
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href={asset('/')}>Trang chủ</a> ›
+      <a href={asset('/products/')}>Giỏ quà</a> ›
+      {category && <a href={`${asset('/products/')}?category=${category.slug}`}>{category.name}</a>} ›
+      <span aria-current="page">{product.name}</span>
+    </nav>
+
+    <div class="detail-grid">
+      <div class="detail-media">
+        {product.badge && <span class:list={['badge', badgeClass(product.badge)]}>{product.badge}</span>}
+        <img
+          src={productImage(product)}
+          alt={`Ảnh minh họa: ${product.name}`}
+          width="800"
+          height="600"
+        />
+      </div>
+
+      <div>
+        {category && (
+          <span class="card-cat">
+            <a href={`${asset('/products/')}?category=${category.slug}`} style="text-decoration: none;">{category.name}</a>
+          </span>
+        )}
+        <h1 style="margin-bottom: 0.2em;">{product.name}</h1>
+        {product.subtitle && <p style="color: var(--muted); margin-top: 0;">{product.subtitle}</p>}
+
+        <div class="detail-price">
+          <span class="price">{formatVnd(product.price.amount)}</span>
+          <small>giá tham khảo cỡ vừa</small>
+        </div>
+
+        <p>{product.description}</p>
+
+        {
+          product.options.length > 0 && (
+            <>
+              <h3 style="font-family: var(--font-body); font-size: 0.95rem; margin-bottom: 0.2rem;">
+                {product.options[0].name}
+              </h3>
+              <div class="opt-chips">
+                {product.options[0].values.map((v) => (
+                  <span class="chip">{v}</span>
+                ))}
+              </div>
+              <p style="color: var(--muted); font-size: 0.9rem;">
+                Giá thay đổi theo cỡ — nhắn mình cỡ bạn cần, báo giá chốt liền.
+              </p>
+            </>
+          )
+        }
+
+        <ul class="meta-list">
+          {
+            product.personalization.enabled && (
+              <li>
+                ✍️ <strong>{product.personalization.label}</strong> — miễn phí, tối đa{' '}
+                {product.personalization.maxChars} ký tự, viết tay từng thiệp.
+              </li>
+            )
+          }
+          <li>🌿 Trái cây &amp; nguyên liệu tuyển mỗi sáng, gói mới ngay trước khi giao.</li>
+          <li>🚚 Giao {site.deliveryArea} — cần gấp thì giao nhanh 2h nội thành.</li>
+          <li>↩️ Quà hư hỏng khi giao: mình đổi mới ngay trong ngày.</li>
+        </ul>
+
+        <div class="hero-cta-row">
+          <a class="btn btn--primary btn--big" href={site.zaloUrl} target="_blank" rel="noopener noreferrer">
+            Nhắn Zalo đặt giỏ này
+          </a>
+          <a class="btn btn--ghost btn--big" href={site.phoneHref}>Gọi {site.phoneDisplay}</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="section">
+      <SectionHead eyebrow="Gợi ý thêm" title="Vài giỏ nữa bạn có thể thích" />
+      <div class="grid-products">
+        {
+          related.map((p) => (
+            <ProductCard product={p} />
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 0;">
+      <div class="contact-grid">
+        <div>
+          <SectionHead
+            eyebrow="Đặt giỏ này"
+            title="Để mình gọi lại chốt đơn nhé"
+            lead="Điền tên, số điện thoại và giỏ đang xem — mình gọi lại trong 30 phút trong giờ mở cửa, tư vấn cỡ và báo giá chốt."
+          />
+        </div>
+        <ContactForm defaultProductSlug={product.slug} />
+      </div>
+    </section>
+  </div>
+</BaseLayout>

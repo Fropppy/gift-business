@@ -1,0 +1,42 @@
+---
+import SectionHead from './SectionHead.astro';
+
+const steps = [
+  {
+    title: 'Chọn mẫu ưng ý',
+    body: 'Lướt website hoặc xem ảnh mẫu mới mình đăng trên Zalo / Facebook mỗi ngày.',
+  },
+  {
+    title: 'Nhắn Zalo hoặc gọi hotline',
+    body: 'Bạn nhắn dịp tặng, ngân sách và nơi giao — mình trả lời tin nhắn trong 30 phút trong giờ mở cửa.',
+  },
+  {
+    title: 'Mình tư vấn & báo giá',
+    body: 'Mình gửi ảnh giỏ thật kèm giá chốt theo cỡ và số lượng, chốt thời gian giao với bạn.',
+  },
+  {
+    title: 'Gói đẹp & giao đúng hẹn',
+    body: 'Gói mới khi có đơn, kèm thiệp viết tay, chụp ảnh giỏ cho bạn duyệt trước khi giao.',
+  },
+];
+---
+
+<section class="section" id="quy-trinh">
+  <div class="container">
+    <SectionHead
+      eyebrow="Đặt quà dễ thôi"
+      title="Đặt quà ở shop mình chỉ 4 bước"
+      lead="Đơn nào mình cũng xử lý thủ công nên nói chuyện trực tiếp với bạn — nhanh và đúng ý người nhận."
+    />
+    <ol class="steps-grid">
+      {
+        steps.map((s) => (
+          <li class="step">
+            <h3>{s.title}</h3>
+            <p>{s.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

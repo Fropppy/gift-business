@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import CTA from '../../components/CTA.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import { products } from '../../utils/catalog';
+---
+
+<BaseLayout
+  title="Tất cả giỏ quà"
+  description="Toàn bộ giỏ quà của Nhà Mai: giỏ trái cây cao cấp, giỏ quà Tết, quà doanh nghiệp, quà sinh nhật, hộp quà biếu sếp, quà khai trương, set quà Trung Thu — giá tham khảo, gói đẹp miễn phí."
+>
+  <section class="section">
+    <div class="container">
+      <SectionHead
+        eyebrow="Giỏ quà"
+        title="Tất cả giỏ quà nhà mình đang có"
+        lead="Lọc theo nhóm bên dưới, bấm vào giỏ xem chi tiết. Giá là mức tham khảo cỡ vừa — giỏ thiết kế riêng theo ngân sách thì mình báo giá trực tiếp qua Zalo."
+      />
+      <ProductGrid products={products} showFilter />
+    </div>
+  </section>
+
+  <CTA
+    title="Không thấy giỏ ưng ý?"
+    lead="Nhắn mình dịp tặng, người nhận và ngân sách — mình làm giỏ thiết kế riêng, gửi ảnh mẫu cho bạn duyệt trước khi gói."
+  />
+</BaseLayout>

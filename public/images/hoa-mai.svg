@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <!-- Hoa mai watermark tile for the Tết theme (Nov to Feb). Used as a fixed
+       repeating layer at the motif opacity variable (0.08) behind content. -->
+  <g fill="none" stroke="#2B2118" stroke-width="1.6" opacity="0.55">
+    <path d="M30 210 C 55 160, 70 130, 96 96"/>
+    <path d="M150 230 C 160 190, 178 160, 200 132"/>
+    <path d="M60 150 C 90 140, 120 142, 148 128" />
+  </g>
+  <g transform="translate(96 84)">
+    <g fill="#C89B3C">
+      <ellipse rx="7" ry="15" transform="rotate(0) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(72) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(144) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(216) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(288) translate(0 -15)"/>
+    </g>
+    <circle r="5.5" fill="#C0272D"/>
+  </g>
+  <g transform="translate(184 46) scale(0.72)">
+    <g fill="#C89B3C">
+      <ellipse rx="7" ry="15" transform="rotate(0) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(72) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(144) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(216) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(288) translate(0 -15)"/>
+    </g>
+    <circle r="5.5" fill="#C0272D"/>
+  </g>
+  <g transform="translate(38 62) scale(0.6)">
+    <g fill="#C89B3C">
+      <ellipse rx="7" ry="15" transform="rotate(0) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(72) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(144) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(216) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(288) translate(0 -15)"/>
+    </g>
+    <circle r="5.5" fill="#C0272D"/>
+  </g>
+  <g transform="translate(206 168) scale(0.5)">
+    <g fill="#C89B3C">
+      <ellipse rx="7" ry="15" transform="rotate(0) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(72) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(144) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(216) translate(0 -15)"/>
+      <ellipse rx="7" ry="15" transform="rotate(288) translate(0 -15)"/>
+    </g>
+    <circle r="5.5" fill="#C0272D"/>
+  </g>
+  <circle cx="140" cy="70" r="4" fill="#C89B3C" opacity="0.8"/>
+  <circle cx="66" cy="118" r="3.2" fill="#C89B3C" opacity="0.7"/>
+  <circle cx="222" cy="104" r="3" fill="#C89B3C" opacity="0.7"/>
+</svg>
