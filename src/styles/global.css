@@ -1050,6 +1050,12 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
   text-align: center;
 }
 
+/* §3.3 exception, implemented: the band's fill IS --primary, so the default
+   --primary ring would be primary-on-primary (1.00:1 — invisible) on the
+   CTAs here. Focusable elements on dark panels get an ink ring instead;
+   --primary-ink is #ffffff in every theme. */
+.cta-band :focus-visible { outline-color: var(--primary-ink); }
+
 .cta-band h2 { color: var(--primary-ink); }
 
 .cta-band p {

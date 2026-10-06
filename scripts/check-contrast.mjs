@@ -100,6 +100,9 @@ const PAIRS = [
   { name: '.price in tet theme (tet on bg, all themes)', fg: '--tet', bg: '--bg', min: 4.5 },
   { name: ':focus-visible ring vs bg (non-text)', fg: '--primary', bg: '--bg', min: 3.0 },
   { name: ':focus-visible ring vs surface (non-text)', fg: '--primary', bg: '--surface', min: 3.0 },
+  /* .cta-band is filled with --primary, so the ring there is the ink
+     override (§3.3 dark-panel exception) — audited against the fill. */
+  { name: ':focus-visible ring on .cta-band (ink on primary fill)', fg: '--primary-ink', bg: '--primary', min: 3.0 },
 ];
 
 /* ---------- run ---------- */
@@ -137,6 +140,26 @@ for (const r of rows) {
     `${r.theme.padEnd(11)} ${String(r.pair.min.toFixed(1)).padStart(4)}:1  ` +
     `${(r.ratio.toFixed(2) + ':1').padStart(8)}  ${r.fg} on ${r.bg}  ${r.ok ? 'PASS' : 'FAIL'}`;
   console.log(line);
+}
+
+/* Structural ring assertions (§3.3). Token pairs cannot see WHICH selector
+   renders: .cta-band is filled with --primary, so without the ink override
+   its ring would be primary-on-primary (1.00:1) while every token pair
+   still passes. Assert the rendered rules exist. */
+const noCommentsCss = css.replace(/\/\*[\s\S]*?\*\//g, '');
+const structuralRules = [
+  {
+    name: 'default :focus-visible ring sources its color from --primary',
+    present: /:focus-visible\s*\{[^}]*outline:\s*3px\s+solid\s+var\(--primary\)/.test(noCommentsCss),
+  },
+  {
+    name: '.cta-band :focus-visible overrides the ring to --primary-ink (dark-panel exception)',
+    present: /\.cta-band\s+:focus-visible\s*\{[^}]*outline-color:\s*var\(--primary-ink\)/.test(noCommentsCss),
+  },
+];
+for (const rule of structuralRules) {
+  console.log(`${rule.present ? 'PASS' : 'FAIL'}  structural: ${rule.name}`);
+  if (!rule.present) failures.push({ theme: 'css', pair: { name: rule.name, min: '—' }, ratio: 0, fg: '—', bg: '—' });
 }
 
 console.log(`\n${rows.length} pairs audited across ${themes.size} theme(s): ${themes.has('tet') ? 'base' : ''}${[...themes.keys()].filter((t) => t !== 'base').map((t) => `, ${t}`).join('')}`);
