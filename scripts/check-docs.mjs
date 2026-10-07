@@ -526,11 +526,11 @@ const CITED_PATHS = {
 
 const CITED_FACTS = [
   // [repo path, fromLine, toLine, substring that must sit inside the range]
-  ['src/layouts/BaseLayout.astro', 24, 47, 'http-equiv="Content-Security-Policy"'],
-  ['src/layouts/BaseLayout.astro', 66, 134, 'is:inline'],
-  ['src/layouts/BaseLayout.astro', 86, 96, 'trung-thu'],
-  ['src/layouts/BaseLayout.astro', 117, 127, 'hero-tet-'],
-  ['src/layouts/BaseLayout.astro', 144, 160, 'float-zalo'],
+  ['src/layouts/BaseLayout.astro', 52, 75, 'http-equiv="Content-Security-Policy"'],
+  ['src/layouts/BaseLayout.astro', 105, 173, 'is:inline'],
+  ['src/layouts/BaseLayout.astro', 125, 135, 'trung-thu'],
+  ['src/layouts/BaseLayout.astro', 156, 166, 'hero-tet-'],
+  ['src/layouts/BaseLayout.astro', 184, 200, 'float-zalo'],
   ['src/components/ContactForm.astro', 24, 24, 'maxlength="100"'],
   ['src/components/ContactForm.astro', 61, 61, 'maxlength="1000"'],
   ['src/components/ContactForm.astro', 138, 143, 'ENDPOINT_CONFIGURED'],

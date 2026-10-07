@@ -3,15 +3,47 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ContactForm from '../components/ContactForm.astro';
 import SectionHead from '../components/SectionHead.astro';
 import { site } from '../utils/site';
+
+// FAQ content — single source for both the visible cards below and the
+// FAQPage JSON-LD (seo-proposal P0-3: markup must not assert anything the
+// page doesn't show).
+const faqs = [
+  {
+    question: 'Giao được khu vực nào?',
+    answer: `${site.deliveryArea}. Nội thành cần gấp mình giao trong 2 giờ; nơi xa hẹn giờ cụ thể khi chốt đơn.`,
+  },
+  {
+    question: 'Giá trên web đã chốt chưa?',
+    answer:
+      'Giá là mức tham khảo theo cỡ vừa. Cỡ nhỏ/lớn, thêm bớt món, đặt số lượng — mình báo giá chính xác qua Zalo ngay.',
+  },
+  {
+    question: 'Cần giỏ theo ngân sách riêng?',
+    answer:
+      'Được nhé, mình làm giỏ thiết kế riêng theo ngân sách và người nhận — nhắn mình dịp tặng là có ảnh mẫu gửi bạn duyệt.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+};
 ---
 
 <BaseLayout title="Liên hệ & đặt quà" description={`Liên hệ ${site.name}: Zalo, hotline ${site.phoneDisplay}, Facebook/Messenger, form để shop gọi lại trong ${site.replyWithin}.`}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <section class="section">
     <div class="container">
       <SectionHead
         eyebrow="Liên hệ"
         title="Mình ở đây, bạn nhắn lúc nào cũng được"
         lead={`Giờ mở cửa: ${site.hours}. Ngoài giờ bạn cứ nhắn — sáng hôm sau mình trả lời sớm nhất.`}
+        level="h1"
       />
 
       <div class="contact-grid">
@@ -83,27 +115,14 @@ import { site } from '../utils/site';
     <div class="container">
       <SectionHead eyebrow="Trước khi đặt" title="Vài điều hay được hỏi" center />
       <div class="faq-grid">
-        <div class="faq-card">
-          <strong>Giao được khu vực nào?</strong>
-          <p style="margin: 0.4rem 0 0; color: var(--muted); font-size: 0.93rem">
-            {site.deliveryArea}. Nội thành cần gấp mình giao trong 2 giờ; nơi xa hẹn giờ cụ thể
-            khi chốt đơn.
-          </p>
-        </div>
-        <div class="faq-card">
-          <strong>Giá trên web đã chốt chưa?</strong>
-          <p style="margin: 0.4rem 0 0; color: var(--muted); font-size: 0.93rem">
-            Giá là mức tham khảo theo cỡ vừa. Cỡ nhỏ/lớn, thêm bớt món, đặt số lượng — mình báo
-            giá chính xác qua Zalo ngay.
-          </p>
-        </div>
-        <div class="faq-card">
-          <strong>Cần giỏ theo ngân sách riêng?</strong>
-          <p style="margin: 0.4rem 0 0; color: var(--muted); font-size: 0.93rem">
-            Được nhé, mình làm giỏ thiết kế riêng theo ngân sách và người nhận — nhắn mình dịp
-            tặng là có ảnh mẫu gửi bạn duyệt.
-          </p>
-        </div>
+        {
+          faqs.map((faq) => (
+            <div class="faq-card">
+              <strong>{faq.question}</strong>
+              <p style="margin: 0.4rem 0 0; color: var(--muted); font-size: 0.93rem">{faq.answer}</p>
+            </div>
+          ))
+        }
       </div>
     </div>
   </section>

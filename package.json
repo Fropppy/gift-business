@@ -6,9 +6,10 @@
   "description": "Nhà Mai — website giỏ quà gia đình (Astro, GitHub Pages)",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/generate-sitemap.mjs",
     "preview": "astro preview",
     "generate:placeholders": "node scripts/generate-placeholders.mjs",
+    "generate:sitemap": "node scripts/generate-sitemap.mjs",
     "check:contrast": "node scripts/check-contrast.mjs",
     "check:docs": "node scripts/check-docs.mjs",
     "check:output": "node scripts/check-output.mjs"

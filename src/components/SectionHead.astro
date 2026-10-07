@@ -4,12 +4,15 @@ interface Props {
   title: string;
   lead?: string;
   center?: boolean;
+  /** Heading level: 'h1' for a page's single top-level heading, 'h2' (default) for sections. */
+  level?: 'h1' | 'h2';
 }
-const { eyebrow, title, lead, center = false } = Astro.props;
+const { eyebrow, title, lead, center = false, level = 'h2' } = Astro.props;
+const Heading = level;
 ---
 
 <div class:list={['section-head', { 'section-head--center': center }]}>
   {eyebrow && <span class="eyebrow">{eyebrow}</span>}
-  <h2>{title}</h2>
+  <Heading>{title}</Heading>
   {lead && <p class="lead">{lead}</p>}
 </div>

@@ -55,3 +55,20 @@ Now/Later stay honest).
 - 2026-10-06: dependabot PR #1 resolved — setup-node pin bumped to the
   v7.0.0 SHA (820762786026740c76f36085b0efc47a31fe5020) in check.yml;
   dependabot PR closed in favor of the manual pin.
+- 2026-10-07: catalog occasion filter + quiet-luxury type pass + PDP story
+  facts. /products/ gains a server-rendered "Dịp tặng" chip row (all 12
+  occasions from occasions.json, no client cap) above the category row;
+  ?tag= deep links now land on a lit chip with one-tap clear, and setting
+  a tag replaces ?category= in URL and filter state together. Type pass:
+  display/2xl/xl scale caps raised, text-wrap: balance on headlines,
+  airier section spacing, display-serif PDP price — value-only edits, no
+  new tokens or fonts. PDP "Gồm N món trong giỏ" list became a story-facts
+  panel (Tặng ai · Dịp nào · Bên trong giỏ) built entirely from existing
+  product fields; review fold-in: the standalone subtitle line under the h1
+  was removed — it had rendered twice on every PDP (also under the new
+  "Tặng ai" row). Design record: docs/design-language.md §9. Gates: the
+  four repo gates run in this task's verification step immediately after
+  these edits — that step's output is the verdict, not this line. 390px
+  fit: hero rendering unchanged by construction (clamp floor/rate
+  untouched, ≈39.4px); longest PDP name floor moved 30.4→32px — browser
+  spot-check still owed (no renderer in the edit step).

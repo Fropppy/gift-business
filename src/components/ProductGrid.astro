@@ -2,6 +2,8 @@
 import type { Product } from '../utils/catalog';
 import { categories } from '../utils/catalog';
 import ProductCard from './ProductCard.astro';
+import { fold } from '../utils/search';
+import occasions from '../data/occasions.json';
 
 interface Props {
   products: Product[];
@@ -9,11 +11,71 @@ interface Props {
 }
 
 const { products, showFilter = false } = Astro.props;
+
+// Build-time search index (diacritic-insensitive catalog search): one
+// pre-folded haystack per product, embedded as the <script
+// type="application/json"> data island below — no runtime fetch, so the
+// CSP connect-src allow-list stays untouched. The client folds only the
+// short query; haystacks are folded once here at build time.
+const searchIndex = products.map((p) => ({
+  id: p.id,
+  slug: p.slug,
+  price: p.price.amount,
+  text: fold(
+    [
+      p.name,
+      p.subtitle ?? '',
+      p.description,
+      (p.contents ?? []).join(' '),
+      p.tags.join(' '),
+      p.category,
+      p.slug,
+    ].join(' ')
+  ),
+}));
 ---
 
 {
   showFilter && (
     <>
+      <form class="filter-row search-row" role="search" data-search-form>
+        <label class="filter-label" for="product-q">Tìm kiếm giỏ quà</label>
+        <input
+          id="product-q"
+          class="search-input"
+          type="search"
+          name="q"
+          inputmode="search"
+          autocomplete="off"
+          placeholder="VD: giỏ trái cây, quà biếu sếp, Tết…"
+          aria-describedby="product-q-status"
+          data-search-input
+        />
+      </form>
+      {/* Live result count: a status region must exist in the initial markup
+          before its first textContent update to be announced (MDN). */}
+      <p
+        class="form-status"
+        id="product-q-status"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        data-search-status
+        hidden
+      ></p>
+      {/* Occasion filter (§1.3 occasion-first): dịp trước nhóm — a gift
+          shopper decides the occasion before the category. All 12 chips are
+          server-rendered with NO client cap: this is a filter, not the
+          capped marketing band (the homepage OccasionStrip keeps §4.2's
+          8-chip cap), and no-JS visitors must see every option. */}
+      <div class="filter-row" role="group" aria-label="Lọc theo dịp tặng quà">
+        <span class="filter-label">Dịp tặng:</span>
+        {occasions.map((o) => (
+          <button class="chip" data-filter-tag={o.tag}>
+            <span aria-hidden="true">{o.icon}</span> {o.name}
+          </button>
+        ))}
+      </div>
       <div class="filter-row" role="group" aria-label="Lọc giỏ quà theo nhóm">
         <button class="chip chip--active" data-filter-cat="">Tất cả</button>
         {categories.map((c) => (
@@ -30,6 +92,15 @@ const { products, showFilter = false } = Astro.props;
         <button class="chip" data-filter-price="500-1tr">500k – 1tr</button>
         <button class="chip" data-filter-price="tren-1tr">Trên 1tr</button>
       </div>
+      {/* Search data island: set:html renders the JSON raw (same mechanism
+          as BaseLayout's ld+json). Every < is escaped to \u003c so a future
+          literal "</script" in owner-edited product text cannot break out —
+          \u003c still JSON-parses as <. */}
+      <script
+        type="application/json"
+        data-search-index
+        set:html={JSON.stringify(searchIndex).replace(/</g, '\\u003c')}
+      />
     </>
   )
 }
@@ -46,17 +117,29 @@ const { products, showFilter = false } = Astro.props;
   Nhóm này mình chưa cập nhật mẫu lên web — bạn nhắn Zalo, mình gửi ảnh mẫu mới nhất nhé.
 </p>
 
+<p class="form-status" data-search-empty hidden>
+  Không thấy giỏ nào khớp — thử gõ không dấu, bớt từ, hoặc nhắn Zalo mình gửi ảnh mẫu ngay.
+</p>
+
 <script>
-  // Category/tag/price filtering on the catalog page. Supports deep links:
+  import { fold, matchesTokens } from '../utils/search';
+
+  // Category/tag/price filtering + diacritic-insensitive text search on the
+  // catalog page. Supports deep links:
   //   /products/?category=<slug>  (from category cards)
-  //   /products/?tag=<tag>        (from the occasion strip)
+  //   /products/?tag=<tag>        (from the occasion strip + PDP story row)
   //   /products/?price=<tier>     (price tiers: duoi-500 | 500-1tr | tren-1tr)
+  //   /products/?q=<query>        (text search — toneless typing works too)
   const grid = document.querySelector('[data-product-grid]');
   if (grid) {
     const cards = Array.from(grid.querySelectorAll<HTMLElement>('.card'));
     const catChips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter-cat]'));
+    const tagChips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter-tag]'));
     const priceChips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter-price]'));
     const empty = document.querySelector<HTMLElement>('[data-filter-empty]');
+    const searchEmpty = document.querySelector<HTMLElement>('[data-search-empty]');
+    const status = document.querySelector<HTMLElement>('[data-search-status]');
+    const searchInput = document.querySelector<HTMLInputElement>('[data-search-input]');
     const params = new URLSearchParams(window.location.search);
 
     // Boundaries per §5.5: 500,000 and 1,000,000 VND.
@@ -66,30 +149,114 @@ const { products, showFilter = false } = Astro.props;
       'tren-1tr': (a) => a > 1000000,
     };
 
+    // --- text search ---
+    // The data island ships haystacks pre-folded at build time, so the
+    // client folds only the short query (fold: src/utils/search.ts — NFD +
+    // strip combining marks + đ→d, applied to index and query alike).
+    // Cards carry no slug attribute — the card link's last path segment is
+    // the join key back into the island.
+    const MIN_QUERY = 2; // a single letter matches 16/16 — not a filter
+    const foldedByText = new Map<string, string>();
+    const island = document.querySelector('script[data-search-index]');
+    if (island?.textContent) {
+      for (const record of JSON.parse(island.textContent) as Array<{ slug: string; text: string }>) {
+        foldedByText.set(record.slug, record.text);
+      }
+    }
+
+    function cardHaystack(card: HTMLElement): string | null {
+      const href = card.querySelector<HTMLAnchorElement>('.card-link')?.getAttribute('href') ?? '';
+      const slug = href.split('/').filter(Boolean).pop();
+      return slug ? foldedByText.get(slug) ?? null : null;
+    }
+
     let currentCat = '';
     let currentTag: string | null = null;
     let currentPrice = '';
+    let currentQ = ''; // active (folded) text query — '' means not filtering
+    let lastCommitted = ''; // de-dupes URL writes and search_apply events
 
-    function apply(cat: string, tag: string | null, price: string) {
+    function apply(cat: string, tag: string | null, price: string, q: string) {
       let shown = 0;
       const tier = price ? PRICE_TIERS[price] : undefined;
+      const tokens = q.split(/\s+/).filter(Boolean);
       cards.forEach((card) => {
         const matchCat = !cat || card.dataset.cat === cat;
         const tags = (card.dataset.tags || '').split(' ');
         const matchTag = !tag || tags.includes(tag);
         const amount = Number(card.dataset.price ?? '');
         const matchPrice = !tier || (Number.isFinite(amount) && tier(amount));
-        const visible = matchCat && matchTag && matchPrice;
+        // Token-AND by substring containment over the folded haystack —
+        // "qua gio tet" (any word order, any tone) must match.
+        const haystack = tokens.length ? cardHaystack(card) : null;
+        const matchText = !tokens.length || (haystack !== null && matchesTokens(tokens, haystack));
+        const visible = matchCat && matchTag && matchPrice && matchText;
         card.hidden = !visible;
         if (visible) shown += 1;
       });
       catChips.forEach((chip) =>
         chip.classList.toggle('chip--active', (chip.dataset.filterCat || '') === cat)
       );
+      // tag ?? '' unlights every chip when tag is null (?category= deep link)
+      tagChips.forEach((chip) =>
+        chip.classList.toggle('chip--active', (chip.dataset.filterTag || '') === (tag ?? ''))
+      );
       priceChips.forEach((chip) =>
         chip.classList.toggle('chip--active', chip.dataset.filterPrice === price)
       );
-      if (empty) empty.hidden = shown > 0;
+      // Differentiated empty states: a text-search miss gets its own copy;
+      // the status region announces the result size (0 included — zero-result
+      // queries are the stock-gap signal).
+      if (empty) empty.hidden = shown > 0 || tokens.length > 0;
+      if (searchEmpty) searchEmpty.hidden = shown > 0 || tokens.length === 0;
+      if (status) {
+        status.hidden = tokens.length === 0;
+        if (tokens.length) status.textContent = `Tìm thấy ${shown} giỏ`;
+      }
+      return shown;
+    }
+
+    // Analytics hook: one search_apply per COMMITTED query (deep-link load,
+    // Enter, explicit clear, or a debounce settle that changed the query —
+    // never per keystroke). Rides the window.__nm queue when the analytics
+    // layer lands; until then it is silent in production and one dev-console
+    // line in `npm run dev`. No network code here — nothing leaves the page.
+    function nmEvent(name: string, params: Record<string, string | number>) {
+      const queue = (window as unknown as { __nm?: { push?: (event: unknown) => void } }).__nm;
+      if (queue && typeof queue.push === 'function') {
+        queue.push({ name, params });
+      } else if (import.meta.env.DEV) {
+        console.debug('[nm:event]', name, params);
+      }
+    }
+
+    // Fold + min length: "t" (or a toned single letter) filters nothing.
+    function activeQuery(raw: string): string {
+      const folded = fold(raw).trim();
+      return folded.length >= MIN_QUERY ? folded : '';
+    }
+
+    // Commit one raw query value: filter, sync ?q= like the chip params,
+    // fire search_apply once. search_query stays raw-as-typed (truncated to
+    // 100 chars — a query box can receive anything).
+    function commit(raw: string, cause: 'load' | 'settle' | 'enter' | 'clear') {
+      const q = activeQuery(raw);
+      const changed = q !== lastCommitted;
+      lastCommitted = q;
+      currentQ = q;
+      const shown = apply(currentCat, currentTag, currentPrice, q);
+      if (changed) {
+        const url = new URL(window.location.href);
+        if (q) url.searchParams.set('q', raw.trim());
+        else url.searchParams.delete('q');
+        history.replaceState(null, '', url);
+        if (q || cause === 'clear') {
+          nmEvent('search_apply', {
+            search_query: raw.trim().slice(0, 100),
+            result_count: shown,
+          });
+        }
+      }
     }
 
     catChips.forEach((chip) => {
@@ -102,7 +269,7 @@ const { products, showFilter = false } = Astro.props;
         history.replaceState(null, '', url);
         currentCat = cat;
         currentTag = null;
-        apply(currentCat, currentTag, currentPrice);
+        apply(currentCat, currentTag, currentPrice, currentQ);
       });
     });
 
@@ -115,15 +282,87 @@ const { products, showFilter = false } = Astro.props;
         else url.searchParams.delete('price');
         history.replaceState(null, '', url);
         currentPrice = price;
-        apply(currentCat, currentTag, currentPrice);
+        apply(currentCat, currentTag, currentPrice, currentQ);
       });
     });
 
-    // initial state from URL (?category= wins over ?tag=; ?price= combines)
+    tagChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        // click the active occasion again to clear it (price-toggle pattern).
+        // Setting a tag REPLACES any category — URL param and state change in
+        // the same stroke, mirroring the cat handler's discipline: editing the
+        // URL alone would leave cards filtered by cat+tag while the address
+        // bar shows only ?tag=, silently changing results on reload.
+        const tag = chip.dataset.filterTag === currentTag ? null : (chip.dataset.filterTag ?? null);
+        const url = new URL(window.location.href);
+        if (tag) {
+          url.searchParams.set('tag', tag);
+          url.searchParams.delete('category');
+        } else {
+          url.searchParams.delete('tag');
+        }
+        history.replaceState(null, '', url);
+        if (tag) currentCat = '';
+        currentTag = tag;
+        apply(currentCat, currentTag, currentPrice, currentQ);
+      });
+    });
+
+    // Search wiring: ~200 ms debounce (screen-reader/layout chatter, not
+    // speed — a full scan is microseconds). Escape clears the box AND the
+    // URL; the native ⓧ of type="search" arrives as an empty `search` event.
+    if (searchInput) {
+      const form = searchInput.closest<HTMLFormElement>('[data-search-form]');
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      const flush = (cause: 'enter' | 'clear') => {
+        clearTimeout(timer);
+        commit(searchInput.value, cause);
+      };
+      const settle = () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => commit(searchInput.value, 'settle'), 200);
+      };
+
+      searchInput.addEventListener('input', (event) => {
+        if (event.isComposing) return; // IME guard — advisory; the debounce is the real protection
+        settle();
+      });
+      // Some keyboards (Gboard Telex) end composition without a trailing
+      // input event — pick the final value up here.
+      searchInput.addEventListener('compositionend', settle);
+      searchInput.addEventListener('keydown', (event) => {
+        if (event.isComposing) return; // IME: Enter confirms / Escape cancels the composition — neither commits or wipes a query
+        if (event.key === 'Enter') {
+          event.preventDefault(); // filtering is client-side — never a GET reload
+          flush('enter');
+        } else if (event.key === 'Escape') {
+          searchInput.value = '';
+          flush('clear');
+        }
+      });
+      searchInput.addEventListener('search', () => {
+        // Chromium/Safari fire this for ⓧ and for Enter; the non-empty Enter
+        // case is already committed by the keydown handler above.
+        if (!searchInput.value) flush('clear');
+      });
+      form?.addEventListener('submit', (event) => {
+        event.preventDefault();
+        flush('enter');
+      });
+    }
+
+    // initial state from URL (?category= wins over ?tag=; ?price= and ?q= combine)
     currentCat = params.get('category') || '';
     currentTag = currentCat ? null : params.get('tag');
     const priceParam = params.get('price');
     currentPrice = priceParam && priceParam in PRICE_TIERS ? priceParam : '';
-    if (currentCat || currentTag || currentPrice) apply(currentCat, currentTag, currentPrice);
+    // ?q= only means something where the data island shipped. On grids
+    // rendered without the filter block (homepage) there is no haystack to
+    // match and no search box to clear — a hand-crafted ?q= must be ignored,
+    // not hide every card behind the search empty state. Chip params keep
+    // their pre-existing behavior on those grids.
+    const qParam = island ? params.get('q') || '' : '';
+    if (searchInput && qParam) searchInput.value = qParam; // deep link fills the box
+    if (currentCat || currentTag || currentPrice || qParam) commit(qParam, 'load');
   }
 </script>
