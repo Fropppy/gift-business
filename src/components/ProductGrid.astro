@@ -290,6 +290,7 @@ const searchIndex = products.map((p) => ({
       // input event — pick the final value up here.
       searchInput.addEventListener('compositionend', settle);
       searchInput.addEventListener('keydown', (event) => {
+        if (event.isComposing) return; // IME: Enter confirms / Escape cancels the composition — neither commits or wipes a query
         if (event.key === 'Enter') {
           event.preventDefault(); // filtering is client-side — never a GET reload
           flush('enter');
@@ -314,7 +315,12 @@ const searchIndex = products.map((p) => ({
     currentTag = currentCat ? null : params.get('tag');
     const priceParam = params.get('price');
     currentPrice = priceParam && priceParam in PRICE_TIERS ? priceParam : '';
-    const qParam = params.get('q') ?? '';
+    // ?q= only means something where the data island shipped. On grids
+    // rendered without the filter block (homepage) there is no haystack to
+    // match and no search box to clear — a hand-crafted ?q= must be ignored,
+    // not hide every card behind the search empty state. Chip params keep
+    // their pre-existing behavior on those grids.
+    const qParam = island ? params.get('q') || '' : '';
     if (searchInput && qParam) searchInput.value = qParam; // deep link fills the box
     if (currentCat || currentTag || currentPrice || qParam) commit(qParam, 'load');
   }
