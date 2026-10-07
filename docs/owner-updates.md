@@ -134,13 +134,13 @@ products. Rules per field, before you fill in the worksheet:
 | --- | --- | --- |
 | `slug` | Never change it. | It IS the page URL (`/products/<slug>/`) and a sitemap row (`scripts/generate-sitemap.mjs` builds the URL list from it). A changed slug silently moves the page and 404s the old URL. |
 | `name` | Keep the buyer's search words in it — "Giỏ quà Tết…", "Giỏ trái cây…", "quà biếu sếp". ≤ ~60 chars. | It becomes the page title, the `h1`, the image alt text, and the Product JSON-LD name. |
-| `subtitle` | One short positioning line. | Shows under the `h1` and on cards; also leads the meta description (`src/pages/products/[slug].astro:30-31`). |
+| `subtitle` | One short positioning line. | Shows in the detail page's "Tặng ai" story row and on cards; also leads the meta description (`src/pages/products/[slug].astro:37-38`). |
 | `description` | UNIQUE across all 16, ~120–160 characters, your shop voice. | Card text, product-page body copy, and the JSON-LD description Google reads. Duplicate boilerplate across products wastes all three. |
-| `contents[]` | List exactly what is really in the basket. | Renders as "Gồm N món trong giỏ". |
+| `contents[]` | List exactly what is really in the basket. | Renders in the detail page's "Bên trong giỏ" story row as "Gồm N món: món này · món kia". |
 | `price.amount` | Integer VND only: `850000`, never `850.000` or `850.000₫`. `currency_code` stays `"vnd"`. | `formatVnd()` renders 850000 → 850.000₫ (`src/utils/catalog.ts:66-68`); the JSON-LD Offer also needs the raw number. |
-| `inStock` | `true` / `false`. | Flips the JSON-LD Offer availability InStock/OutOfStock (`src/pages/products/[slug].astro:51`). |
+| `inStock` | `true` / `false`. | Flips the JSON-LD Offer availability InStock/OutOfStock (`src/pages/products/[slug].astro:58`). |
 | `images[]` + `thumbnail` | Point BOTH at `/images/products/<slug>.jpg`. | `productImage()` resolves thumbnail → images[0] → placeholder (`src/utils/catalog.ts:71-74`). |
-| (alt text) | Not a JSON field — it is auto-derived as `Ảnh minh họa: <name>` on the detail page and every card (`src/pages/products/[slug].astro:90`, `src/components/ProductCard.astro:25`). | A descriptive name IS the alt text; write names that describe the actual basket. |
+| (alt text) | Not a JSON field — it is auto-derived as `Ảnh minh họa: <name>` on the detail page and every card (`src/pages/products/[slug].astro:97`, `src/components/ProductCard.astro:25`). | A descriptive name IS the alt text; write names that describe the actual basket. |
 
 ## The 16-product worksheet
 

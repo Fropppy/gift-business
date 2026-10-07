@@ -6,6 +6,7 @@ import SectionHead from '../../components/SectionHead.astro';
 import { site } from '../../utils/site';
 import { asset } from '../../utils/asset';
 import { products, categoryBySlug, formatVnd, productImage, badgeClass, relatedProducts } from '../../utils/catalog';
+import occasions from '../../data/occasions.json';
 
 export function getStaticPaths() {
   return products.map((product) => ({
@@ -17,6 +18,12 @@ export function getStaticPaths() {
 const { product } = Astro.props;
 const category = categoryBySlug(product.category);
 const related = relatedProducts(product, 3);
+
+// Story facts (Tặng ai · Dịp nào · Bên trong giỏ): every product already
+// carries subtitle, tags, and contents — zero schema edits. Occasion names
+// deep-link to the catalog's ?tag= filter; the Dịp tặng chip row lights up
+// on landing (ProductGrid's tag active-sync).
+const occasionLinks = occasions.filter((o) => product.tags.includes(o.tag));
 
 // Self-referencing canonical — same construction as BaseLayout (seo-proposal
 // P0-1); also feeds og:url and the JSON-LD Offer/BreadcrumbList URLs below.
@@ -100,7 +107,6 @@ const productSchema = {
           </span>
         )}
         <h1 style="margin-bottom: 0.2em;">{product.name}</h1>
-        {product.subtitle && <p style="color: var(--muted); margin-top: 0;">{product.subtitle}</p>}
 
         <div class="detail-price">
           <span class="price">{formatVnd(product.price.amount)}</span>
@@ -110,17 +116,34 @@ const productSchema = {
         <p>{product.description}</p>
 
         {
-          product.contents && product.contents.length > 0 && (
-            <>
-              <h3 style="font-family: var(--font-body); font-size: 0.95rem; margin-bottom: 0.2rem;">
-                Gồm {product.contents.length} món trong giỏ
-              </h3>
-              <ul class="meta-list">
-                {product.contents.map((item) => (
-                  <li>• {item}</li>
-                ))}
-              </ul>
-            </>
+          (product.subtitle || occasionLinks.length > 0 || (product.contents && product.contents.length > 0)) && (
+            <dl class="story-facts">
+              {product.subtitle && (
+                <div class="story-row">
+                  <dt>Tặng ai</dt>
+                  <dd>{product.subtitle}</dd>
+                </div>
+              )}
+              {occasionLinks.length > 0 && (
+                <div class="story-row">
+                  <dt>Dịp nào</dt>
+                  <dd>
+                    {occasionLinks.map((o, i) => (
+                      <Fragment>
+                        {i > 0 && ' · '}
+                        <a href={`${asset('/products/')}?tag=${o.tag}`}>{o.name}</a>
+                      </Fragment>
+                    ))}
+                  </dd>
+                </div>
+              )}
+              {product.contents && product.contents.length > 0 && (
+                <div class="story-row">
+                  <dt>Bên trong giỏ</dt>
+                  <dd>{`Gồm ${product.contents.length} món: ${product.contents.join(' · ')}`}</dd>
+                </div>
+              )}
+            </dl>
           )
         }
 

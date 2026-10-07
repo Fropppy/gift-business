@@ -3,6 +3,7 @@ import type { Product } from '../utils/catalog';
 import { categories } from '../utils/catalog';
 import ProductCard from './ProductCard.astro';
 import { fold } from '../utils/search';
+import occasions from '../data/occasions.json';
 
 interface Props {
   products: Product[];
@@ -62,6 +63,19 @@ const searchIndex = products.map((p) => ({
         data-search-status
         hidden
       ></p>
+      {/* Occasion filter (§1.3 occasion-first): dịp trước nhóm — a gift
+          shopper decides the occasion before the category. All 12 chips are
+          server-rendered with NO client cap: this is a filter, not the
+          capped marketing band (the homepage OccasionStrip keeps §4.2's
+          8-chip cap), and no-JS visitors must see every option. */}
+      <div class="filter-row" role="group" aria-label="Lọc theo dịp tặng quà">
+        <span class="filter-label">Dịp tặng:</span>
+        {occasions.map((o) => (
+          <button class="chip" data-filter-tag={o.tag}>
+            <span aria-hidden="true">{o.icon}</span> {o.name}
+          </button>
+        ))}
+      </div>
       <div class="filter-row" role="group" aria-label="Lọc giỏ quà theo nhóm">
         <button class="chip chip--active" data-filter-cat="">Tất cả</button>
         {categories.map((c) => (
@@ -113,13 +127,14 @@ const searchIndex = products.map((p) => ({
   // Category/tag/price filtering + diacritic-insensitive text search on the
   // catalog page. Supports deep links:
   //   /products/?category=<slug>  (from category cards)
-  //   /products/?tag=<tag>        (from the occasion strip)
+  //   /products/?tag=<tag>        (from the occasion strip + PDP story row)
   //   /products/?price=<tier>     (price tiers: duoi-500 | 500-1tr | tren-1tr)
   //   /products/?q=<query>        (text search — toneless typing works too)
   const grid = document.querySelector('[data-product-grid]');
   if (grid) {
     const cards = Array.from(grid.querySelectorAll<HTMLElement>('.card'));
     const catChips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter-cat]'));
+    const tagChips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter-tag]'));
     const priceChips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter-price]'));
     const empty = document.querySelector<HTMLElement>('[data-filter-empty]');
     const searchEmpty = document.querySelector<HTMLElement>('[data-search-empty]');
@@ -181,6 +196,10 @@ const searchIndex = products.map((p) => ({
       });
       catChips.forEach((chip) =>
         chip.classList.toggle('chip--active', (chip.dataset.filterCat || '') === cat)
+      );
+      // tag ?? '' unlights every chip when tag is null (?category= deep link)
+      tagChips.forEach((chip) =>
+        chip.classList.toggle('chip--active', (chip.dataset.filterTag || '') === (tag ?? ''))
       );
       priceChips.forEach((chip) =>
         chip.classList.toggle('chip--active', chip.dataset.filterPrice === price)
@@ -263,6 +282,28 @@ const searchIndex = products.map((p) => ({
         else url.searchParams.delete('price');
         history.replaceState(null, '', url);
         currentPrice = price;
+        apply(currentCat, currentTag, currentPrice, currentQ);
+      });
+    });
+
+    tagChips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        // click the active occasion again to clear it (price-toggle pattern).
+        // Setting a tag REPLACES any category — URL param and state change in
+        // the same stroke, mirroring the cat handler's discipline: editing the
+        // URL alone would leave cards filtered by cat+tag while the address
+        // bar shows only ?tag=, silently changing results on reload.
+        const tag = chip.dataset.filterTag === currentTag ? null : (chip.dataset.filterTag ?? null);
+        const url = new URL(window.location.href);
+        if (tag) {
+          url.searchParams.set('tag', tag);
+          url.searchParams.delete('category');
+        } else {
+          url.searchParams.delete('tag');
+        }
+        history.replaceState(null, '', url);
+        if (tag) currentCat = '';
+        currentTag = tag;
         apply(currentCat, currentTag, currentPrice, currentQ);
       });
     });

@@ -55,9 +55,9 @@
   --font-size-sm: 0.875rem;                           /* .card-desc, notes */
   --font-size-base: 1rem;                             /* body — 16px floor, never lower */
   --font-size-lg: 1.125rem;                           /* .lead */
-  --font-size-xl: clamp(1.5rem, 3.2vw, 2.2rem);       /* h2 */
-  --font-size-2xl: clamp(1.9rem, 4.5vw, 2.9rem);      /* h1 on inner pages */
-  --font-size-display: clamp(2.25rem, 6vw + 1rem, 4.5rem); /* hero display */
+  --font-size-xl: clamp(1.6rem, 3.4vw, 2.35rem);      /* h2 */
+  --font-size-2xl: clamp(2rem, 4.75vw, 3.125rem);     /* h1 on inner pages */
+  --font-size-display: clamp(2.25rem, 6vw + 1rem, 5rem); /* hero display */
   --leading-tight: 1.15;                              /* display headlines */
   --leading-body: 1.65;
   --tracking-caps: 0.14em;                            /* .eyebrow, .badge */
@@ -177,6 +177,8 @@ h1 { font-size: var(--font-size-2xl); }
 h2 { font-size: var(--font-size-xl); }
 h3 { font-size: 1.2rem; }
 
+h1, h2, .hero-title { text-wrap: balance; }
+
 p { margin: 0 0 1em; }
 
 a {
@@ -240,14 +242,14 @@ button { font-family: inherit; }
   margin-inline: auto;
 }
 
-.section { padding-block: clamp(3rem, 6vw, 4.5rem); }
+.section { padding-block: clamp(3.5rem, 7vw, 5.25rem); }
 
 .section--surface {
   background: color-mix(in srgb, var(--surface) 60%, var(--bg));
   border-block: 1px solid var(--border);
 }
 
-.section-head { max-width: var(--container-prose); margin-bottom: clamp(1.75rem, 3vw, 2.5rem); }
+.section-head { max-width: var(--container-prose); margin-bottom: clamp(2rem, 4vw, 3rem); }
 
 .section-head--center { margin-inline: auto; text-align: center; }
 
@@ -823,7 +825,7 @@ button { font-family: inherit; }
 
 .search-input::placeholder { color: var(--muted); }
 
-/* Phones (§8.3): the two filter rows stop wrapping — each becomes ONE
+/* Phones (§8.3): the chip filter rows stop wrapping — each becomes ONE
    horizontally scrollable snap row of 44px chips, so the first product
    card renders near the fold instead of after 4–5 wrapped chip lines.
    Pure CSS overflow — no carousel machinery (check-output). */
@@ -1310,6 +1312,7 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
 }
 
 .detail-price .price { font-size: 1.6rem; }
+.detail-price .price { font-family: var(--font-display); }
 
 .detail-price small { color: var(--muted); }
 
@@ -1325,6 +1328,38 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
 }
 
 .meta-list li { padding-block: 0.3rem; font-size: 0.93rem; }
+
+/* PDP story facts (Tặng ai · Dịp nào · Bên trong giỏ): a definition-list
+   panel under the price/description — who it's for, when, and what's in
+   the basket at a glance. Pairs stay in the audited §3.4 set: --text /
+   --muted / --primary links on --surface. dt is deliberately NOT
+   uppercase — §4.3: Vietnamese diacritics stack badly in caps. */
+.story-facts {
+  margin: 1rem 0 1.4rem;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.story-facts .story-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  padding-block: 0.4rem;
+}
+
+.story-facts .story-row + .story-row { border-top: 1px solid var(--border); }
+
+.story-facts dt {
+  flex: 0 0 auto;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.story-facts dd { margin: 0; color: var(--text); }
 
 @media (max-width: 860px) { .detail-grid { grid-template-columns: 1fr; } }
 
