@@ -33,7 +33,7 @@ deleted):
 | --- | --- |
 | `src/data/site.json` | `phoneDisplay`/`phoneHref`, `zaloUrl`, `facebookUrl`, `messengerUrl` (lines 6-10) are samples; check `hours`, `deliveryArea`, `replyWithin` too. `orderEndpoint` is the go-live step above. |
 | `public/images/products/*.svg` | 17 placeholder SVGs → real photos with the same basename as `.jpg`/`.avif`, then update `images[]` in `src/data/products.json`. |
-| `public/images/hero-*.svg` | Hero art `hero-1/2/tile.svg` → photos of real baskets, same basenames. For Tết: drop `hero-tet-1.svg`, `hero-tet-2.svg`, `hero-tet-tile.svg` into public/images/ and the Tết hero activates by itself (BaseLayout.astro:117-127 probes for the files) — no code changes. |
+| `public/images/hero-*.svg` | Hero art `hero-1/2/tile.svg` → photos of real baskets, same basenames. For Tết: drop `hero-tet-1.svg`, `hero-tet-2.svg`, `hero-tet-tile.svg` into public/images/ and the Tết hero activates by itself (BaseLayout.astro:156-166 probes for the files) — no code changes. |
 | `astro.config.mjs` | Nothing — `site: 'https://fropppy.github.io'` (line 14) is already correct for this repo. Change only if the repo moves. |
 
 Regenerate placeholder art any time: `npm run generate:placeholders`.

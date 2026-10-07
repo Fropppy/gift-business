@@ -9,11 +9,38 @@ import { asset } from '../utils/asset';
 interface Props {
   title?: string;
   description?: string;
+  /** Open Graph type — 'website' everywhere except product pages, which pass 'product'. */
+  ogType?: string;
 }
 
-const { title = 'Giỏ quà cho mọi dịp', description = site.description } = Astro.props;
+const { title = 'Giỏ quà cho mọi dịp', description = site.description, ogType = 'website' } = Astro.props;
 const pageTitle = `${title} · ${site.name}`;
 const base = import.meta.env.BASE_URL;
+
+// Self-referencing canonical (seo-proposal P0-1): pathname only — query
+// strings (the ?category=/?tag=/?price= filter variants of /products/) are
+// dropped, so every variant consolidates onto the clean URL. In static builds
+// Astro.url.pathname already carries the /gift-business base prefix, and
+// Astro.site is the origin from astro.config.mjs.
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+// LocalBusiness structured data (seo-proposal), sourced only from
+// src/data/site.json. NOTE: phone/social URLs are the intentionally-live
+// placeholders (AGENTS.md "Non-obvious facts") and no street address exists
+// yet — the owner swaps in real NAP in site.json when it lands. openingHours
+// is site.hours ("7:30 – 20:30, cả tuần kể cả Chủ nhật") rendered in the
+// schema.org "Mo-Su 07:30-20:30" form.
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: site.name,
+  description: site.description,
+  url: new URL(`${base}/`, Astro.site).href,
+  telephone: site.phoneHref.replace('tel:', ''),
+  openingHours: 'Mo-Su 07:30-20:30',
+  areaServed: site.deliveryArea,
+  sameAs: [site.zaloUrl, site.facebookUrl],
+};
 ---
 
 <!doctype html>
@@ -50,7 +77,18 @@ const base = import.meta.env.BASE_URL;
     <meta name="description" content={description} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="vi_VN" />
+    {/* TODO(og:image — seo-proposal P1-1): deliberately NOT emitted yet.
+        public/images/ holds only SVGs and social crawlers (Zalo/Facebook)
+        won't render them; needs a real ~1200×630 raster (PNG/JPEG) from the
+        owner. Once it exists, add og:image + og:image:width/height/alt
+        (+ twitter:card=summary_large_image). Astro comment on purpose so the
+        TODO stays in source without shipping to the built HTML. */}
+    <link rel="canonical" href={canonical} />
+    <script type="application/ld+json" set:html={JSON.stringify(localBusiness)} />
     <link rel="icon" type="image/svg+xml" href={asset('/favicon.svg')} />
 
     <!-- Fonts: Playfair Display (headings) + Be Vietnam Pro (body/UI).

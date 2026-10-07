@@ -10,7 +10,7 @@ adapter, pure static output, `astro.config.mjs:13-16`). `npm run build`
 emits 21 pages into dist/. There is no JS framework and no server.
 
 - `src/layouts/BaseLayout.astro` — theme engine + CSP meta + the Zalo/hotline
-  floating button (BaseLayout.astro:144-160) on every page.
+  floating button (BaseLayout.astro:184-200) on every page.
 - `src/components/ContactForm.astro` — the enquiry form incl. the honesty
   gate.
 - Data layer: `src/data/products.json` (16 products across 7 category
@@ -33,12 +33,12 @@ emits 21 pages into dist/. There is no JS framework and no server.
 Nov–Feb → tet, Sep → trung-thu (a documented Gregorian approximation of
 rằm tháng 8 that occasionally falls in early October). localStorage
 `nm:theme` manual override, validated against the whitelist. All of this
-lives in the `is:inline` synchronous head script (BaseLayout.astro:66-134)
+lives in the `is:inline` synchronous head script (BaseLayout.astro:105-173)
 and must stay inline — a bundled/module script executes after first paint
 and would flash the wrong palette. The switcher is revealed via
 `data-theme-ui`; dist/ behavior is asserted by scripts/check-output.mjs.
 When the effective theme is tet and `hero-tet-*.svg` files exist, the hero
-tokens swap to them automatically (BaseLayout.astro:117-127).
+  tokens swap to them automatically (BaseLayout.astro:156-166).
 
 ## Order pipeline
 
@@ -91,7 +91,7 @@ chain also runs in CI).
 
 ## Security posture
 
-CSP meta on every page (BaseLayout.astro:44-47; asserted on 21/21 dist/
+CSP meta on every page (BaseLayout.astro:72-75; asserted on 21/21 dist/
 pages by check-output.mjs): `default-src 'none'`, and `connect-src`
 allow-lists BOTH https://script.google.com AND
 https://script.googleusercontent.com — the Apps Script /exec URL answers
@@ -99,7 +99,7 @@ with a 302 to a one-time script.googleusercontent.com URL and CSP is
 enforced on every redirect hop (commit 8c2af58). Known limitation,
 documented in-source: script-src carries 'unsafe-inline' because the theme
 engine must stay inline and Astro inlines bundles — this CSP blocks remote
-code/exfil origins, not inline XSS (BaseLayout.astro:24-43).
+code/exfil origins, not inline XSS (BaseLayout.astro:52-71).
 
 Secret scan: the ad-hoc pattern grep in ZCODE.md (Commands) over every blob
 in history — GitHub token prefixes (ghp_/gho_/ghs_/github_pat_), AWS

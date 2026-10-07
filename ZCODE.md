@@ -13,6 +13,7 @@ One question → one file. Links, never summaries.
 | How do the site and the order pipeline fit together? | [docs/architecture.md](docs/architecture.md) |
 | Why was X chosen? | [docs/decisions.md](docs/decisions.md) |
 | How to deploy, operate, replace placeholders, triage orders? | [docs/operations.md](docs/operations.md) |
+| How does the owner update products / contact data himself? | [docs/owner-updates.md](docs/owner-updates.md) |
 | What is pending / blocked / conditional? | [docs/roadmap.md](docs/roadmap.md) |
 | How does the memory system work? | [docs/ai/memory-system.md](docs/ai/memory-system.md) |
 | Design-system rationale (tokens, themes, WCAG)? | [docs/design-language.md](docs/design-language.md) |
@@ -122,16 +123,16 @@ Non-derivable facts — things an agent cannot safely infer from a quick read.
   `""`, ContactForm refuses to promise delivery and shows the Zalo/hotline
   fallback (`src/components/ContactForm.astro:138-143`). Intended, not a bug.
 - **FOUC constraint.** The theme engine is a synchronous `is:inline` script
-  in `<head>` (`src/layouts/BaseLayout.astro:66-134`). It must stay inline:
+  in `<head>` (`src/layouts/BaseLayout.astro:105-173`). It must stay inline:
   bundled/module scripts run after first paint and would flash the wrong
   palette. dist/ behavior is asserted by scripts/check-output.mjs.
 - **CSP both hops.** `connect-src` allow-lists BOTH script.google.com and
-  script.googleusercontent.com (`src/layouts/BaseLayout.astro:44-47`,
+  script.googleusercontent.com (`src/layouts/BaseLayout.astro:72-75`,
   commit 8c2af58): the /exec URL 302-redirects to a
   script.googleusercontent.com URL and CSP is enforced on every hop —
   omitting it breaks every submit once the webhook is live. Known,
   in-source-documented limitation: script-src carries 'unsafe-inline'
-  (BaseLayout.astro:24-43) because the theme engine is inline and Astro
+  (BaseLayout.astro:52-71) because the theme engine is inline and Astro
   inlines bundles — this CSP blocks remote code/exfil, not inline XSS.
 - **Job-id coupling.** check.yml's job id is `check`
   (.github/workflows/check.yml:15); main's branch protection requires that
@@ -145,7 +146,7 @@ Non-derivable facts — things an agent cannot safely infer from a quick read.
   check.yml).
 - **Theme calendar.** Nov–Feb → tet; Sep → trung-thu — a Gregorian
   approximation of rằm tháng 8 âm lịch that occasionally misses; the manual
-  switcher is the escape hatch (BaseLayout.astro:86-96).
+  switcher is the escape hatch (BaseLayout.astro:125-135).
 - **Token truth.** `:root` in src/styles/global.css declares 56 custom
   properties; tet and trung-thu each override 12. Older prose said 53, then
   55 — count with the gate's parser (node over the css text), never trust

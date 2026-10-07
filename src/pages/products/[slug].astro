@@ -17,9 +17,63 @@ export function getStaticPaths() {
 const { product } = Astro.props;
 const category = categoryBySlug(product.category);
 const related = relatedProducts(product, 3);
+
+// Self-referencing canonical — same construction as BaseLayout (seo-proposal
+// P0-1); also feeds og:url and the JSON-LD Offer/BreadcrumbList URLs below.
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const homeUrl = new URL(asset('/'), Astro.site).href;
+const productsUrl = new URL(asset('/products/'), Astro.site).href;
+
+// Meta description (seo-proposal P0-5): name + subtitle (every product
+// carries one; fall back to the description's first sentence) + the
+// price/delivery hook, clamped to ≤160 chars so it never truncates.
+const lead = product.subtitle || product.description.split('.')[0].trim();
+let metaDescription = `${product.name} — ${lead} · Giá tham khảo ${formatVnd(product.price.amount)}, giao nhanh TP. HCM.`;
+if (metaDescription.length > 160) metaDescription = metaDescription.slice(0, 159).trimEnd() + '…';
+
+// Product + Offer + BreadcrumbList structured data (seo-proposal P0-2) —
+// built entirely from what this template already renders. The category
+// breadcrumb step points at the clean /products/ URL, not the ?category=
+// filter variant the visible breadcrumb links to (canonicals consolidate
+// those variants away). price is the raw numeric VND amount per schema.org.
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Product',
+      name: product.name,
+      description: product.description,
+      image: new URL(productImage(product), Astro.site).href,
+      offers: {
+        '@type': 'Offer',
+        price: product.price.amount,
+        priceCurrency: 'VND',
+        availability: `https://schema.org/${product.inStock ? 'InStock' : 'OutOfStock'}`,
+        url: canonical,
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Trang chủ', item: homeUrl },
+        { '@type': 'ListItem', position: 2, name: 'Giỏ quà', item: productsUrl },
+        ...(category
+          ? [{ '@type': 'ListItem', position: 3, name: category.name, item: productsUrl }]
+          : []),
+        {
+          '@type': 'ListItem',
+          position: category ? 4 : 3,
+          name: product.name,
+          item: canonical,
+        },
+      ],
+    },
+  ],
+};
 ---
 
-<BaseLayout title={product.name} description={`${product.name} — ${product.description} Giá tham khảo ${formatVnd(product.price.amount)}. Gói đẹp miễn phí kèm thiệp viết tay.`}>
+<BaseLayout title={product.name} description={metaDescription} ogType="product">
+  <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
   <div class="container">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href={asset('/')}>Trang chủ</a> ›

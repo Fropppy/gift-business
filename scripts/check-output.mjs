@@ -26,6 +26,12 @@
  *      script.googleusercontent.com) — the redirect hop is CSP-enforced,
  *      so omitting it breaks every order-form submit once the webhook is
  *      activated.
+ *   8. dist/sitemap.xml exists and carries exactly the expected absolute
+ *      URLs — the four static routes plus every src/data/products.json
+ *      slug, each prefixed https://fropppy.github.io/gift-business/
+ *      (astro.config.mjs site + base), /404 excluded, every URL resolving
+ *      to a built dist/ page — and dist/robots.txt (copied from public/)
+ *      declares the sitemap (seo-proposal P0-6).
  *
  * Exit 1 on any failed assertion.
  */
@@ -202,6 +208,68 @@ assert(
   noCsp.length === 0,
   noCsp.length ? `missing/failing on: ${noCsp.map((f) => path.relative(distDir, f)).join(', ')}` : `${allHtml.length}/${allHtml.length} pages`
 );
+
+/* --- 8. sitemap.xml + robots.txt (seo-proposal P0-6): full absolute-URL map --- */
+// The expected URL set is derived here independently of
+// scripts/generate-sitemap.mjs — same source data (src/data/products.json,
+// which getStaticPaths also builds pages from) but this file's own
+// static-route list and base prefix — so a wrong, stale, or missing
+// generator cannot self-validate.
+const SITEMAP_BASE = 'https://fropppy.github.io/gift-business'; // astro.config.mjs site + base
+const SITEMAP_STATIC_ROUTES = ['/', '/about/', '/contact/', '/products/'];
+const productsData = JSON.parse(readFileSync(path.join(repoRoot, 'src', 'data', 'products.json'), 'utf8'));
+const expectedUrls = [
+  ...SITEMAP_STATIC_ROUTES,
+  ...productsData.products.map((p) => `/products/${p.slug}/`),
+].map((route) => SITEMAP_BASE + route);
+
+const sitemap = read('sitemap.xml');
+assert('dist/sitemap.xml exists (sitemap generation chained into the build)', sitemap !== null);
+if (sitemap) {
+  const locs = [...sitemap.matchAll(/<loc>([\s\S]*?)<\/loc>/g)].map((m) => m[1].trim());
+  assert(
+    'sitemap.xml carries exactly the expected URL count',
+    locs.length === expectedUrls.length,
+    `${locs.length} <loc> entries, expected ${expectedUrls.length} (${SITEMAP_STATIC_ROUTES.length} static routes + ${productsData.products.length} product pages)`
+  );
+  const missingUrls = expectedUrls.filter((u) => !locs.includes(u));
+  assert(
+    'sitemap.xml contains every expected absolute URL (static routes + all product slugs)',
+    missingUrls.length === 0,
+    missingUrls.length ? `missing: ${missingUrls.join(', ')}` : `${expectedUrls.length} URLs found`
+  );
+  const extraUrls = locs.filter((u) => !expectedUrls.includes(u));
+  assert(
+    'sitemap.xml lists no unexpected URLs (no /404, no stale slugs, no query variants)',
+    extraUrls.length === 0,
+    extraUrls.length ? `unexpected: ${extraUrls.join(', ')}` : 'none'
+  );
+  const nonPrefixed = locs.filter((u) => !u.startsWith(SITEMAP_BASE + '/'));
+  assert(
+    'every sitemap URL is absolute with the /gift-business/ base prefix',
+    nonPrefixed.length === 0,
+    nonPrefixed.length ? nonPrefixed.join(', ') : `${locs.length}/${locs.length} prefixed`
+  );
+  const missingPages = expectedUrls
+    .map((u) => u.slice(SITEMAP_BASE.length))
+    .filter((rel) => !existsSync(path.join(distDir, rel, 'index.html')));
+  assert(
+    'every sitemap URL resolves to a built dist/ page',
+    missingPages.length === 0,
+    missingPages.length
+      ? `no dist page for: ${missingPages.join(', ')}`
+      : `${expectedUrls.length}/${expectedUrls.length} pages exist`
+  );
+}
+
+const robots = read('robots.txt');
+assert('dist/robots.txt exists (copied from public/robots.txt)', robots !== null);
+if (robots) {
+  assert(
+    'robots.txt declares the sitemap with the full base-prefixed URL',
+    /^Sitemap: https:\/\/fropppy\.github\.io\/gift-business\/sitemap\.xml$/m.test(robots)
+  );
+}
 
 console.log(`\ncheck-output: ${allHtml.length} HTML files checked under ${distDir}`);
 if (failures.length > 0) {
