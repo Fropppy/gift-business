@@ -806,6 +806,23 @@ button { font-family: inherit; }
   color: var(--muted);
 }
 
+/* Text search input (catalog filter row): existing tokens only — focus is
+   covered by the global :focus-visible ring, the placeholder reuses
+   --muted. No new :root properties. */
+.search-input {
+  flex: 1 1 260px;
+  min-height: 44px;                 /* §8.3 tap-target floor */
+  padding: 0.55rem 0.95rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--font-size-base); /* 16px floor — iOS stops auto-zooming */
+}
+
+.search-input::placeholder { color: var(--muted); }
+
 /* Phones (§8.3): the two filter rows stop wrapping — each becomes ONE
    horizontally scrollable snap row of 44px chips, so the first product
    card renders near the fold instead of after 4–5 wrapped chip lines.
@@ -824,6 +841,13 @@ button { font-family: inherit; }
     flex: 0 0 auto;
     scroll-snap-align: start;
     min-height: 44px;
+  }
+
+  /* The search row keeps wrapping like desktop — an input must never slide
+     out of view inside the chips' horizontal scroll row. */
+  .search-row {
+    flex-wrap: wrap;
+    overflow-x: visible;
   }
 }
 
