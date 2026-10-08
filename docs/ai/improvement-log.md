@@ -168,3 +168,48 @@ Mark promoted entries with → where they landed.
   rejecting the flag.
 - Promoted to → rule of thumb: geometric claims get geometric proof;
   screenshots propose, rect math disposes.
+
+## 2026-10-08 — line-stable regions beat pin chases
+
+- Observation: a 325-line append to global.css (345 after same-session
+  review + audit fixes — the audit fix repaired entry-range syntax and
+  the roof draw's unreachable cover end) plus the pass's 20 in-place
+  swap hunks over 34 lines
+  (a later same-session review fix swaps one more line's comment in
+  kind — `git diff faa78ed -U0 -- src/styles/global.css` shows 21
+  hunks / 35 lines total) left all 27 check-docs CITED_FACTS pins and
+  the roadmap's living
+  citation (roadmap.md:83 → `.hero-title` at global.css:608) valid with
+  ZERO edits to scripts/check-docs.mjs — because the editorial pass
+  hard-partitioned the file (in-place swaps above line 1503, append-only
+  below it) instead of allowing "small" inserts where a component needed
+  them. The pins never chased the code; the code kept the pins.
+- Change: the region contract is now recorded as binding, not tribal
+  knowledge — any pre-1503 insert in global.css is a stop-and-replan
+  event that must move the citation and the pins in the same commit
+  (check-docs' move-together protocol), never an in-flight workaround.
+- Promoted to → docs/design-language.md §10 ("Why append-only") and
+  ADR-0009 Consequences in docs/decisions.md.
+
+## 2026-10-08 — animation-range bare ends are cover-relative, not phase-relative
+
+- Observation: five scroll-driven reveals shipped as
+  `animation-range: entry 0% 42%` (etc.) intending "42% of the entry
+  phase", but per scroll-animations-1 each component is independent — a
+  bare second percentage resolves against the ENTIRE view timeline
+  (cover), so reveals completed only when elements were most of the way
+  to exiting. Same trap, second shape: `animation-timeline: view()` with
+  no range defaults to cover 0–100%, and cover-100% is structurally
+  unreachable for a page-final element (the document cannot scroll past
+  its own bottom) — the footer roofline rested permanently part-drawn.
+- Change: every phase-scoped reveal now spells both ends
+  (`entry 0% entry 60%`, `entry 10% entry 45%`); the roofline got an
+  explicit range. Caught by the independent audit's motion reviewer and
+  reproduced with live headless-Chrome getAnimations() measurements
+  (rawProgress 0.616 at max scroll → 1.0 after the fix).
+- Lesson: with named timeline ranges, never abbreviate the end — write
+  both components; and any view() animation on page-final content needs
+  an explicit range or its end-state is unreachable by construction.
+  Verify with element.getAnimations()[0].effect.getComputedTiming().progress
+  at max scroll, not by eye.
+

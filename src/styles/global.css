@@ -57,7 +57,7 @@
   --font-size-lg: 1.125rem;                           /* .lead */
   --font-size-xl: clamp(1.6rem, 3.4vw, 2.35rem);      /* h2 */
   --font-size-2xl: clamp(2rem, 4.75vw, 3.125rem);     /* h1 on inner pages */
-  --font-size-display: clamp(2.25rem, 6vw + 1rem, 5rem); /* hero display */
+  --font-size-display: clamp(2.25rem, 6vw + 1rem, 6rem); /* hero display */
   --leading-tight: 1.15;                              /* display headlines */
   --leading-body: 1.65;
   --tracking-caps: 0.14em;                            /* .eyebrow, .badge */
@@ -70,14 +70,14 @@
   --space-5: 1.5rem;    /* grid gaps */
   --space-6: 2.25rem;   /* section head offset */
   --space-7: 3.5rem;    /* section padding start */
-  --space-8: 5rem;      /* section padding max / footer top */
+  --space-8: 5rem;      /* scale top step, currently unconsumed: .section clamps to 7rem, .footer-grid pads 2.6rem (2026-10-08) */
 
   /* radius & depth */
-  --radius: 14px;        /* cards, chips-rect, steps */
-  --radius-lg: 22px;     /* hero panels, forms */
+  --radius: 10px;        /* cards, chips-rect, steps */
+  --radius-lg: 16px;     /* hero panels, forms */
   --radius-pill: 999px;  /* buttons, chips */
-  --shadow-soft: 0 10px 30px rgba(43, 33, 24, 0.08);
-  --shadow-lift: 0 16px 40px rgba(43, 33, 24, 0.14);
+  --shadow-soft: 0 6px 18px rgba(43, 33, 24, 0.07);
+  --shadow-lift: 0 12px 28px rgba(43, 33, 24, 0.10);
 
   /* motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -242,7 +242,7 @@ button { font-family: inherit; }
   margin-inline: auto;
 }
 
-.section { padding-block: clamp(3.5rem, 7vw, 5.25rem); }
+.section { padding-block: clamp(3.5rem, 8vw, 7rem); }
 
 .section--surface {
   background: color-mix(in srgb, var(--surface) 60%, var(--bg));
@@ -413,12 +413,12 @@ button { font-family: inherit; }
   font-weight: 500;
   color: var(--text);
   padding-block: 0.35rem;
-  border-bottom: 2px solid transparent;
+  border-bottom: none;
 }
 
 .site-nav a:not(.btn):hover {
   color: var(--primary);
-  border-bottom-color: var(--accent);
+  border-bottom-color: transparent;
 }
 
 .site-nav .btn { padding: 0.5rem 1.1rem; }
@@ -589,10 +589,10 @@ button { font-family: inherit; }
   padding-block: clamp(1.5rem, 3vw, 2.5rem);
 }
 
-/* hero main: one static type-led composition on a flat token-colored
-   panel — no scrim (a legibility scrim over a flat color is a leftover
-   photo idiom; --scrim stays reserved for real imagery panels that carry
-   overlay text, §4.2). */
+/* hero main: one static type-led composition straight on the cream page
+   ground — paper-on-cream with a single top rule. No scrim (a legibility
+   scrim over a flat color is a leftover photo idiom; --scrim stays
+   reserved for real imagery panels that carry overlay text, §4.2). */
 .hero-main {
   display: flex;
   flex-direction: column;
@@ -600,9 +600,9 @@ button { font-family: inherit; }
   gap: var(--space-4);
   padding: clamp(1.75rem, 4vw, 3rem);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  background: var(--surface);
-  box-shadow: var(--shadow-soft);
+  border: none; border-top: 1px solid var(--border);
+  background: transparent;
+  box-shadow: none;
 }
 
 .hero-title {
@@ -703,7 +703,7 @@ button { font-family: inherit; }
   gap: 0.65rem;
   padding: 0.7rem 0.9rem;
   border-radius: var(--radius);
-  border: 1px solid var(--border);
+  border: none; border-bottom: 1px solid var(--border);
   background: var(--surface);
   text-decoration: none;
   color: var(--text);
@@ -721,7 +721,7 @@ button { font-family: inherit; }
 
 .occ-chip strong { display: block; font-size: 0.92rem; line-height: 1.3; }
 
-.occ-chip small { color: var(--muted); font-size: 0.75rem; }
+.occ-chip small { color: var(--muted); font-size: 0.8rem; font-family: var(--font-display); font-style: italic; }
 
 /* Phones (§8.3): the occasion strip becomes one horizontal snap row of
    fixed-min-width chips. All 12 chips stay server-rendered and the
@@ -815,9 +815,9 @@ button { font-family: inherit; }
   flex: 1 1 260px;
   min-height: 44px;                 /* §8.3 tap-target floor */
   padding: 0.55rem 0.95rem;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-pill);
-  background: var(--surface);
+  border: none; border-bottom: 1px solid var(--border-strong);
+  border-radius: 0;
+  background: transparent;
   color: var(--text);
   font-family: inherit;
   font-size: var(--font-size-base); /* 16px floor — iOS stops auto-zooming */
@@ -1033,13 +1033,13 @@ button { font-family: inherit; }
   content: counter(step);
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 64px;
+  height: 64px;
   margin-bottom: 0.8rem;
   border-radius: var(--radius-pill);
-  background: var(--primary);
-  color: var(--primary-ink);
-  font-weight: 700;
+  background: none;
+  color: var(--primary);
+  font-weight: 680; font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1169,7 +1169,7 @@ button { font-family: inherit; }
   background: var(--surface);
   text-decoration: none;
   color: var(--text);
-  transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+  transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), transform 150ms var(--ease-out);
 }
 
 a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
@@ -1311,7 +1311,7 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
   margin: 0.4rem 0 1rem;
 }
 
-.detail-price .price { font-size: 1.6rem; }
+.detail-price .price { font-size: 2rem; }
 .detail-price .price { font-family: var(--font-display); }
 
 .detail-price small { color: var(--muted); }
@@ -1330,16 +1330,16 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
 .meta-list li { padding-block: 0.3rem; font-size: 0.93rem; }
 
 /* PDP story facts (Tặng ai · Dịp nào · Bên trong giỏ): a definition-list
-   panel under the price/description — who it's for, when, and what's in
-   the basket at a glance. Pairs stay in the audited §3.4 set: --text /
-   --muted / --primary links on --surface. dt is deliberately NOT
+   in-flow ruled rail under the price/description — who it's for, when,
+   and what's in the basket at a glance. Pairs stay in the audited §3.4
+   set: --text / --muted / --primary links. dt is deliberately NOT
    uppercase — §4.3: Vietnamese diacritics stack badly in caps. */
 .story-facts {
   margin: 1rem 0 1.4rem;
   padding: var(--space-4) var(--space-5);
-  border: 1px solid var(--border);
+  border: none; border-top: 1px solid var(--border-strong);
   border-radius: var(--radius);
-  background: var(--surface);
+  background: transparent;
 }
 
 .story-facts .story-row {
@@ -1355,7 +1355,7 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
 .story-facts dt {
   flex: 0 0 auto;
   font-size: var(--font-size-xs);
-  font-weight: 600;
+  font-weight: 400; font-family: var(--font-display);
   color: var(--muted);
 }
 
@@ -1378,7 +1378,7 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.3fr 1fr 1.2fr;
+  grid-template-columns: 1.5fr 1fr 1.2fr;
   gap: 2rem;
   padding-block: 2.6rem 2rem;
 }
@@ -1499,4 +1499,349 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ============================================================
+   Editorial pass (2026-10-08) — motion layer + static selectors.
+   APPEND-ONLY REGION: this pass adds every new rule here; lines
+   1–1502 keep their line COUNT (the value swaps did change ~16 lines'
+   bytes up there, 1:1, no line moves; docs cite global.css:608).
+   Appended rules win cascade ties, keeping the overrides below safe.
+   Motion architecture (binding): every animation lives inside
+   (prefers-reduced-motion: no-preference); scroll-driven animations
+   additionally inside @supports (animation-timeline: view()), with the
+   animation shorthand ONLY inside that block — no support means the
+   fully-visible static site, never missing content. Animated properties
+   are limited to transform / opacity / font-variation-settings. No JS.
+   ============================================================ */
+
+/* Reduced-motion hardening, pairs with the duration kill above: a
+   progress-based timeline ignores animation-duration, so 0.01ms alone
+   cannot stop a view() animation. Reverting every timeline to the
+   document clock lets the kill end each animation instantly at its
+   final keyframe — every reveal renders at end state under reduce. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-timeline: auto !important;
+  }
+}
+
+/* ---------- keyframes (inert until applied below) ---------- */
+
+/* Row 1 — hero ink-settle: wght 430 → 600 (h1 rests at 600). Playfair's
+   variable axis floor is 400; no keyframe starts below it. */
+@keyframes hero-ink-settle {
+  from { font-variation-settings: 'wght' 430; }
+  to { font-variation-settings: 'wght' 600; }
+}
+
+/* Rows 2–3 — price / 404 code settle: wght 600 → 700 (both rest at 700). */
+@keyframes weight-settle-600-700 {
+  from { font-variation-settings: 'wght' 600; }
+  to { font-variation-settings: 'wght' 700; }
+}
+
+/* Row 4 — section head: title rise + rule draw (no opacity on text). */
+@keyframes section-title-rise {
+  from { transform: translateY(8px); }
+  to { transform: none; }
+}
+
+@keyframes section-rule-draw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Row 5 — card present. */
+@keyframes card-present {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Row 7 — step folio numeral settle: wght 400 → 680 (rests at 680). */
+@keyframes step-numeral-settle {
+  from { font-variation-settings: 'wght' 400; }
+  to { font-variation-settings: 'wght' 680; }
+}
+
+/* Row 8 — story-row reveal (8px / 420ms pinned by the plan; the entry
+   0–60% range is this layer's choice, matching the row-4 title band). */
+@keyframes story-row-reveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Rows 11–12 — slow parallax drifts, clipped by their overflow:hidden
+   parents (.hero-tile / .detail-media). */
+@keyframes tile-drift {
+  from { transform: translateY(-4%) scale(1.06); }
+  to { transform: translateY(4%) scale(1.06); }
+}
+
+@keyframes detail-drift {
+  from { transform: translateY(-3%) scale(1.05); }
+  to { transform: translateY(3%) scale(1.05); }
+}
+
+/* Row 13 — roofline draw. */
+@keyframes roof-draw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ---------- clock-based entrances (rows 1–3) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-title {
+    animation: hero-ink-settle 900ms var(--ease-out) both;
+  }
+
+  .detail-price .price {
+    animation: weight-settle-600-700 480ms var(--ease-out) both;
+  }
+
+  .error-page .code {
+    animation: weight-settle-600-700 480ms var(--ease-out) both;
+  }
+}
+
+/* ---------- static editorial selectors (§5/§6) — the no-JS / no-SDA
+   baseline retune; visible with or without any animation support ----- */
+
+/* Row 4 — ruled section head: full-length hairline by default; the draw
+   below only animates it where view() is supported. */
+.section-head::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  margin-top: var(--space-4);
+  background: var(--border-strong);
+  transform-origin: left center;
+}
+
+/* §5 — magazine rail drop: the hero side tile sits lower on desktop
+   only; the ≤860px single-column stack keeps today's rhythm. */
+@media (min-width: 861px) {
+  .hero-tile {
+    margin-top: var(--space-7);
+  }
+}
+
+/* §5 — homepage lead card: the first featured card spans the row; ≥700px
+   it lays out horizontally (media ≈40% at 16:9 left, body right, h3
+   1.5rem). Below 700px it stays a standard card. Anchored to
+   #gio-noi-bat so the PDP related grid (plain .grid-products) is
+   unaffected; DOM order unchanged — 1 lead + the rest. */
+#gio-noi-bat .grid-products > .card:first-child {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 700px) {
+  #gio-noi-bat .grid-products > .card:first-child {
+    display: grid;
+    grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
+  }
+
+  #gio-noi-bat .grid-products > .card:first-child .card-media {
+    aspect-ratio: 16 / 9;
+    border-bottom: none;
+    border-right: 1px solid var(--border);
+  }
+
+  #gio-noi-bat .grid-products > .card:first-child .card-body {
+    align-self: center;
+    padding: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  #gio-noi-bat .grid-products > .card:first-child .card-body h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* §5 — editorial index bar: every catalog filter row gets a hairline
+   separation. The search row is a .filter-row too, so all four rows —
+   search / Dịp tặng / Nhóm / Mức giá — read as one ruled index beside
+   the hairline-bottom .search-input. Source order after the base rules
+   wins without touching them; ≤560px keeps the hairline AND the §8.3
+   tightened padding via the re-override at the file end. */
+.filter-row {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.75rem;
+}
+
+/* §5 — contact channel folio index: Latin-digit 01… prefixes in Playfair
+   (--accent-strong). Both .channel-list instances (contact page +
+   homepage #lien-he) carry the same ruled-index grammar. */
+.channel-list {
+  counter-reset: channel-index;
+}
+
+.channel {
+  counter-increment: channel-index;
+}
+
+.channel::before {
+  content: counter(channel-index, decimal-leading-zero);
+  flex: none;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.35rem;
+  line-height: 1.4;
+  color: var(--accent-strong);
+}
+
+/* §5 — occasion row hover: only the folio month flips to --accent-strong
+   (instant color state, no transition); the occasion name keeps its own
+   color. A descendant selector on purpose — folding into the base
+   .occ-chip:hover would recolor the whole chip. */
+.occ-chip:hover small {
+  color: var(--accent-strong);
+}
+
+/* §5 — header hotline hover: the number deepens to --primary-deep
+   (instant color state; scanning numerals stay Be Vietnam Pro). */
+.header-hotline:hover strong {
+  color: var(--primary-deep);
+}
+
+/* §4 row 9 — channel nudge on hover/focus: 4px translateX; the border
+   state rides the existing border-color transition (transform 150ms was
+   folded into that list in place). Instant under reduce (duration kill). */
+.channel:is(:hover, :focus-within) {
+  transform: translateX(4px);
+}
+
+/* §4 row 10 — desktop nav underline draw, ≥901px ONLY so the ≤900px
+   mobile panel rows keep their deliberate border-bottom: none. The
+   ::after exists unconditionally in that band (the underline appears
+   instantly under reduce); only the draw transition is guarded. */
+@media (min-width: 901px) {
+  .site-nav a:not(.btn) {
+    position: relative;
+  }
+
+  .site-nav a:not(.btn)::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  .site-nav a:not(.btn):hover::after,
+  .site-nav a:not(.btn):focus-visible::after {
+    transform: scaleX(1);
+  }
+}
+
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  .site-nav a:not(.btn)::after {
+    transition: transform 160ms var(--ease-out);
+  }
+}
+
+/* §4 row 6 — pointer-only card media zoom; touch viewports keep the
+   always-on 44px Zalo pill instead (see the hover:none block above). */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .card-media img {
+    transition: transform 400ms var(--ease-out);
+  }
+
+  .card:hover .card-media img,
+  .card:focus-within .card-media img {
+    transform: scale(1.03);
+  }
+}
+
+/* ---------- scroll-driven entrances (rows 4–5, 7–8, 11–13) ----------
+   The animation shorthand lives ONLY in here: outside this block the
+   site renders fully visible (the no-SDA baseline). fill-mode holds each
+   0% state until its entry range begins. The card entrance fills
+   BACKWARDS only — a forwards fill would pin transform at animation
+   origin forever and silently kill .card:hover's existing lift. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* Row 4 — section head: title rises 8px, rule draws left→right
+       across the entry band. */
+    .section-head > :is(h1, h2) {
+      animation: section-title-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+
+    .section-head::after {
+      animation: section-rule-draw linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+
+    /* Row 5 — cards present (homepage featured, /products/ grid, PDP
+       related). A filter-unhidden card recomputes: fully visible → end
+       state; partially visible may settle mid-range (accepted). */
+    .card {
+      animation: card-present 480ms var(--ease-out) backwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 42%;
+    }
+
+    /* Row 7 — step folio numeral settles 400 → 680 inside the fixed
+       64px box (Playfair has no tabular figures — the box aligns). */
+    .step::before {
+      animation: step-numeral-settle linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 45%;
+    }
+
+    /* Row 8 — story rows reveal per-row: each row owns its timeline,
+       which is the stagger. */
+    .story-facts .story-row {
+      animation: story-row-reveal 420ms var(--ease-out) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+
+    /* Row 11 — hero tile drift (desktop-only by construction: the tile
+       media is hidden ≤860px). */
+    .hero-tile-art {
+      animation: tile-drift linear both;
+      animation-timeline: view();
+    }
+
+    /* Row 12 — PDP media drift. */
+    .detail-media img {
+      animation: detail-drift linear both;
+      animation-timeline: view();
+    }
+
+    /* Row 13 — roofline draw. The entry range is load-bearing: with the
+       default cover range the draw's 100% point sits at fully-scrolled-
+       past, which a page-final footer can never reach (the document
+       cannot scroll beyond its own bottom) — the roof would rest
+       part-drawn on every page. entry 0%→entry 100% completes the draw
+       as soon as the roof has entered the viewport, per spec row 13
+       ("footer entering viewport"). */
+    .roof-divider {
+      transform-origin: left center;
+      animation: roof-draw 600ms var(--ease-out) both;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+  }
+}
+
+/* §8.3 phone padding re-override (2026-10-08 review fix): the .filter-row
+   rule above adds padding-bottom 0.75rem for desktop hairline breathing
+   room, but at ≤560px it would silently win the cascade tie over the base
+   mobile block's padding-block 0.3rem (same specificity, later source
+   order) — ~8px per row across the four catalog filter rows, pushing the
+   first product card ~33px further below the fold and partially rolling
+   back §8.3's documented fold intent. Placed at the file end so every
+   earlier .filter-row declaration stays at its cited line; the hairline
+   itself keeps rendering on phones. */
+@media (max-width: 560px) {
+  .filter-row { padding-bottom: 0.3rem; }
 }
