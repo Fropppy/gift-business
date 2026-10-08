@@ -211,3 +211,62 @@ rule 8 or relocating it — this ADR is the barrier. If the owner changes the
 style or push policy, edit the ZCODE.md rule and supersede this ADR in the
 same change. Push policy stays as rule 4 states it: never push without the
 owner reviewing the results first.
+
+## ADR-0009: Editorial re-style + zero-JS motion layer (2026-10-08, accepted)
+
+### Context
+
+The 2026-10-07 pass left the catalog calm but visually flat: display type
+capped at 5rem, panel chrome (fills, 14/22px radius, wide soft shadows) on
+every surface, and no entrance motion of any kind. The owner-approved
+editorial spec asked for a quiet-luxury re-style plus a motion layer under
+hard constraints: CSP stays `script-src 'self' 'unsafe-inline'` with zero
+new JavaScript, reduced-motion must be honored, the four gates must not
+weaken, and the check-docs CITED_FACTS pins plus the one living file:line
+citation into global.css (roadmap.md:83 → `.hero-title` at global.css:608)
+must survive the change.
+
+### Decision
+
+Ship as two disjoint, strictly ordered regions of global.css. (1) In-place
+swaps inside lines 1–1502 — zero line-count change (values swapped, a few
+lines also gaining packed-in declarations): display cap
+6rem (floor/rate byte-identical), radius 14→10 / 22→16px, closer fainter
+shadows, section rhythm clamp(3.5rem, 8vw, 7rem), panel chrome replaced by
+a ruled-rail grammar (hero-main paper-on-cream, story-facts in-flow rail,
+occ-chip ruled index entries, hairline filter rows), Playfair folio
+numerals on the steps and contact channel index — plus the one font move:
+the css2 link at BaseLayout.astro:102 swaps Playfair's static instances
+for the variable axis (ital,wght@0,400..900;1,400..700). (2) An
+append-only layer after global.css:1502 carries the 13-row motion
+inventory and the new static selectors, under binding architecture rules:
+every animation inside `(prefers-reduced-motion: no-preference)`;
+scroll-driven entrances additionally inside
+`@supports (animation-timeline: view())` with the `animation` shorthand
+only there (no support = today's fully-visible site); animated properties
+limited to transform / opacity / font-variation-settings; and a
+load-bearing `(prefers-reduced-motion: reduce)` block reverting
+`animation-timeline: auto !important` on everything, because the existing
+duration kill cannot stop progress-based timelines.
+
+### Consequences
+
+No-JS and no-scroll-timeline visitors get today's fully-visible site plus
+the static retune; reduced-motion users see every reveal at end state.
+Zero color values moved, so the 60-pair contrast table and both seasonal
+theme blocks stand untouched; `:root` stays 56 tokens. Appended rules win
+cascade ties, which is what lets the layer override base rules without
+editing them. Binding discipline going forward: global.css lines 1–1502
+must never gain or lose a line — any pre-1503 insert is a stop-and-replan
+event that must move the roadmap citation and every matching check-docs
+pin in the same commit (the move-together protocol in check-docs.mjs),
+never an in-flight workaround. Known inert leftover, recorded so it is not
+misread as a lost hover affordance: `.site-nav a:not(.btn):hover` still
+declares `border-bottom-color: transparent` (global.css:421), unrenderable
+under the same rule set's `border-bottom: none` (:416) — the desktop hover
+underline is the appended row-10 `::after` draw; the dead declaration stays
+because deleting a pre-1503 line is itself a stop-and-replan event. The
+variable-Playfair URL serves 23
+@font-face blocks (35 before) but its axis floor is 400: no keyframe may
+start below `wght` 400. Design record: docs/design-language.md §10.
+

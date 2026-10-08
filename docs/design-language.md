@@ -242,12 +242,14 @@ Theme blocks — sparse, colors only:
   --font-size-lg: 1.125rem;                           /* .lead */
   --font-size-xl: clamp(1.6rem, 3.4vw, 2.35rem);      /* h2 */
   --font-size-2xl: clamp(2rem, 4.75vw, 3.125rem);     /* h1 on inner pages */
-  --font-size-display: clamp(2.25rem, 6vw + 1rem, 5rem); /* hero display — §4.2.
+  --font-size-display: clamp(2.25rem, 6vw + 1rem, 6rem); /* hero display — §4.2.
                                 At 390px viewport ≈ 39.4px (2.46rem) — floor and viewport
                                 rate unchanged by the 2026-10-07 quiet-luxury pass; only the
-                                cap rose 4.5rem → 5rem for the desktop scale. The 390px
-                                rendering is unchanged by construction, re-checked 2026-10-07
-                                per the §4.2 fit note */
+                                cap rose, 4.5rem → 5rem (2026-10-07) → 6rem (2026-10-08
+                                editorial pass), for the desktop scale. The phone rendering
+                                is unchanged by construction — the 6rem cap engages only
+                                above ≈1333px viewport; the §4.2 browser line-count re-check
+                                is owed after any clamp change */
   --leading-tight: 1.15;                              /* display headlines */
   --leading-body: 1.65;
   --tracking-caps: 0.14em;                            /* .eyebrow, .badge */
@@ -262,12 +264,12 @@ Theme blocks — sparse, colors only:
   --space-7: 3.5rem;    /* section padding start */
   --space-8: 5rem;      /* section padding max / footer top */
 
-  /* radius & depth */
-  --radius: 14px;        /* cards, chips-rect, steps */
-  --radius-lg: 22px;     /* hero panels, forms */
-  --radius-pill: 999px;  /* buttons, chips — currently hardcoded at global.css:165,211 */
-  --shadow-soft: 0 10px 30px rgba(43, 33, 24, 0.08);
-  --shadow-lift: 0 16px 40px rgba(43, 33, 24, 0.14);
+  /* radius & depth — 2026-10-08 editorial pass: tighter radius, closer/fainter shadows */
+  --radius: 10px;        /* cards, chips-rect, steps (was 14px) */
+  --radius-lg: 16px;     /* hero panels, forms (was 22px) */
+  --radius-pill: 999px;  /* buttons, chips */
+  --shadow-soft: 0 6px 18px rgba(43, 33, 24, 0.07);  /* was 0 10px 30px / 0.08 */
+  --shadow-lift: 0 12px 28px rgba(43, 33, 24, 0.10); /* was 0 16px 40px / 0.14 */
 
   /* motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -281,7 +283,7 @@ Theme blocks — sparse, colors only:
 }
 ```
 
-**Token count:** the `:root` base layer declares **55 custom properties** (19 color incl. scrim + 5 runtime hooks + 12 type + 8 space + 3 radius + 2 shadow + 4 motion + 2 layout). `[data-theme='tet']` overrides **12**, `[data-theme='trung-thu']` **12**. Migration is gradual: existing hardcoded values in components map 1:1 onto these (e.g. `padding: 1rem 1.1rem` ≈ `--space-4 --space-4*1.1` — snap to the scale where the delta is invisible).
+**Token count:** the `:root` base layer declares **56 custom properties** (20 color incl. scrim + `--focus-ring-color` + 5 runtime hooks + 12 type + 8 space + 3 radius + 2 shadow + 4 motion + 2 layout). *(Corrected 2026-10-08: this paragraph said 55 / 19 color before — it missed the §5.4 `--focus-ring-color` tokenization; 56 is what the file declares, recounted this session, and what the docs gate pins at `scripts/check-docs.mjs:463`.)* `[data-theme='tet']` overrides **12**, `[data-theme='trung-thu']` **12**. Migration is gradual: existing hardcoded values in components map 1:1 onto these (e.g. `padding: 1rem 1.1rem` ≈ `--space-4 --space-4*1.1` — snap to the scale where the delta is invisible).
 
 ### 3.3 Accessibility contract for tokens
 
@@ -344,7 +346,7 @@ Re-run this script whenever a token value changes (checked into the repo as `scr
 | Surface | Decision | Research trace | Plan step |
 |---|---|---|---|
 | Hero | **One static type-led composition — the carousel is dropped.** Display headline at `--font-size-display`, one promise sentence, CTA row, reassurance tile in the right column. Rotating display headlines would cut against the very trends driving the change (type-led editorial + slow browsing both argue for one committed statement), and the second slide's doanh nghiệp message becomes a compact one-line band under the hero grid (copy + Zalo/phone CTAs from `Hero.astro:29-48`), not a rotating slide. The carousel markup, dots, `is-active` logic, and rotation script (`Hero.astro:50, 74-112`) are deleted. Photo/SVG panels become quieter: flat token-colored panels or art, never fake photography. | Trends: typography-led *rising*; slow browsing *rising*; anti-pattern: photo-style hero the shop can't fill. | 5 |
-| Hero display fit | `--font-size-display: clamp(2.25rem, 6vw + 1rem, 5rem)` — cap raised 4.5rem → 5rem (72→80px) by the 2026-10-07 quiet-luxury type pass; floor and viewport rate are byte-identical, so the phone rendering is unchanged by construction: at 390px the formula still yields ≈39.4px in a ≈350px container → ~16–18 chars/line, 3–4 lines for the 41-char hero headline; at the 1140px container the ≈648px hero-main column sets that headline in ≈3 calm lines at the 80px cap. With the carousel gone there is no fixed aspect panel constraining the headline — `.hero-title` (`global.css:608`) sets `font-size: var(--font-size-display)`, so the token's 2.25rem clamp floor is the only floor (an earlier draft of this row cited `global.css:500`/`global.css:427` for a 1.6rem floor; both were dead pins inside `.header-hotline` — caught by the 2026-10-07 review sweep). If any headline exceeds 4 lines, the response depends on who owns the copy (**2026-10-07 amendment**): *authored* headlines (the hero — site copy) → shorten the copy, not the type; *data-sourced* headlines (the PDP h1 = owner product names, not editable site copy) → dial the type clamp back instead. Browser line-count check at 390px ran 2026-10-07 (hero ≈39.4px by construction; longest PDP h1 at its 32px floor, ≤3 lines) — re-run manually after any clamp change; no renderer in CI. | — | 5 |
+| Hero display fit | `--font-size-display: clamp(2.25rem, 6vw + 1rem, 6rem)` — cap raised 4.5rem → 5rem (72→80px, 2026-10-07) → 6rem (96px, 2026-10-08 editorial pass, §10); floor and viewport rate are byte-identical, so the phone rendering is unchanged by construction: at 390px the formula still yields ≈39.4px in a ≈350px container → ~16–18 chars/line, 3–4 lines for the 41-char hero headline. The 6rem cap engages only above ≈1333px viewport, and the browser line-count re-check at the 96px cap is still owed (§3.2 comment) — the earlier "≈648px hero-main column at the 1140px container, ≈3 calm lines" estimate was computed at the 80px cap and has not been re-run at 96px. With the carousel gone there is no fixed aspect panel constraining the headline — `.hero-title` (`global.css:608`) sets `font-size: var(--font-size-display)`, so the token's 2.25rem clamp floor is the only floor (an earlier draft of this row cited `global.css:500`/`global.css:427` for a 1.6rem floor; both were dead pins inside `.header-hotline` — caught by the 2026-10-07 review sweep). If any headline exceeds 4 lines, the response depends on who owns the copy (**2026-10-07 amendment**): *authored* headlines (the hero — site copy) → shorten the copy, not the type; *data-sourced* headlines (the PDP h1 = owner product names, not editable site copy) → dial the type clamp back instead. Browser line-count check at 390px ran 2026-10-07 (hero ≈39.4px by construction; longest PDP h1 at its 32px floor, ≤3 lines) — re-run manually after any clamp change; no renderer in CI. | — | 5 |
 | Scrim scope | The `--scrim` gradient (`global.css:397-408`) applies **only to panels with real imagery** (background-image/SVG art with overlay text). Flat token-colored panels use surface tokens and no scrim — a legibility scrim over a flat color is a leftover photo idiom. | Anti-pattern: photo idioms on non-photo surfaces. | 5 |
 | Homepage rhythm | Keep the current section ladder (hero → occasions → categories → 8 featured → steps → commitments → story → *real-proof band, replacing testimonials* → contact, `pages/index.astro`) — it already paces slowly. Keep featured at **8 max** (`index.astro:18` already slices to 8). | Slow browsing: fewer, larger cards; small catalog is an advantage. | 5–6 |
 | Hero grid | Keep the asymmetric `2fr / 1fr` split (`global.css:361-366`) — it is a restrained 2-tile bento; do **not** grow it into a 5–6 tile bento wall. | Bento is at *peak*/saturation warning; gift study calls bento an honorable-mention style choice, not a foundation. | 5 |
@@ -502,6 +504,52 @@ Built on §1–§8; no earlier decision reopened. The §3.2 clamp values/comment
 - **Occasion filter on /products/ (the Dịp tặng row).** A third chip filter row (`role="group"` / `aria-label="Lọc theo dịp tặng quà"`), placed ABOVE the Nhóm (category) row because a gift shopper decides dịp before nhóm — §1.3's occasion-first pattern carried into the catalog itself. All 12 `occasions.json` entries are server-rendered with NO client cap: this is a filter, not the capped marketing band (the homepage OccasionStrip keeps §4.2's 8-chip cap), hiding e.g. Trung Thu in October would hide a working filter, and no-JS visitors must see every option. Chips reuse `.chip` (never `.occ-chip` — check-output counts that class on the homepage) and inherit the §8.3 ≤560px snap-row behavior. URL behavior extends the existing `?tag=` param: a deep link (homepage strip or PDP story row) now lands on a lit chip with one-tap clear; setting a tag deletes `?category=` from the URL AND resets the category state in the same stroke (the cat handler's discipline — URL-only edits desync state vs reload); load precedence stays `?category=` wins over `?tag=`. The four audience/merit tags in products.json (`ban-chay`, `bieu-sep`, `gia-dinh`, `doanh-nghiep`) are deliberately NOT promoted to occasions — the cap above, and the recipient dimension is served per-product by the story-facts block below. No new routes (`?tag=` is a filter param, not a page — the sitemap gate pins the route set).
 - **Quiet-luxury type pass.** Value-only token edits (the 56-token count holds): `--font-size-display` cap 4.5rem → 5rem with floor/rate byte-identical (390px rendering unchanged at ≈39.4px), `--font-size-2xl` → clamp(2rem, 4.75vw, 3.125rem) (h1 inner pages incl. PDP names), `--font-size-xl` → clamp(1.6rem, 3.4vw, 2.35rem) (h2); new `text-wrap: balance` on h1/h2/.hero-title; `.section`/`.section-head` airier clamps; the PDP price renders in `--font-display` (card prices stay sans + tabular-nums — scanning; Playfair has no tabular figures). Bigger, calmer serif headlines over the quiet sans body IS the quiet-luxury move (§1.1 type-led editorial) — no new fonts, weights, or origins (the CSP meta is never-touch), no new `:root` properties.
 - **PDP story facts.** The "Gồm N món trong giỏ" h3+ul becomes a semantic `<dl class="story-facts">` between the description and the options block: **Tặng ai** ← `product.subtitle` · **Dịp nào** ← product tags ∩ occasions (each name links to `/products/?tag=` — the loop closes with the filter row above) · **Bên trong giỏ** ← contents joined " · ". The standalone muted subtitle `<p>` that used to sit under the h1 was removed in review: the first pass kept both and rendered `product.subtitle` twice on every PDP — it now renders exactly once, as the labeled Tặng ai row (the label is what makes the repeat worth keeping over a bare tagline). Every row guards itself against owner-edited data (hide the row if empty; hide the whole dl if all three empty); zero schema edits — §1.3's contents manifest and §5.2's subtitle get their PDP surface. Labels deliberately NOT uppercase (§4.3 — Vietnamese diacritics stack badly in caps); colors ride only audited §3.4 pairs (--text/--muted/--primary links on --surface).
+
+---
+
+## 10. Motion layer + editorial pass (2026-10-08)
+
+Built on §1–§9; no earlier decision reopened. Two same-change halves: an in-place retune inside `global.css` lines 1–1502 (zero line-count change — value swaps, with a few lines also gaining packed-in declarations: `font-family`/`font-style` on `.occ-chip small`, Playfair + size on `.step::before`, a `transform` segment in `a.channel`'s transition list) and an append-only layer after `global.css:1502` (everything new lives there; appended rules also win cascade ties with the base layer, which is what makes the overrides safe without touching it). The §3.2 value/comment syncs and the §4.2 display-cap figures above are this pass's doc-truth edits. Record:
+
+**Supersessions (old rows left as written — this section is the record, not a reword):**
+
+- **§5.7's five-row motion table was labeled "complete" — it no longer is.** The thirteen-row inventory below is the complete set; nothing outside it gets animated.
+- **§1.6's property list is extended, not replaced:** motion is still CSS-only, still no scroll-jacking, no cursor effects, no libraries, no autoplay — but the animated properties are now transform / opacity / `font-variation-settings`, entrances are scroll-driven (`animation-timeline: view()`) as well as clock-based, and one duration now exceeds §1.6's 700ms ceiling: the 900ms hero ink-settle (row 1). §1.6's own text stands as its 2026-10-06 record.
+- **§4.1's weight discipline (display 500–700) gains recorded exceptions:** large display *numerals* — the step folio numerals and the contact channel index — sit at Playfair 400, the variable axis floor, because a folio numeral reads as engraving, not emphasis. Two text uses join them in the same engraving register: the PDP story-fact labels (`.story-facts dt`, Playfair 400 — weight 600→400 + family swap, `global.css:1355-1358`) and each occasion chip's folio month (`.occ-chip small`, Playfair italic, `:724`), so §4.1's "one italic use (`.signature`, `.testi blockquote`)" list is no longer exhaustive (`.testi` itself was removed by plan step 6; `.signature` remains the body-text italic). §4.1's own text stands as its 2026-10-06 record.
+
+**Static retune (in-place value swaps, zero line moves):**
+
+- Tokens: `--font-size-display` cap 5rem → 6rem with floor/rate byte-identical (`global.css:60` — the cap engages only above ≈1333px viewport, so every phone rendering is unchanged by construction); `--radius` 14→10px, `--radius-lg` 22→16px (`:76-77`); `--shadow-soft`/`--shadow-lift` closer and fainter — `0 6px 18px`/.07 and `0 12px 28px`/.10 (`:79-80`). Non-token: `.section` rhythm `clamp(3.5rem, 8vw, 7rem)` (`:245`), PDP price 2rem (`:1314`), footer grid 1.5fr (`:1381`). `:root` stays 56 tokens; zero color values move, so the tet/trung-thu blocks and the §3.4 60-pair audit table stand untouched.
+- **Ruled-rail grammar** (the panel chrome comes off; hairlines carry the structure): `.hero-main` is paper-on-cream — transparent ground, no shadow, a single top rule (`global.css:592-606`); `.story-facts` is an in-flow ruled rail (top rule `--border-strong`, row hairlines `--border`, no fill, `:1337-1353`); `.occ-chip` is a ruled index entry (bottom hairline only, `:706`) whose folio month sits in Playfair italic (`:724`); the catalog search field is a hairline-bottom field, not a pill (`:814-826`, 16px floor + 44px min-height kept); every catalog `.filter-row` gets the same hairline (appended, `:1667-1670` — the search row is a `.filter-row` too, so all four rows read as one ruled index; the appended `padding-bottom: 0.75rem` is re-overridden back to §8.3's `0.3rem` at ≤560px by a block at the file end, so the phone fold intent survives the cascade tie).
+- **Folio numerals:** `.step::before` is an oversized Playfair numeral — weight 680, `--primary`, fixed 64px box, no fill (`global.css:1031-1044`); the contact channels gain Latin-digit `01`–`06` prefixes in Playfair `--accent-strong` (appended counter, `:1675-1691`). Playfair has **no tabular figures** — alignment comes from the fixed box, never from `font-variant-numeric` (the `tabular-nums` left on `.step::before` is a no-op on it; scanning numerals — prices, the hotline number — stay in Be Vietnam Pro).
+- **Instant color states, no new transitions:** `.occ-chip:hover small` → `--accent-strong` (appended descendant selector on purpose — folding into the base `.occ-chip:hover` at `:714-718` would recolor the occasion name); `.header-hotline:hover strong` → `--primary-deep`. Both ride already-audited §3.4 pairs.
+- **Homepage shape:** the hero side tile drops low on desktop only (magazine rail, `margin-top: var(--space-7)` inside `min-width: 861px`, collapsing into the existing ≤860px stack, appended `:1624-1628`); the first featured card spans the row as a horizontal lead — media ≈40% at 16:9, body right, h3 1.5rem at ≥700px, a standard card below (`#gio-noi-bat .grid-products > .card:first-child`, appended `:1635-1659`; anchored to the homepage section so the PDP related grid is unaffected; DOM order unchanged, 1 lead + 7).
+
+**Motion inventory — 13 rows, the complete set (CSS-only, zero JS):**
+
+| # | Surface | Motion | Timeline |
+|---|---|---|---|
+| 1 | `.hero-title` | weight settle `wght` 430→600 (rests at 600) | 900ms clock |
+| 2 | `.detail-price .price` | weight settle 600→700 | 480ms clock |
+| 3 | `.error-page .code` | weight settle 600→700 | 480ms clock |
+| 4 | `.section-head` | title rise 8px + hairline rule draw, no opacity on text | view() entry 0–60% |
+| 5 | `.card` | present — opacity 0→1 + 14px rise | view() entry 0–42%, 480ms |
+| 6 | `.card-media img` | hover/focus-within scale 1.03 | 400ms, `(hover: hover)` only |
+| 7 | `.step::before` | numeral settle `wght` 400→680 (rests at 680) | view() entry 10–45% |
+| 8 | `.story-facts .story-row` | per-row reveal (each row owns its timeline — the stagger) | view(), 420ms |
+| 9 | `.channel` | 4px nudge | 150ms hover/focus-within |
+| 10 | `.site-nav a:not(.btn)` | underline `::after` draw, scaleX 0→1 left-origin | 160ms, ≥901px only |
+| 11 | `.hero-tile-art` | drift −4%→4% at scale 1.06, clipped by `.hero-tile` | view() |
+| 12 | `.detail-media img` | drift ±3% at scale 1.05, clipped by `.detail-media` | view() |
+| 13 | `.roof-divider` | left-origin draw | view() entry, 600ms |
+
+**Architecture rules (binding, stated in the appended header at `global.css:1504-1516`):** every animation lives inside `@media (prefers-reduced-motion: no-preference)`; scroll-driven ones additionally inside `@supports (animation-timeline: view())` with the `animation` shorthand ONLY inside that block — no support means today's fully-visible site, never missing content; animated properties are limited to transform / opacity / `font-variation-settings`; no JavaScript anywhere. The card entrance fills **backwards** only — a forwards fill would pin the transform at its animation origin forever and silently kill `.card:hover`'s existing lift. Row 10's `::after` is scoped inside `min-width: 901px` so the ≤900px mobile panel rows keep their deliberate `border-bottom: none` (the base hover rule's leftover `border-bottom-color: transparent` at `global.css:421` is inert under that `border-bottom: none` (`:416`) — a remnant of the pre-pass 2px underline kept only because deleting a pre-1503 line is a stop-and-replan event; the hover affordance lives entirely in the `::after` draw); row 6 is pointer-only, touch keeping the always-on 44px Zalo pill. A filter-unhidden card recomputes to end-state when fully in viewport; a partially-visible one may settle mid-range — accepted as cosmetic.
+
+**Reduced-motion hardening (load-bearing):** the pre-existing duration kill zeroes `animation-duration` but **cannot stop a progress-based timeline** — a view() animation would keep progressing with scroll regardless. The appended rule (`global.css:1523-1527`) sets `animation-timeline: auto !important` on everything under `(prefers-reduced-motion: reduce)`, returning each animation to the document clock, where the duration kill ends it instantly at its final keyframe — every reveal renders at end state under reduce. It shipped in the same commit as the first view() rule and must never be split from it.
+
+**Type: variable Playfair.** The single css2 link (`BaseLayout.astro:102`) now requests `Playfair+Display:ital,wght@0,400..900;1,400..700` — the Be Vietnam Pro segment is byte-identical; still one request, the same two families, no new origins (CSP untouched). Live-fetch facts, re-verified 2026-10-08 with a full Chrome UA: the URL serves 23 `@font-face` blocks (the previous static-instance URL served 35), declares `font-weight: 400 900` normal / `400 700` italic, and carries the vietnamese unicode-range subset for Playfair (2 blocks). Binding consequence: the variable axis **floor is 400** — no keyframe may start below `wght` 400 (the spec first sketched row 7 at 380; normalized to 400 before shipping).
+
+**Why append-only, and the line-shift contract:** every new rule lives after `global.css:1502`, and the invariant this pass actually maintained on lines 1–1502 is line-COUNT stability — the pass's own value swaps changed ~16 lines' bytes in place (1:1, no line moves; "byte-stable" would overstate it). `docs/roadmap.md:83` cites `.hero-title` at `global.css:608`, and the docs gate's CITED_FACTS pins held mechanically through this pass with zero edits to `scripts/check-docs.mjs` (same assertion count). A future change that must insert or delete a line before `global.css:1503` is a stop-and-replan event, not an in-flight workaround: it has to move that living citation and every matching pin in the same commit, per the move-together protocol documented in `check-docs.mjs`.
 
 ---
 

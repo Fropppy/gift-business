@@ -86,3 +86,32 @@ Now/Later stay honest).
   prose); operations.md note updated to match the corrected README.
   Still open in the owner's untracked seo-proposal.md: the stale
   gate-status paragraph at :72-79.
+- 2026-10-08: "Mai Almanac" editorial re-style + zero-JS motion layer —
+  the 2026 redesign pass, run as a three-workflow pipeline (concept
+  battle across junior/mid/senior engineers → synthesized spec; build
+  with planner/critic + per-file diff review + confirmers; three-lens
+  independent audit + fix rounds). Shipped as global.css value-swaps and
+  appends past :1503 only (the region contract held — 27 CITED_FACTS
+  pins and the living `.hero-title` citation at global.css:608
+  untouched)
+  plus ONE line at BaseLayout.astro:102 (Playfair URL → variable range
+  0,400..900;1,400..700 on the same origin; Be Vietnam Pro segment
+  byte-identical). 13-motion CSS layer: scroll-driven view() entrances,
+  variable-font settles, hover turns — all inside
+  prefers-reduced-motion: no-preference AND @supports guards, animated
+  properties transform/opacity/font-variation-settings only, hardened
+  with an animation-timeline: auto reduce-block against the existing
+  duration kill. Zero color values moved, tet/trung-thu blocks
+  byte-identical, zero new JavaScript or dependencies, design record in
+  design-language.md §10 + ADR-0009. Audit caught and fixed before
+  ship: five animation-range ends were bare percentages (COVER-relative,
+  not entry-relative — now entry-relative ends) and roof-draw had no
+  range so cover-100% was unreachable at max scroll (live-measured
+  part-draw; fixed). Browser QA this session: 1280px (hero 92.8px,
+  rail drop 56px, roofline scaleX(1) at max scroll, step numeral
+  settles wght 680), 390px (hero 39.4px / 4 lines, lead card stacks as
+  a standard card, occasion peek intact, no horizontal overflow), PDP
+  under tet theme (folio price 32px + settle, ruled story rail,
+  clipped parallax). Not live-tested: prefers-reduced-motion emulation
+  (in-app browser lacks it) — verified structurally by the audit. All
+  four gates green this session by the release step, not by inference.
