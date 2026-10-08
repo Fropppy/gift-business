@@ -22,12 +22,11 @@ Everything needed to turn the placeholder site into the real shop:
 
 ## Replacing placeholder content
 
-Corrected copy of the README.md table — the README version has stale rows
-(README.md:29 tells you to set a site URL that astro.config.mjs:14 already
-sets correctly — do NOT "fix" astro.config.mjs; README.md:31-32 mention an
-`ENDPOINT` in ContactForm.astro and a Testimonials component that no longer
-exist — the endpoint moved to site.json and the invented testimonials were
-deleted):
+The placeholder table below is the detailed version; README.md carries a
+short copy of it. README's rows were corrected 2026-10-08 — the stale
+"set your site URL" row (astro.config.mjs was already right) and the
+ContactForm/Testimonials rows (the endpoint moved to site.json and the
+invented testimonials were deleted long before) are gone from README:
 
 | Vị trí | Cần thay |
 | --- | --- |

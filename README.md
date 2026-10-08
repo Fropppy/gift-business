@@ -26,12 +26,10 @@ npm run build      # xuất dist/
 
 | Vị trí | Cần thay |
 | --- | --- |
-| `astro.config.mjs` | `site: 'https://khanh.github.io'` → username thật |
-| `src/data/site.json` | Số hotline, link Zalo/Facebook/Messenger, giờ mở cửa, khu vực giao (đang là số/link mẫu) |
-| `src/components/ContactForm.astro` | `ENDPOINT` → URL Google Apps Script Web App (ghi chú TODO trong file: Apps Script `doPost` ghi vào Google Sheet) |
-| `src/components/Testimonials.astro` | 3 đánh giá mẫu → đánh giá thật kèm ảnh giỏ đã giao |
-| `public/images/products/*.svg` | Ảnh minh họa SVG → ảnh thật cùng tên `.jpg/.avif`, cập nhật `images[]` trong `products.json` |
-| `public/images/hero-*.svg` | Ảnh hero minh họa → ảnh chụp giỏ thật (`hero-1.svg`, `hero-2.svg`, `hero-tile.svg`). Mùa Tết (T11–T2): chỉ cần drop thêm `hero-tet-1.svg`, `hero-tet-2.svg`, `hero-tet-tile.svg` — site tự đổi ảnh slider theo, không phải sửa code |
+| `src/data/site.json` | `phoneDisplay`/`phoneHref`, `zaloUrl`, `facebookUrl`, `messengerUrl` (dòng 6-10) đang là số/link mẫu; kiểm tra luôn `hours`, `deliveryArea`, `replyWithin`. `orderEndpoint` (Apps Script /exec URL) là bước go-live — xem docs/operations.md |
+| `public/images/products/*.svg` | 17 ảnh SVG minh họa → ảnh thật cùng tên `.jpg/.avif`, cập nhật `images[]` trong `products.json` |
+| `public/images/hero-*.svg` | Ảnh hero `hero-1/2/tile.svg` → ảnh giỏ thật, cùng tên. Mùa Tết (T11–T2): chỉ cần drop thêm `hero-tet-1.svg`, `hero-tet-2.svg`, `hero-tet-tile.svg` — hero Tết tự kích hoạt, không phải sửa code |
+| `astro.config.mjs` | Không cần đổi — `site: 'https://fropppy.github.io'` (dòng 14) đã đúng cho repo này; chỉ đổi khi dời repo |
 
 Sau này muốn tạo lại ảnh minh họa: `npm run generate:placeholders`.
 

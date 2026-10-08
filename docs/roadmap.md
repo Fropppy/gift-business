@@ -16,15 +16,9 @@ Now/Later stay honest).
 
 ## Next
 
-- Fix the stale README.md:29 row — it tells the reader to replace a site URL
-  that astro.config.mjs:14 already has correct; the whole placeholder table
-  needs the corrected version now in operations.md.
 - Decide the fate of gift-business-site.zip (unknown provenance,
-  gitignored) — delete or archive outside the repo.
-- Clean the two low review findings left open by the 2026-10-07 pass:
-  design-language.md:347 still pins global.css:500/427 (dead lines, inside
-  .header-hotline both then and now); the theme switcher label "Mùa
-  (auto)" mixes English into Vietnamese UI copy.
+  gitignored) — delete or archive outside the repo. Owner's manual call;
+  agents must not touch it.
 
 ## Later
 
@@ -82,3 +76,13 @@ Now/Later stay honest).
   shipped in PR #5 (merge ac122aa), live site verified, owner approved.
   Correction: Playfair was NOT added by this pass — the Google Fonts
   link has carried it since b1a1278; the pass only assigned it.
+- 2026-10-08: stale-cleanup sweep — README placeholder table now matches
+  reality (astro.config row says "already correct"; dead ContactForm /
+  Testimonials rows removed; check-docs README pins updated to the new
+  rows, same assertion count); design-language §4.2 hero-fit row repinned
+  to the real floor (`.hero-title` global.css:608 — the old 1.6rem pins
+  were dead lines in `.header-hotline`); theme switcher label "Mùa
+  (auto)" → "Tự động" (pure Vietnamese, ThemeSwitcher.astro + §2.4/§2.7
+  prose); operations.md note updated to match the corrected README.
+  Still open in the owner's untracked seo-proposal.md: the stale
+  gate-status paragraph at :72-79.
