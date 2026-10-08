@@ -21,6 +21,10 @@ Now/Later stay honest).
   needs the corrected version now in operations.md.
 - Decide the fate of gift-business-site.zip (unknown provenance,
   gitignored) — delete or archive outside the repo.
+- Clean the two low review findings left open by the 2026-10-07 pass:
+  design-language.md:347 still pins global.css:500/427 (dead lines, inside
+  .header-hotline both then and now); the theme switcher label "Mùa
+  (auto)" mixes English into Vietnamese UI copy.
 
 ## Later
 
@@ -72,3 +76,9 @@ Now/Later stay honest).
   fit: hero rendering unchanged by construction (clamp floor/rate
   untouched, ≈39.4px); longest PDP name floor moved 30.4→32px — browser
   spot-check still owed (no renderer in the edit step).
+  Spot-check and ship (2026-10-08): browser pass at 390px + 1280px
+  confirmed the 32px floor, story-block geometry, occasion carousel
+  snap (peek ≠ clip — rect-verified) and Playfair actually loading;
+  shipped in PR #5 (merge ac122aa), live site verified, owner approved.
+  Correction: Playfair was NOT added by this pass — the Google Fonts
+  link has carried it since b1a1278; the pass only assigned it.
