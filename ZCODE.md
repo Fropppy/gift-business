@@ -151,6 +151,11 @@ Non-derivable facts — things an agent cannot safely infer from a quick read.
   properties; tet and trung-thu each override 12. Older prose said 53, then
   55 — count with the gate's parser (node over the css text), never trust
   older docs.
+- **Webfonts predate everything.** The Google Fonts `<link>` in
+  BaseLayout.astro has loaded Be Vietnam Pro + Playfair Display since the
+  initial commit (b1a1278); CSP style-src/font-src allow exactly those two
+  origins. "Adding a font family" means editing that one link — a new origin
+  needs a CSP change, which is an ask-first/never-touch zone.
 - **The Sheet is the back office.** The family edits content/order status in
   Google Sheets; Apps Script behavior is verifiable by reading Code.gs only
   (it runs in Google's runtime — no test harness, nothing in CI covers it).

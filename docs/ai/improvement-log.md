@@ -139,3 +139,32 @@ Mark promoted entries with → where they landed.
 - Change: PR #4's flow matched runs by --json headSha before citing them;
   trigger nuance recorded in ZCODE.md Project facts.
 - Promoted to → ZCODE.md Project facts (PR-only checks).
+
+## 2026-10-07 — world.run opts must be an object or omitted
+
+- Observation: a workflow's gate helper passed
+  `world.run("npm", argv, cond ? {timeoutMs} : undefined)` and the whole run
+  errored at the first non-build gate: the undefined crosses the call
+  boundary as null and the runtime rejects "arg 3 (opts) must be an options
+  object or omitted, got null". The build call (which had a real object)
+  succeeded first, so the failure looked gate-specific, not arg-marshalling.
+- Change: branch into two calls — one with the options object, one with no
+  third argument at all — and resubmitted via AmendWorkflow, which imported
+  the finished scout/plan/builder work from cache at zero tokens.
+- Promoted to → personal memory (zcode-workflow-gotchas) so every future
+  workflow in this repo starts with the rule.
+
+## 2026-10-07 — Vision "clipped" flags on scroll-snap rows, twice now
+
+- Observation: a vision pass called a scroll-snap carousel's edge card
+  "clipped" — the same false positive the mobile-pass audit made on the
+  price-chip row (2026-10-06). A snap carousel shows the next card partially
+  ON PURPOSE (peek affordance); a screenshot cannot distinguish peek from
+  clip. The workflow's reviewer fan-out also confirmed real clipping
+  elsewhere (subtitle rendered twice), so the lesson is not "ignore vision"
+  — it is "never settle a clipping claim without rect math".
+- Change: verified with getBoundingClientRect + scrollWidth/clientWidth
+  (1512 > 375, overflow-x auto, scroll-snap-type x) before accepting or
+  rejecting the flag.
+- Promoted to → rule of thumb: geometric claims get geometric proof;
+  screenshots propose, rect math disposes.
