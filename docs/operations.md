@@ -53,7 +53,7 @@ Triage runbook for "orders stopped arriving", in order:
 3. **Rate limit:** more than 3 submissions from one phone in 10 minutes get
    `too many requests` — by design (Code.gs:71-76).
 4. **Dedupe:** the same phone + message within 5 minutes is silently merged
-   into the existing order ID (Code.gs:163-179) — not data loss.
+   into the existing order ID (Code.gs:169-185) — not data loss.
 5. **Honeypot:** submissions with the hidden `company` field filled get a
    fake success and no row — by design (Code.gs:62-64).
 

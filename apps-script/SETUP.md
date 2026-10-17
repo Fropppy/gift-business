@@ -69,4 +69,7 @@ without changing the site.
   tab/CR) is stored as plain text via a leading apostrophe, so formulas
   pasted into the form never execute when the sheet is opened. This also
   keeps phones like `+841234567890` from rendering as `8.41235E+11`.
+- Errors: a failing POST returns `{"ok":false,"error":"server error"}`
+  (nothing internal leaks to whoever curls the URL). The real exception is
+  in the Apps Script editor's **Executions** log — look there first.
 - Timezone: Asia/Ho_Chi_Minh, fixed in code regardless of script TZ setting.

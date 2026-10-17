@@ -102,7 +102,13 @@ function doPost(e) {
 
     return json({ ok: true, orderId });
   } catch (err) {
-    return json({ ok: false, error: String((err && err.message) || err) });
+    // The /exec URL is deployed "Anyone", so anyone can curl it; raw
+    // exception strings (JSON.parse, Sheets, permission errors) disclose
+    // the script's internals to a prober. The site's form posts
+    // mode:'no-cors' so browsers never read this body — the detail goes
+    // to the Apps Script Executions log instead.
+    console.error(err);
+    return json({ ok: false, error: 'server error' });
   }
 }
 
