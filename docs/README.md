@@ -14,6 +14,7 @@ from here or `npm run check:docs` fails, so un-indexed docs cannot merge.
 | [docs/architecture.md](architecture.md) | Site, theme engine, order pipeline, build/CI, security posture, known limitations. | You need to know how the system IS. |
 | [docs/decisions.md](decisions.md) | Append-only ADR log (ADR-0001…) with rationale. | You need to know WHY something was chosen, or want to change it. |
 | [docs/operations.md](operations.md) | Runbook: go-live checklist, placeholder replacement, order triage, Apps Script redeploy, release flow. | You are doing something repeated, not reading. |
+| [docs/monitoring.md](monitoring.md) | Monitoring runbook: daily 07:00 digest automation (prompt pinned), StatusCake fast lane (pending owner), alert flow, canonical do-not-alarm list, residual risks. | An alert fired, the digest flagged something, or you are (re)creating the watch. |
 | [docs/owner-updates.md](owner-updates.md) | Khanh's own step-by-step guide: real contact data (NAP), og:image, real photos, GBP/Zalo OA, and a 16-product fill-in worksheet. | You are the owner and want to change content yourself. |
 | [docs/roadmap.md](roadmap.md) | Now / Next / Later / Done — pending owner actions and conditional work. | You are picking work or checking status. |
 | [docs/design-language.md](design-language.md) | The design-language proposal the current UI implements (tokens, themes, WCAG). | You touch themes or design tokens. Historical record. |
@@ -40,6 +41,9 @@ Short task paths; follow only the one that matches your task.
   [operations.md](operations.md#orders) (triage when orders stop arriving).
 - **CI / release** → [architecture.md](architecture.md#build-cicd) +
   [operations.md](operations.md#release-flow).
+- **Monitoring** → [monitoring.md](monitoring.md) (the two lanes + the
+  do-not-alarm list) + [operations.md](operations.md#release-flow) (what to
+  do when the deploy is red).
 
 ## Conventions
 
