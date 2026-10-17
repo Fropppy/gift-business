@@ -50,8 +50,9 @@ Triage runbook for "orders stopped arriving", in order:
 2. **Deploy state:** `GET` the `/exec` URL — it must return `ok`
    (SETUP.md §2). If not, the Apps Script or its authorization is broken;
    redeploy per the section below.
-3. **Rate limit:** more than 3 submissions from one phone in 10 minutes get
-   `too many requests` — by design (Code.gs:71-76).
+3. **Rate limit:** more than 3 submissions from one phone in 10 minutes,
+   or more than 50 across all phones in a day (spam guard), get
+   `too many requests` — by design (Code.gs:71-89).
 4. **Dedupe:** the same phone + message within 5 minutes is silently merged
    into the existing order ID (Code.gs:169-185) — not data loss.
 5. **Honeypot:** submissions with the hidden `company` field filled get a

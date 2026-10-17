@@ -40,6 +40,11 @@ const PRODUCT_HEADERS = [
 
 const STATUS_VALUES = ['Mới', 'Đang gọi', 'Đã tư vấn', 'Đã chốt', 'Đã giao', 'Huỷ'];
 
+// Global budget: max submissions per day across ALL phones (see
+// dailyCapReached) — the per-phone limit alone is defeated by rotating
+// phone numbers, and this bounds the junk rows that reach the sheet.
+const DAILY_SUBMISSION_CAP = 50;
+
 function doPost(e) {
   try {
     const body = JSON.parse(e.postData.contents);
@@ -74,6 +79,14 @@ function doPost(e) {
       return json({ ok: false, error: 'too many requests' });
     }
     cache.put(rlKey, String(Number(cache.get(rlKey) || 0) + 1), 600);
+
+    // Global daily cap — the per-phone limit above gives each fabricated
+    // 9-13 digit string a fresh budget, so a rotating-phone spammer could
+    // otherwise append unbounded junk rows. Checked before any sheet
+    // access, same as the per-phone limit.
+    if (dailyCapReached()) {
+      return json({ ok: false, error: 'too many requests' });
+    }
 
     const duplicate = findRecentDuplicate(phone, message);
     if (duplicate) {
@@ -160,6 +173,29 @@ function nextOrderId() {
     const seq = state.date === today ? Number(state.seq || 0) + 1 : 1;
     props.setProperty('orderCounter', JSON.stringify({ date: today, seq }));
     return 'GQ-' + today + '-' + ('0000' + seq).slice(-4);
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/**
+ * True when today's global submission budget (DAILY_SUBMISSION_CAP) is
+ * spent; consumes one unit otherwise. ScriptProperties counter keyed by
+ * date and reset when the date flips — the same pattern as nextOrderId,
+ * so the cap survives restarts and holds even if every request uses a
+ * different phone number.
+ */
+function dailyCapReached() {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(5000);
+  try {
+    const props = PropertiesService.getScriptProperties();
+    const today = Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'yyyyMMdd');
+    const state = JSON.parse(props.getProperty('dailySubmissions') || '{}');
+    const count = state.date === today ? Number(state.count || 0) : 0;
+    if (count >= DAILY_SUBMISSION_CAP) return true;
+    props.setProperty('dailySubmissions', JSON.stringify({ date: today, count: count + 1 }));
+    return false;
   } finally {
     lock.releaseLock();
   }

@@ -62,6 +62,11 @@ without changing the site.
 - Honeypot: a filled `company` field is dropped silently.
 - Rate limit: max 3 submissions per phone per 10 minutes (CacheService);
   the 4th gets `{"ok":false,"error":"too many requests"}`.
+- Daily cap: max 50 submissions per day across ALL phones (constant
+  `DAILY_SUBMISSION_CAP` in Code.gs — raise it if a genuine rush ever
+  hits it; a family shop's real volume is far below). Over cap returns
+  the same `too many requests`. The caps bound spam, they don't prevent
+  it: skim the `Đơn hàng` sheet now and then and delete junk rows.
 - Field caps: name 100, product 200, message 1000, page 500 characters —
   anything longer is trimmed before it reaches the sheet (the form's
   name/message inputs carry matching maxlength).
