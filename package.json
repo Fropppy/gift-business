@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Nhà Mai — website giỏ quà gia đình (Astro, GitHub Pages)",
+  "engines": { "node": ">=22.12 <23 || >=24" },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && node scripts/generate-sitemap.mjs",

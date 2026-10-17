@@ -77,6 +77,30 @@ main. Node >= 22.12, never 23. If deploy fails on a fresh clone, check repo
 Settings → Pages → Source = "GitHub Actions" — a one-time toggle that leaves
 no file trace. Never push without the owner reviewing results first.
 
+## Rollback the site
+
+For "deploy finished but the content is wrong". Honest framing: Pages
+deployed from GitHub Actions has no one-click "restore previous artifact" —
+rollback IS a fresh deploy of reverted code, and its cost is one build cycle
+(~minutes) of bad content staying live.
+
+1. **Find the last-good deployment** — the `github-pages` environment's
+   deployment history (every publish by the deploy job's `environment:`
+   block lands there) or the deploy workflow's Actions run list.
+2. **Revert-forward** — `git revert <bad-sha>` on develop → normal PR to
+   main. Force pushes are off and admins are not exempt, so a forward
+   revert through the required `check` context is the only path; with zero
+   required reviews the solo owner merges it immediately. The merge itself
+   fires deploy.yml's push-to-main trigger: the reverted, last-good code is
+   rebuilt and published.
+3. **Run merely failed or cancelled on current main?** Nothing to revert —
+   re-dispatch `gh workflow run deploy.yml` (its `workflow_dispatch`
+   trigger; the same remediation [monitoring.md](monitoring.md) § Alert
+   flow already sanctions).
+
+Verify: the live URL serves the pre-bad content (hard-refresh past the CDN
+cache) and the newest deploy run's head commit is the revert merge.
+
 ## Docs & memory upkeep
 
 The rituals (same-PR doc updates, improvement-log appends, personal-memory

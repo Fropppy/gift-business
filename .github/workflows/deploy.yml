@@ -8,9 +8,19 @@ on:
 permissions:
   contents: read
 
+# Serialize whole runs — build AND deploy together (the environment on the
+# deploy job below only queues that job's deployments; it does nothing
+# about parallel builds). One running + one pending per group;
+# cancel-in-progress: false never kills an in-flight publish, and the
+# pending slot is always the newest arrival, so the newest merge ships next.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout your repository using git
         # Pinned to the commit the v7 tag resolved to (git ls-remote) — a
@@ -35,6 +45,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     # pages:write + id-token:write live HERE, not at workflow level, so
     # the build job (and anything it pulls in) never holds them.
     permissions:
@@ -48,6 +59,49 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5
+
+  # P1-4 resolved as reading (a): additive job after the chain is compliant; owner may still move it to a workflow_run sidecar.
+  smoke:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout (product count for the live expectations)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Probe the live site
+        env:
+          # Third deliberate copy of the origin (after astro.config.mjs:14
+          # and generate-sitemap.mjs:42-43, both never-touch/ask-first
+          # zones). If the site ever moves without this env, THIS job goes
+          # red — the duplication is self-checking.
+          BASE: https://fropppy.github.io/gift-business
+        run: |
+          set -euo pipefail
+          # Expectations computed at run time, never hardcoded — same rule
+          # as the 07:00 digest (docs/monitoring.md). Occurrence-based
+          # counting (grep -o | wc -l): line counting silently breaks if
+          # products.json is ever reformatted onto fewer lines.
+          N=$(grep -o '"slug"' src/data/products.json | wc -l)   # 16 today
+          EXPECT=$((N + 4))   # /, /about/, /contact/, /products/
+          # Home: 200 + title + canonical + CSP with both Apps Script hops
+          body=$(curl --fail --retry 5 --retry-delay 3 --retry-connrefused -s "$BASE/")
+          printf '%s' "$body" | grep -q 'Nhà Mai'
+          printf '%s' "$body" | grep -qF 'rel="canonical" href="https://fropppy.github.io/gift-business/"'
+          printf '%s' "$body" | grep -qF "default-src 'none'"
+          printf '%s' "$body" | grep -q 'script\.googleusercontent\.com'
+          # /products/: 200 + exactly one card per product
+          cards=$(curl --fail --retry 5 --retry-delay 3 --retry-connrefused -s "$BASE/products/")
+          test "$(printf '%s' "$cards" | grep -o 'class="card"' | wc -l)" -eq "$N"
+          # Sitemap: 200 + exact <loc> count + every loc on the real origin
+          map=$(curl --fail --retry 5 --retry-delay 3 --retry-connrefused -s "$BASE/sitemap.xml")
+          test "$(printf '%s' "$map" | grep -o '<loc>' | wc -l)" -eq "$EXPECT"
+          unprefixed=$(printf '%s' "$map" | grep -o '<loc>[^<]*' | grep -cvF "<loc>$BASE/" || true)
+          test "$unprefixed" -eq 0
+          # Pages config intact: a known-bad path must 404, not soft-serve
+          code=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/nonexistent-page-xyz/")
+          test "$code" -eq 404
 
 # ONE-TIME REPO SETTING (required or nothing publishes):
 #   Settings → Pages → Build and deployment → Source = "GitHub Actions"

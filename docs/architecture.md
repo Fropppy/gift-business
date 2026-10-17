@@ -88,7 +88,11 @@ chain also runs in CI).
   Node 22. Its job id is `check` (.github/workflows/check.yml:15) — that
   exact status context is required by main's branch protection (PR required,
   strict, admins included; verified via gh api). Renaming the job id breaks
-  the required check on main.
+  the required check on main. Any edit that inserts lines above check.yml:24
+  must, in the same PR, MOVE (never drop) the two gate anchors in
+  scripts/check-docs.mjs — assertion 17's line-15 job-id pin and assertion
+  18's CITED_FACTS check.yml:23 entry — plus the living citations in
+  ZCODE.md and this file.
 - deploy.yml runs on push to main: withastro/action (SHA-pinned # v6) does
   install + build + artifact upload in one step, then actions/deploy-pages
   (# v5) publishes. PR checks are a separate workflow because
