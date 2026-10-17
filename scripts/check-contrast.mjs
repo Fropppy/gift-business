@@ -100,8 +100,8 @@ const PAIRS = [
   { name: '.price in tet theme (tet on bg, all themes)', fg: '--tet', bg: '--bg', min: 4.5 },
   { name: ':focus-visible ring vs bg (non-text)', fg: '--primary', bg: '--bg', min: 3.0 },
   { name: ':focus-visible ring vs surface (non-text)', fg: '--primary', bg: '--surface', min: 3.0 },
-  /* .cta-band is filled with --primary, so the ring there is the ink
-     override (§3.3 dark-panel exception) — audited against the fill. */
+  /* BND-3 (2026-10-17): the band is ruled paper now (transparent on --bg)
+     and the appended --primary ring wins. Pair kept as the §3.3 record. */
   { name: ':focus-visible ring on .cta-band (ink on primary fill)', fg: '--primary-ink', bg: '--primary', min: 3.0 },
 ];
 
@@ -143,9 +143,9 @@ for (const r of rows) {
 }
 
 /* Structural ring assertions (§3.3). Token pairs cannot see WHICH selector
-   renders: .cta-band is filled with --primary, so without the ink override
-   its ring would be primary-on-primary (1.00:1) while every token pair
-   still passes. Assert the rendered rules exist. */
+   renders. BND-3 (2026-10-17): the band is ruled paper — the base ink rule
+   stays in source as this regex's anchor while the appended --primary ring
+   wins the cascade tie. Assert the rendered rules exist. */
 const noCommentsCss = css.replace(/\/\*[\s\S]*?\*\//g, '');
 const structuralRules = [
   {

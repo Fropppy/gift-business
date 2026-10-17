@@ -213,3 +213,37 @@ Mark promoted entries with → where they landed.
   Verify with element.getAnimations()[0].effect.getComputedTiming().progress
   at max scroll, not by eye.
 
+## 2026-10-17 — Pin drift inside an append-only record: disclose, don't edit
+
+- Observation: the minimal-lane wave-5 build (C3, owner sign-off) deletes
+  ProductCard.astro's single `.card-desc` line (was line 34), shifting the
+  card-CTA anchor cited by the 2026-10-06 geometry entry from
+  ProductCard.astro:41 to :40. This log is append-only — its past entries
+  are claims about their writing time, and check-docs excludes it from
+  citation integrity for exactly that reason.
+- Change: the 2026-10-06 entry left as written; this entry is the
+  move-together disclosure. The dead `.card-desc` rules stay in
+  global.css (:932-940, :955-958) — lines above 1503 are never deleted.
+- Promoted to → the pin move-together protocol (constraint of the
+  minimal-lane pass; recorded here because the citing file is this log).
+
+## 2026-10-17 — The most pin-dense doc is the one the pin gate doesn't check
+
+- Observation: docs/design-language.md carries the repo's densest set of
+  file:line pins, but check-docs' citation-integrity pass covers only
+  the seven living docs enumerated in CITATION_DOCS
+  (scripts/check-docs.mjs:502-510) — design-language.md is in neither
+  that set nor the excluded append-only set, so its pins fail silently.
+  Found while writing the §11 record: §5.2's heading pin
+  "`.card` — global.css:598-698" predates the mobile/occasion-pass
+  growth and is dead — the base `.card` rule sits at global.css:862
+  today; no gate ever flagged it.
+- Change: §11's pins were verified line-by-line against the working
+  tree this session, and §11 states that scope explicitly; older
+  sections' pins stay as claims about their writing time (the doc's
+  preamble already scopes them "as read this session"). No gate change
+  proposed — docs/README.md classifies this file a historical record,
+  so the fix is the stated convention, not a new assertion.
+- Promoted to → the verification paragraph of
+  docs/design-language.md §11 (this entry is the receipt).
+

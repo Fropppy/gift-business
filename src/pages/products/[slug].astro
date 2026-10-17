@@ -19,10 +19,10 @@ const { product } = Astro.props;
 const category = categoryBySlug(product.category);
 const related = relatedProducts(product, 3);
 
-// Story facts (Tặng ai · Dịp nào · Bên trong giỏ): every product already
-// carries subtitle, tags, and contents — zero schema edits. Occasion names
-// deep-link to the catalog's ?tag= filter; the Dịp tặng chip row lights up
-// on landing (ProductGrid's tag active-sync).
+// Story facts (Tặng ai · Dịp nào · Bên trong giỏ · the size options row):
+// every product already carries subtitle, tags, contents, and options —
+// zero schema edits. Occasion names deep-link to the catalog's ?tag=
+// filter; the Dịp tặng chip row lights up on landing (tag active-sync).
 const occasionLinks = occasions.filter((o) => product.tags.includes(o.tag));
 
 // Self-referencing canonical — same construction as BaseLayout (seo-proposal
@@ -103,10 +103,10 @@ const productSchema = {
       <div>
         {category && (
           <span class="card-cat">
-            <a href={`${asset('/products/')}?category=${category.slug}`} style="text-decoration: none;">{category.name}</a>
+            <a href={`${asset('/products/')}?category=${category.slug}`}>{category.name}</a>
           </span>
         )}
-        <h1 style="margin-bottom: 0.2em;">{product.name}</h1>
+        <h1>{product.name}</h1>
 
         <div class="detail-price">
           <span class="price">{formatVnd(product.price.amount)}</span>
@@ -116,7 +116,10 @@ const productSchema = {
         <p>{product.description}</p>
 
         {
-          (product.subtitle || occasionLinks.length > 0 || (product.contents && product.contents.length > 0)) && (
+          (product.subtitle ||
+            occasionLinks.length > 0 ||
+            (product.contents && product.contents.length > 0) ||
+            product.options.length > 0) && (
             <dl class="story-facts">
               {product.subtitle && (
                 <div class="story-row">
@@ -143,25 +146,21 @@ const productSchema = {
                   <dd>{`Gồm ${product.contents.length} món: ${product.contents.join(' · ')}`}</dd>
                 </div>
               )}
+              {product.options.length > 0 && (
+                <div class="story-row">
+                  <dt>{product.options[0].name}</dt>
+                  <dd>{product.options[0].values.join(' · ')}</dd>
+                </div>
+              )}
             </dl>
           )
         }
 
         {
           product.options.length > 0 && (
-            <>
-              <h3 style="font-family: var(--font-body); font-size: 0.95rem; margin-bottom: 0.2rem;">
-                {product.options[0].name}
-              </h3>
-              <div class="opt-chips">
-                {product.options[0].values.map((v) => (
-                  <span class="chip">{v}</span>
-                ))}
-              </div>
-              <p style="color: var(--muted); font-size: 0.9rem;">
-                Giá thay đổi theo cỡ — nhắn mình cỡ bạn cần, báo giá chốt liền.
-              </p>
-            </>
+            <p class="opt-note">
+              Giá thay đổi theo cỡ — nhắn mình cỡ bạn cần, báo giá chốt liền.
+            </p>
           )
         }
 

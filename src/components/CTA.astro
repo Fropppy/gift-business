@@ -1,5 +1,6 @@
 ---
 import { site } from '../utils/site';
+import { asset } from '../utils/asset';
 
 interface Props {
   title?: string;
@@ -15,6 +16,18 @@ const {
 <section class="section">
   <div class="container">
     <div class="cta-band">
+      {/* BND-3 (owner sign-off): ruled paper band — the roofline (§6.1,
+          the "nhà" in Nhà Mai) sits centered above the headline; the
+          accent Zalo button stays the page's one saturated element. */}
+      <img
+        class="roof-divider"
+        src={asset('/images/roofline.svg')}
+        alt=""
+        aria-hidden="true"
+        width="120"
+        height="12"
+        loading="lazy"
+      />
       <h2>{title}</h2>
       <p>{lead}</p>
       <div class="hero-cta-row">

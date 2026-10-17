@@ -4,6 +4,8 @@ import { categories } from '../utils/catalog';
 import ProductCard from './ProductCard.astro';
 import { fold } from '../utils/search';
 import occasions from '../data/occasions.json';
+import { site } from '../utils/site';
+import { asset } from '../utils/asset';
 
 interface Props {
   products: Product[];
@@ -114,11 +116,13 @@ const searchIndex = products.map((p) => ({
 </div>
 
 <p class="form-status" data-filter-empty hidden>
-  Nhóm này mình chưa cập nhật mẫu lên web — bạn nhắn Zalo, mình gửi ảnh mẫu mới nhất nhé.
+  Nhóm này mình chưa cập nhật mẫu lên web — bạn nhắn Zalo, mình gửi ảnh mẫu mới nhất nhé.{' '}
+  <a href={asset('/products/')}>Bỏ lọc — xem tất cả giỏ quà</a>
 </p>
 
 <p class="form-status" data-search-empty hidden>
-  Không thấy giỏ nào khớp — thử gõ không dấu, bớt từ, hoặc nhắn Zalo mình gửi ảnh mẫu ngay.
+  Không thấy giỏ nào khớp — thử gõ không dấu, bớt từ, hoặc{' '}
+  <a href={site.zaloUrl} target="_blank" rel="noopener noreferrer">nhắn Zalo</a> mình gửi ảnh mẫu ngay.
 </p>
 
 <script>

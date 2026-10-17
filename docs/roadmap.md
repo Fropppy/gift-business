@@ -115,3 +115,41 @@ Now/Later stay honest).
   clipped parallax). Not live-tested: prefers-reduced-motion emulation
   (in-app browser lacks it) — verified structurally by the audit. All
   four gates green this session by the release step, not by inference.
+- 2026-10-17: minimal-lane component pass — boxed → floating across every
+  repeated surface, built as five waves from the owner-approved
+  minimal-component proposal (all three Wave-5 sign-off trades included:
+  hero band one-action, card descriptions off, ruled-paper CTA band).
+  Float: cards / hero tile / PDP plate / header bar lose their defining
+  borders for cocoa-ink shadow lifts (global.css:1873-1898) and the
+  desktop Zalo CTA floats ≥901px (global.css:1909-1912). Type: card
+  names 1.18rem (global.css:1936-1939), lead-card display clamp ≥700px
+  (global.css:1949-1957), proof-band facts to Playfair display size
+  (global.css:1970-1976), current-crumb + accent PDP eyebrow
+  (global.css:1990-1992), wordmark 1.5rem with a measured ≤560px
+  1.35rem mobile tier (global.css:2004-2006) and scroll-padding-top
+  re-measured to 4.75rem. Ruled bands: Steps/Commitments de-boxed to
+  ruled entries (global.css:2035-2059); submit :disabled state +
+  channel folio color flip (global.css:2070-2085). Markup: PDP options
+  folded in as the 4th story-facts row (src/pages/products/[slug].astro:150-154)
+  with .meta-list a rail twin (global.css:2115-2124) and the de-inlined
+  right column (global.css:2143-2156); catalog empty states get real
+  anchors (src/components/ProductGrid.astro:118-125 +
+  global.css:2173-2182); search
+  focus joins the form grammar (global.css:2198-2200); borderless
+  filter chips via the two-rule :where() append (global.css:2227-2229).
+  Sign-off wave: one link-more hero-band action
+  (src/components/Hero.astro:57-61), a
+  static hand-drawn stroke under "chu đáo" (src/components/Hero.astro:15,
+  global.css:2282-2294), .card-desc off catalog cards at all widths
+  (dead rules stay above :1503), CTA band → ruled paper + roofline
+  with the focus ring re-pointed to --primary (src/components/CTA.astro:19-30,
+  global.css:2306-2350) and the check-contrast band comment synced in
+  the same commit (comment-only, no bar change). Region contract held:
+  global.css lines 1-1502 count-stable (nine swap hunks, enumerated in
+  the design record), appends only at the file end; :root untouched
+  (56 tokens), tet/trung-thu byte-identical, §10's 13-row motion
+  inventory untouched (stroke static; new states instant). Design
+  record: docs/design-language.md §11 plus its §10 Wave-4 addendum.
+  Gates: the four repo gates run in this task's verification step
+  immediately after these doc edits — that step's output is the
+  verdict, not this line.

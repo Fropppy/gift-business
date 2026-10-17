@@ -10,7 +10,9 @@ import { asset } from '../utils/asset';
 <section class="hero-grid container" aria-label="Giới thiệu shop">
   <div class="hero-main">
     <span class="eyebrow">{site.name} · {site.wordmarkSub}</span>
-    <h1 class="hero-title">Giỏ quà tươi đẹp, gói chu đáo cho mọi dịp</h1>
+    {/* HER-3: one hand-drawn stroke under "chu đáo" — the site's single
+        organic accent; svg is aria-hidden decoration, strictly static. */}
+    <h1 class="hero-title">Giỏ quà tươi đẹp, gói <span class="hero-stroke">chu đáo<svg viewBox="0 0 100 12" aria-hidden="true" preserveAspectRatio="none"><path d="M4 8 C 18 4.5, 33 10, 50 7.2 C 67 4.6, 83 9.6, 96 6.6" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg></span> cho mọi dịp</h1>
     <p class="hero-promise">
       Bạn nhắn mình dịp tặng với ngân sách, mình chọn giúp giỏ đẹp nhất trong tầm giá —
       trái cây mình tuyển mỗi sáng, gói mới khi có đơn mới giao.
@@ -52,8 +54,10 @@ import { asset } from '../utils/asset';
       báo giá nhanh trong {site.replyWithin}.
     </p>
   </div>
+  {/* HER-4 (owner sign-off): one link-more action rides the ruled strip;
+      the accent + phone buttons are gone — the persistent header hotline
+      carries the phone path everywhere. */}
   <div class="hero-cta-row">
-    <a class="btn btn--accent" href={asset('/products/?category=qua-tang-doanh-nghiep')}>Xem quà doanh nghiệp</a>
-    <a class="btn btn--ghost" href={site.phoneHref}>Gọi {site.phoneDisplay}</a>
+    <a class="link-more" href={asset('/products/?category=qua-tang-doanh-nghiep')}>Xem quà doanh nghiệp →</a>
   </div>
 </section>
