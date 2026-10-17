@@ -77,4 +77,23 @@ without changing the site.
 - Errors: a failing POST returns `{"ok":false,"error":"server error"}`
   (nothing internal leaks to whoever curls the URL). The real exception is
   in the Apps Script editor's **Executions** log — look there first.
+- Payload guard: a missing or >10 KB body is rejected with
+  `payload too large` before parsing (~10x the legit form payload).
+- Race lock: the duplicate check through the sheet append runs under the
+  script lock, so two identical submissions sent at the same instant
+  cannot create two rows.
 - Timezone: Asia/Ho_Chi_Minh, fixed in code regardless of script TZ setting.
+
+## Owner notes
+
+- The `/exec` URL is **public by design** the moment it is committed into
+  `site.json` — anyone who finds it can POST. The defenses (honeypot,
+  field caps, per-phone rate limit, daily cap, payload guard) bound the
+  junk, they don't prevent it: periodically skim the `Đơn hàng` sheet and
+  delete junk rows.
+- The Sheet holds customers' names and phone numbers. Share it only with
+  family accounts — never "anyone with the link" — and delete a
+  customer's rows when they ask.
+- When the site shows "server error", the real cause is never in that
+  message (it is deliberately generic). Open the Apps Script editor →
+  **Executions** log — see Behaviour notes, "Errors".
