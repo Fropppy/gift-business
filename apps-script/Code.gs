@@ -40,8 +40,20 @@ const PRODUCT_HEADERS = [
 
 const STATUS_VALUES = ['Mới', 'Đang gọi', 'Đã tư vấn', 'Đã chốt', 'Đã giao', 'Huỷ'];
 
+// Global budget: max submissions per day across ALL phones (see
+// dailyCapReached) — the per-phone limit alone is defeated by rotating
+// phone numbers, and this bounds the junk rows that reach the sheet.
+const DAILY_SUBMISSION_CAP = 50;
+
 function doPost(e) {
   try {
+    // Payload guard: the /exec URL accepts arbitrary bodies. Missing or
+    // oversized (>10 KB, ~10x the legit form payload) input is rejected
+    // before JSON.parse ever runs, so junk never reaches the parser or
+    // the caps below.
+    if (!e.postData || e.postData.contents.length > 10000) {
+      return json({ ok: false, error: 'payload too large' });
+    }
     const body = JSON.parse(e.postData.contents);
     // Field caps: without them a single POST can stuff a ~49,000-char cell
     // (Sheets' per-cell limit) and bloat the sheet the family opens and
@@ -75,34 +87,65 @@ function doPost(e) {
     }
     cache.put(rlKey, String(Number(cache.get(rlKey) || 0) + 1), 600);
 
-    const duplicate = findRecentDuplicate(phone, message);
-    if (duplicate) {
-      return json({ ok: true, orderId: duplicate, duplicate: true });
+    // Global daily cap — the per-phone limit above gives each fabricated
+    // 9-13 digit string a fresh budget, so a rotating-phone spammer could
+    // otherwise append unbounded junk rows. Checked before any sheet
+    // access, same as the per-phone limit.
+    if (dailyCapReached()) {
+      return json({ ok: false, error: 'too many requests' });
     }
 
-    const sheet = getOrCreateOrdersSheet();
+    // Order ID is minted BEFORE the dedupe lock on purpose: nextOrderId()
+    // takes the same script lock internally, and LockService has no
+    // reference counting — its releaseLock() inside the locked region
+    // below would drop this lock before appendRow and reopen the race.
+    // Cost: a dedupe hit burns one sequence number (a harmless ID gap).
     const orderId = nextOrderId();
-    const timestamp = Utilities.formatDate(
-      new Date(),
-      'Asia/Ho_Chi_Minh',
-      'yyyy-MM-dd HH:mm:ss',
-    );
-    sheet.appendRow([
-      timestamp,
-      orderId,
-      'Mới',
-      neutralize(name),
-      neutralize(phone),
-      neutralize(product),
-      neutralize(message),
-      neutralize(page),
-      '',
-      '',
-    ]);
 
-    return json({ ok: true, orderId });
+    // Dedupe race lock: two identical concurrent submissions can both
+    // pass findRecentDuplicate before either appends, double-writing the
+    // row. The script lock serializes check-through-append, and the
+    // duplicate check re-runs inside it so the second request sees the
+    // first row and returns the duplicate branch.
+    const lock = LockService.getScriptLock();
+    lock.waitLock(10000);
+    try {
+      const duplicate = findRecentDuplicate(phone, message);
+      if (duplicate) {
+        return json({ ok: true, orderId: duplicate, duplicate: true });
+      }
+
+      const sheet = getOrCreateOrdersSheet();
+      const timestamp = Utilities.formatDate(
+        new Date(),
+        'Asia/Ho_Chi_Minh',
+        'yyyy-MM-dd HH:mm:ss',
+      );
+      sheet.appendRow([
+        timestamp,
+        orderId,
+        'Mới',
+        neutralize(name),
+        neutralize(phone),
+        neutralize(product),
+        neutralize(message),
+        neutralize(page),
+        '',
+        '',
+      ]);
+
+      return json({ ok: true, orderId });
+    } finally {
+      lock.releaseLock();
+    }
   } catch (err) {
-    return json({ ok: false, error: String((err && err.message) || err) });
+    // The /exec URL is deployed "Anyone", so anyone can curl it; raw
+    // exception strings (JSON.parse, Sheets, permission errors) disclose
+    // the script's internals to a prober. The site's form posts
+    // mode:'no-cors' so browsers never read this body — the detail goes
+    // to the Apps Script Executions log instead.
+    console.error(err);
+    return json({ ok: false, error: 'server error' });
   }
 }
 
@@ -154,6 +197,29 @@ function nextOrderId() {
     const seq = state.date === today ? Number(state.seq || 0) + 1 : 1;
     props.setProperty('orderCounter', JSON.stringify({ date: today, seq }));
     return 'GQ-' + today + '-' + ('0000' + seq).slice(-4);
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/**
+ * True when today's global submission budget (DAILY_SUBMISSION_CAP) is
+ * spent; consumes one unit otherwise. ScriptProperties counter keyed by
+ * date and reset when the date flips — the same pattern as nextOrderId,
+ * so the cap survives restarts and holds even if every request uses a
+ * different phone number.
+ */
+function dailyCapReached() {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(5000);
+  try {
+    const props = PropertiesService.getScriptProperties();
+    const today = Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'yyyyMMdd');
+    const state = JSON.parse(props.getProperty('dailySubmissions') || '{}');
+    const count = state.date === today ? Number(state.count || 0) : 0;
+    if (count >= DAILY_SUBMISSION_CAP) return true;
+    props.setProperty('dailySubmissions', JSON.stringify({ date: today, count: count + 1 }));
+    return false;
   } finally {
     lock.releaseLock();
   }

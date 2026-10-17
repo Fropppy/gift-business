@@ -141,7 +141,7 @@ flag them as incidents:
   a redirect to `accounts.google.com` HTML is the actual broken state.
 
 **Webhook probe rule** (once `orderEndpoint` is live): the only sanctioned
-probe is `GET <exec-URL>` expecting body `ok` (`apps-script/Code.gs:110-112`,
+probe is `GET <exec-URL>` expecting body `ok` (`apps-script/Code.gs:153-155`,
 [SETUP.md](../apps-script/SETUP.md) §2), at most once daily. NEVER send
 synthetic POSTs — the rate limit is 3 per 10 min per phone and every accepted
 POST writes a real row into the family's Sheet.

@@ -80,7 +80,7 @@ const productSchema = {
 ---
 
 <BaseLayout title={product.name} description={metaDescription} ogType="product">
-  <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(productSchema).replace(/</g, '\\u003c')} />
   <div class="container">
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href={asset('/')}>Trang chủ</a> ›

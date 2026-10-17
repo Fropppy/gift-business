@@ -21,4 +21,5 @@ yarn-error.log*
 # workspace extras
 out/
 .zcode/
+.mimosa/
 gift-business-site.zip

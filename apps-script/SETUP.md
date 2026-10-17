@@ -62,6 +62,11 @@ without changing the site.
 - Honeypot: a filled `company` field is dropped silently.
 - Rate limit: max 3 submissions per phone per 10 minutes (CacheService);
   the 4th gets `{"ok":false,"error":"too many requests"}`.
+- Daily cap: max 50 submissions per day across ALL phones (constant
+  `DAILY_SUBMISSION_CAP` in Code.gs — raise it if a genuine rush ever
+  hits it; a family shop's real volume is far below). Over cap returns
+  the same `too many requests`. The caps bound spam, they don't prevent
+  it: skim the `Đơn hàng` sheet now and then and delete junk rows.
 - Field caps: name 100, product 200, message 1000, page 500 characters —
   anything longer is trimmed before it reaches the sheet (the form's
   name/message inputs carry matching maxlength).
@@ -69,4 +74,26 @@ without changing the site.
   tab/CR) is stored as plain text via a leading apostrophe, so formulas
   pasted into the form never execute when the sheet is opened. This also
   keeps phones like `+841234567890` from rendering as `8.41235E+11`.
+- Errors: a failing POST returns `{"ok":false,"error":"server error"}`
+  (nothing internal leaks to whoever curls the URL). The real exception is
+  in the Apps Script editor's **Executions** log — look there first.
+- Payload guard: a missing or >10 KB body is rejected with
+  `payload too large` before parsing (~10x the legit form payload).
+- Race lock: the duplicate check through the sheet append runs under the
+  script lock, so two identical submissions sent at the same instant
+  cannot create two rows.
 - Timezone: Asia/Ho_Chi_Minh, fixed in code regardless of script TZ setting.
+
+## Owner notes
+
+- The `/exec` URL is **public by design** the moment it is committed into
+  `site.json` — anyone who finds it can POST. The defenses (honeypot,
+  field caps, per-phone rate limit, daily cap, payload guard) bound the
+  junk, they don't prevent it: periodically skim the `Đơn hàng` sheet and
+  delete junk rows.
+- The Sheet holds customers' names and phone numbers. Share it only with
+  family accounts — never "anyone with the link" — and delete a
+  customer's rows when they ask.
+- When the site shows "server error", the real cause is never in that
+  message (it is deliberately generic). Open the Apps Script editor →
+  **Executions** log — see Behaviour notes, "Errors".

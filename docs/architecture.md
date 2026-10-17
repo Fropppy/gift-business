@@ -51,21 +51,29 @@ Zalo/hotline fallback instead (ContactForm.astro:138-143). Setup:
 
 Defenses in the webhook (apps-script/Code.gs), one sentence each:
 
+- **Payload guard** — a missing or >10 KB body (~10x the legit form
+  payload) is rejected before JSON.parse ever runs (Code.gs:50-56).
 - **Honeypot** — a filled hidden `company` field is silently dropped with a
-  fake success response (Code.gs:62-64).
+  fake success response (Code.gs:73-76).
 - **Formula-injection neutralize()** — any value starting with `= + - @` or
   tab/CR is stored as text via a leading apostrophe, applied to every
-  appended field (Code.gs:190-193, applied at Code.gs:94-98).
+  appended field (Code.gs:256-259, applied at Code.gs:128-132).
 - **Per-phone rate limit** — max 3 submissions per 10 min via CacheService,
-  checked BEFORE any sheet access (Code.gs:71-76).
+  checked BEFORE any sheet access (Code.gs:78-88).
 - **Field caps** — name 100 / product 200 / message 1000 / page 500 chars
-  (Code.gs:51-56), with matching maxlength on the form
+  (Code.gs:63-68), with matching maxlength on the form
   (ContactForm.astro:24,61).
 - **Constant error strings** — `'invalid name or phone'` / `'too many
-  requests'`, no detail leakage (Code.gs:59,74).
+  requests'` / `'payload too large'`, no detail leakage
+  (Code.gs:71,86,95,55).
 
-Plus: order IDs `GQ-YYYYMMDD-####` (LockService-raced, Code.gs:147-160) and
-5-minute same-phone+message dedupe (Code.gs:163-179). The endpoint is
+Plus: order IDs `GQ-YYYYMMDD-####` (LockService-raced, Code.gs:189-203),
+5-minute same-phone+message dedupe (Code.gs:228-245), and a dedupe race
+lock — the script lock serializes duplicate-check-through-appendRow so
+two identical concurrent submissions cannot double-write the row
+(Code.gs:110-140; the order ID is minted before the lock because
+LockService releaseLock() has no reference counting — a nested
+acquire-and-release would drop the lock early). The endpoint is
 no-auth by design ("Who has access: Anyone", SETUP.md:17-19) and defended
 in depth; the browser never reads responses (no-cors).
 
