@@ -7,8 +7,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 jobs:
   build:
@@ -21,15 +19,28 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Install, build, and upload your site output
         uses: withastro/action@3eafd002e65cc31b4f0eae0bb05450d521562247 # v6
+        with:
+          # The action defaults to Node 24, but the required check
+          # (check.yml) builds on Node 22 — the published build must be
+          # the same one the gates validated (Astro 7 requires
+          # >=22.12.0; never 23).
+          node-version: '22'
         # withastro/action does install + build + artifact upload in one step.
-        # Optional inputs (defaults shown):
+        # Other optional inputs (defaults shown):
         #   path: ./
-        #   node-version: 24   (Astro 7 requires >=22.12.0; never 23)
         #   package-manager: auto-detected from the committed lockfile
+        # The artifact upload rides the run's runtime token — the build
+        # job needs no GITHUB_TOKEN permissions beyond contents: read.
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    # pages:write + id-token:write live HERE, not at workflow level, so
+    # the build job (and anything it pulls in) never holds them.
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
