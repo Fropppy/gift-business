@@ -36,7 +36,7 @@ const faqSchema = {
 ---
 
 <BaseLayout title="Liên hệ & đặt quà" description={`Liên hệ ${site.name}: Zalo, hotline ${site.phoneDisplay}, Facebook/Messenger, form để shop gọi lại trong ${site.replyWithin}.`}>
-  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema).replace(/</g, '\\u003c')} />
   <section class="section">
     <div class="container">
       <SectionHead

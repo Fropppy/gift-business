@@ -88,7 +88,7 @@ const localBusiness = {
         (+ twitter:card=summary_large_image). Astro comment on purpose so the
         TODO stays in source without shipping to the built HTML. */}
     <link rel="canonical" href={canonical} />
-    <script type="application/ld+json" set:html={JSON.stringify(localBusiness)} />
+    <script type="application/ld+json" set:html={JSON.stringify(localBusiness).replace(/</g, '\\u003c')} />
     <link rel="icon" type="image/svg+xml" href={asset('/favicon.svg')} />
 
     <!-- Fonts: Playfair Display (headings) + Be Vietnam Pro (body/UI).
