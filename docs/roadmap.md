@@ -7,6 +7,13 @@ Now/Later stay honest).
 
 ## Now
 
+- Monitoring: create the daily 07:00 digest automation — one-line ask in a
+  fresh ZCode chat, prompt pinned in monitoring.md (the host allows one
+  scheduled task per session and this repo's session already owns the
+  Friday weekly). Then StatusCake free signup + test-fire and residual-risk
+  sign-off (monitoring.md → Fast lane / Residual risks).
+- Review-merge Dependabot PR #8 (actions/setup-node 7.0.0 → 7.1.0) — a CI
+  change, owner's call.
 - Deploy the Apps Script and set `orderEndpoint` (unblocks real orders; full
   path in operations.md → Go-live checklist).
 - Replace placeholder content that is LIVE on the public site today: sample
@@ -34,6 +41,14 @@ Now/Later stay honest).
 
 ## Done
 
+- 2026-10-17: monitoring system — four-angle research distilled from the
+  machine-local `out/monitoring-proposal.md` into the repo-owned
+  docs/monitoring.md (digest checklist with the automation prompt pinned
+  1:1, canonical do-not-alarm list, alert flow, residual risks); same-day
+  dry run all-green (out/daily/2026-10-17.md). The automation itself is
+  pending creation in a fresh chat — the host allows one scheduled task per
+  session and the Friday weekly owns this session's slot (see Now).
+  Gates: all four run green in this change's verification step.
 - 2026-10-06: `.card-zalo` tap target raised to a 24px floor on
   hover-pointer viewports (global.css base rule; touch devices already
   had the 44px §8.3 pill) — closes the WCAG 2.5.8 flag from the
@@ -150,6 +165,6 @@ Now/Later stay honest).
   (56 tokens), tet/trung-thu byte-identical, §10's 13-row motion
   inventory untouched (stroke static; new states instant). Design
   record: docs/design-language.md §11 plus its §10 Wave-4 addendum.
-  Gates: the four repo gates run in this task's verification step
-  immediately after these doc edits — that step's output is the
-  verdict, not this line.
+  Shipped: 8013b5a → PR #9 (CI green on headSha) → merge a0bf373 → Pages
+  deploy verified; live: hero-stroke present, .card-desc gone, floating
+  CSS served; QA 1280/390/320+tet (chips 44px, stroke clear); gates green.
