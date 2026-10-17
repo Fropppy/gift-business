@@ -150,6 +150,6 @@ Now/Later stay honest).
   (56 tokens), tet/trung-thu byte-identical, §10's 13-row motion
   inventory untouched (stroke static; new states instant). Design
   record: docs/design-language.md §11 plus its §10 Wave-4 addendum.
-  Gates: the four repo gates run in this task's verification step
-  immediately after these doc edits — that step's output is the
-  verdict, not this line.
+  Shipped: 8013b5a → PR #9 (CI green on headSha) → merge a0bf373 → Pages
+  deploy verified; live: hero-stroke present, .card-desc gone, floating
+  CSS served; QA 1280/390/320+tet (chips 44px, stroke clear); gates green.
