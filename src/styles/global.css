@@ -143,8 +143,8 @@
 html {
   scroll-behavior: smooth;
   /* In-page anchors (#dat-qua, #lien-he, #dip-tang-qua, #gio-noi-bat) land
-     below the ~60px sticky header, plus focus-ring space (§8.4). */
-  scroll-padding-top: 4.5rem;
+     below the ~62px sticky header, plus focus-ring space (§8.4). */
+  scroll-padding-top: 4.75rem;
 }
 
 /* The hidden attribute must always win: components like .occ-chip/.card
@@ -368,10 +368,10 @@ button { font-family: inherit; }
   /* Plain --bg first: older WebViews without color-mix() dropped the
      declaration entirely and rendered a transparent sticky bar (§8.2). */
   background: var(--bg);
-  background: color-mix(in srgb, var(--bg) 88%, var(--surface));
+  background: color-mix(in srgb, var(--bg) 92%, var(--surface));
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid transparent;
 }
 
 .header-inner {
@@ -389,20 +389,20 @@ button { font-family: inherit; }
   color: var(--text);
 }
 
-.brand-ico { width: 38px; height: 38px; flex: none; }
+.brand-ico { width: 40px; height: 40px; flex: none; }
 
 .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
 
 .brand-text strong {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary);
 }
 
 .brand-text small {
   font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   color: var(--muted);
 }
 
@@ -613,9 +613,9 @@ button { font-family: inherit; }
 
 .hero-promise {
   color: var(--muted);
-  font-size: var(--font-size-lg);
+  font-size: 1.1875rem;
   margin: 0;
-  max-width: 34em;
+  max-width: 31em; text-wrap: pretty;
 }
 
 .hero-cta-row { display: flex; flex-wrap: wrap; gap: 0.7rem; }
@@ -629,9 +629,9 @@ button { font-family: inherit; }
   gap: var(--space-3) var(--space-5);
   padding: var(--space-4) var(--space-5);
   margin-block: 0 clamp(1.5rem, 3vw, 2.5rem);
-  border: 1px dashed var(--border-strong);
-  border-radius: var(--radius);
-  background: color-mix(in srgb, var(--surface) 55%, var(--bg));
+  border: none; border-top: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
 }
 
 .hero-band-copy strong {
@@ -647,9 +647,9 @@ button { font-family: inherit; }
   display: flex;
   flex-direction: column;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   background: var(--surface);
-  box-shadow: var(--shadow-soft);
+  box-shadow: 0 1px 2px rgba(43, 33, 24, 0.05), 0 18px 40px -18px rgba(43, 33, 24, 0.16);
   overflow: hidden;
 }
 
@@ -796,7 +796,7 @@ button { font-family: inherit; }
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.7rem;
   margin-bottom: 1.75rem;
 }
 
@@ -1844,4 +1844,507 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
    itself keeps rendering on phones. */
 @media (max-width: 560px) {
   .filter-row { padding-bottom: 0.3rem; }
+}
+
+/* ============================================================
+   Float language pass (2026-10-17, minimal-lane wave 1) — C1, HER-2,
+   PDP-2, HEA-1, HEA-3. CSS-only: four same-line value swaps shipped
+   above (site-header mix 88→92% + border-bottom →transparent, :371/:374;
+   hero-tile border →transparent + two-layer soft lift, :650/:652); every
+   new selector lives here at the file end. Lines 1–1502 keep their
+   count. Shadow literals ride the cocoa ink rgb of --shadow-soft /
+   --shadow-lift (:79-80) — theme-invariant by construction: no theme
+   redefines the ink. No gate audits shadows (check-contrast covers
+   token/text pairs only): the owed manual three-theme eyeball
+   (base/tet/trung-thu — cards, hero tile, PDP plate, header bar) is
+   part of this wave's definition of done.
+   ============================================================ */
+
+/* C1 — Paper float: the card loses its perimeter stroke; edge
+   definition rests on the soft shadow over the surface/bg step. BOTH
+   selectors are load-bearing: with only `.card`, the base `.card:hover`
+   (:874-878) would flash a --border-strong edge on hover — the appended
+   pair is later in source and its :hover half is (0,2,0), winning that
+   tie. Width stays 1px, zero reflow. The rest shadow restores §5.2's
+   recorded rest state; at (0,1,0) it loses to `.card:hover` (0,2,0), so
+   hover still steps to --shadow-lift over the existing border-color /
+   box-shadow transition (:870-871). Focus rings are outline-based
+   (:196-203) and survive the borderless card. */
+.card,
+.card:hover { border-color: transparent; }
+
+.card { box-shadow: var(--shadow-soft); }
+
+/* C1 (cont.) — the media hairline follows the perimeter off the card.
+   Deliberately kept: the lead card's internal hairline (:1648,
+   structure) and the touch Zalo pill's stroke (:1006, action
+   affordance). */
+.card-media { border-bottom-color: transparent; }
+
+/* PDP-2 — Floating specimen: the media plate lifts off the paper.
+   (0,2,0) beats the base `.detail-media` (:1294-1301); --shadow-lift is
+   an existing token, so the 56-token count holds. Radius, overflow:
+   hidden (row-12 drift clip) and the 4/3 aspect are untouched. */
+.detail-grid .detail-media {
+  border-color: transparent;
+  box-shadow: var(--shadow-lift);
+}
+
+/* HEA-1 — Borderless floating bar: depth replaces the defining edge.
+   Flat, wide, quiet cast so scrolling content reads as passing under a
+   raised bar rather than smearing into a borderless one (worst on PDP
+   imagery); the 92% mix swap above is the paired mitigation. The ≤900px
+   mobile panel keeps its own border + shadow (:527-528). */
+.site-header {
+  box-shadow: 0 10px 24px rgba(43, 33, 24, 0.05);
+}
+
+/* HEA-3 — One raised action: the desktop Zalo CTA floats above the
+   translucent bar, mirroring the mobile BottomBar's raised pill. Rests
+   --shadow-soft; hover steps to --shadow-lift over .btn's existing
+   box-shadow transition (:282-284) and the -1px lift (:287). The 901px
+   scope is load-bearing: the ≤900px mobile panel instance stays flat
+   per §8.2, where the panel already casts its own shadow. */
+@media (min-width: 901px) {
+  .site-nav .btn--primary { box-shadow: var(--shadow-soft); }
+  .site-nav .btn--primary:hover { box-shadow: var(--shadow-lift); }
+}
+
+/* ============================================================
+   Type pass (2026-10-17, minimal-lane wave 2) — C2, C4, BND-2,
+   PDP-4 as appends; HER-1 + HEA-2 as same-line value swaps above
+   (.hero-promise size/measure/pretty :616/:618; brand glyph
+   38→40px, wordmark 1.35→1.5rem, subline tracking 0.08→0.12em
+   :392/:398/:405; scroll-padding-top re-measured 4.5→4.75rem :147
+   for the taller bar — same commit, per HEA-2) plus one measured
+   mobile-safe tier append at the end (HEA-2 ≤560px wordmark step).
+   CSS-only, no :root edits (56-token count holds), no motion changes
+   (§10 inventory untouched — nothing here animates), no color token
+   moves, so check:contrast's audited pair set is structurally
+   unaffected; PDP-4 reuses the audited accent-as-text pair
+   (--accent-strong, §3.4: 5.30:1 base / 5.38 tet / 5.23 trung-thu)
+   and --text, the darkest ink. Lines 1–1502 keep their count.
+   ============================================================ */
+
+/* C2 — The card name steps forward: 1.08→1.18rem, leading 1.35→1.3.
+   Same selector as the base :909-913, later in source → wins the tie.
+   The original idea's font-family/weight append was a no-op (h1–h4 at
+   :168-172 already render every card title Playfair 600) — this size/
+   leading push is the real, sole delta. The 42-char longest owner
+   name wraps to 2–3 lines in the ≈225px desktop text column; §4.2
+   governs: dial the size back, never edit the copy. */
+.card-body h3 {
+  font-size: 1.18rem;
+  line-height: 1.3;
+}
+
+/* C4 — Lead card, editorial push (≥700px only, under the #gio-noi-bat
+   anchor): the lead h3 steps to a display clamp, its price to 1.35rem.
+   Same (1,4,1) selectors as the :1639-1659 block, later in source →
+   wins that tie; the id also beats C2's (0,1,1) append, and below
+   700px the lead stays a standard card at C2's 1.18rem. The price
+   stays sans + tabular-nums (§9 record: scanning numerals never go
+   Playfair) — only font-size is set, so the tet price color
+   ([data-theme='tet'] .price, :971) still applies. */
+@media (min-width: 700px) {
+  #gio-noi-bat .grid-products > .card:first-child .card-body h3 {
+    font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+  }
+
+  #gio-noi-bat .grid-products > .card:first-child .price {
+    font-size: 1.35rem;
+  }
+}
+
+/* BND-2 — Proof band → quiet colophon of real facts: each .proof-item
+   drops its boxed chrome (1px border + 3px accent left rule + surface
+   fill + radius) for a top-rule entry, and the fact itself is promoted
+   to display size (Playfair via the base :1144 family). Same
+   specificity as :1133-1147, later in source → wins both ties.
+   `border: none` precedes `border-top` so the accent left rule dies
+   with the box. Site.json facts only (index.astro:97-110) — the
+   honesty contract is untouched; contrast pairs unchanged. The band
+   sits on the section tint with no container: if the three items read
+   loose, the recorded fallback is tightening .proof-band's grid gap
+   --space-5 → --space-4. */
+.proof-item {
+  padding: var(--space-4) 0 0;
+  border: none;
+  border-top: 1px solid var(--border-strong);
+  border-radius: 0;
+  background: transparent;
+}
+
+.proof-item strong {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+}
+
+/* PDP-4 — Wayfinding clarity: the current crumb steps out of the muted
+   trail (--text vs the nav's --muted, :1279-1285; (0,2,0) beats (0,1,0)),
+   and the PDP category eyebrow warms to the audited accent-as-text
+   pair. The .detail-grid scope on the second rule is load-bearing:
+   .card-cat is shared with catalog cards and must not recolor there
+   (:901-907). If the accent eyebrow ever reads loud against the rail's
+   --primary occasion links, the eyebrow half drops; the crumb rule
+   stands alone. */
+.breadcrumb [aria-current='page'] { color: var(--text); }
+
+.detail-grid .card-cat a { color: var(--accent-strong); text-decoration: none; }
+
+/* HEA-2 mobile-safe tier (measured in-browser this wave): at ≤560px the
+   compact bar (glyph + hotline number + 48px hamburger) has no room for
+   the 1.5rem wordmark — it wraps to two lines from 320px through 390px
+   (bar 77px) where 1.35rem keeps one line at 390/560 (the ≤360px wrap is
+   pre-existing at 1.35rem too, bar 71.5px — covered by the 4.75rem
+   scroll-padding swap above, which restores the original ~13px desktop
+   anchor clearance against the measured 62.6px desktop bar). The
+   wordmark-as-type-hero push lands ≥561px; the glyph bump (40px) and
+   subline tracking (0.12em) ship at every width. Reuses the §8.2 560px
+   tier boundary — no new breakpoint. */
+@media (max-width: 560px) {
+  .brand-text strong { font-size: 1.35rem; }
+}
+
+/* ============================================================
+   Ruled bands + honest states pass (2026-10-17, minimal-lane
+   wave 3) — BND-1, BND-4. Appends only: no rule above swapped,
+   no pins moved, zero markup — lines 1–1502 keep their count
+   (prefix verified byte-identical this wave); every selector
+   here is new and later in source, winning only its own cascade
+   ties. No motion growth: nothing below declares a transition
+   or animation — BND-4's two states are instant color/opacity
+   states riding no transition list (the §10 instant-state
+   pattern), so the 13-row inventory is untouched and no
+   amendment is owed.
+   ============================================================ */
+
+/* BND-1 — Ruled-index de-chrome: Steps + Commitments drop the
+   mid-page card wall (six boxed cards across two consecutive
+   bands) for flush-left ruled entries seated under the
+   section-head hairline (:1612-1620). Same (0,1,0) as the base
+   .step :1023-1029 / .commit :1060-1066, later in source →
+   wins. ORDER IS LOAD-BEARING inside each body: `border: none`
+   precedes `border-top:` or the shorthand reset wipes the top
+   rule (mirrors the base .commit pattern :1064-1065). Steps
+   draw the 1px --border-strong rule; commits keep their 3px
+   --gold top rule — the one brand marker. The 64px folio
+   numeral box (.step::before :1031-1044) is already
+   background:none and stays untouched, as does the row-7
+   numeral settle (:1793-1797). Recorded fallback if the owner
+   misses the boxes: keep the gold top rule on commits only. */
+.step {
+  padding: 1rem 0 0;
+  border: none;
+  border-top: 1px solid var(--border-strong);
+  border-radius: 0;
+  background: transparent;
+}
+
+.commit {
+  padding: 1rem 0 0;
+  border: none;
+  border-top: 3px solid var(--gold);
+  border-radius: 0;
+  background: transparent;
+}
+
+/* BND-1 (cont.) — both ruled-index grids widen their column
+   gap --space-5 → --space-6 (2.25rem, :71) so the de-boxed
+   entries breathe at 4-col; the ≤980px 2-col and ≤540px 1-col
+   tiers (:1050-1051/:1074-1075) set columns only, never gap,
+   so no conflict at any width. Recorded risk: reads airier at
+   981-1100px — a second gap pass is owed if the 4-col looks
+   sparse. */
+.steps-grid,
+.commit-grid { gap: var(--space-6); }
+
+/* BND-4 — Guided-submit state, closing the §5.1 doc-vs-code
+   gap: the spec names the disabled state and no :disabled rule
+   existed (verified this wave). The DOM property and "Đang
+   gửi…" words already toggle (ContactForm.astro :145-146/:162 —
+   that file is never edited, so its check-docs pins hold).
+   Instant by construction: opacity is absent from .btn's
+   transition list (:282-284), so nothing animates. WCAG 1.4.3
+   exempts inactive controls and check-contrast audits token
+   pairs only (no :disabled row) — no gate impact. */
+.js-enquiry-form button[type='submit']:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* BND-4 (cont.) — the channel folio index 01…06 flips from
+   --accent-strong (:1690) to --primary on hover/focus-within,
+   pairing the existing 4px nudge (:1710-1712) with a color
+   response. Instant color state: `color` is not in .channel's
+   transition list (:1172 — border-color, box-shadow, transform),
+   so §10 is untouched by construction. (0,2,1) beats the base
+   .channel::before (:1683, (0,1,1)); rides the audited
+   --primary-on-surface pair. */
+.channel:is(:hover, :focus-within)::before {
+  color: var(--primary);
+}
+
+/* ============================================================
+   Markup pass (2026-10-17, minimal-lane wave 4) — PDP-1 → PDP-3 →
+   CTL-4 → CTL-2 → CTL-1, in that fixed build order. Markup edits:
+   [slug].astro (options folded into the story rail, right column
+   de-inlined) + ProductGrid.astro (empty-state anchors); everything
+   CSS lives here at the file end. One same-line value swap shipped
+   above: .filter-row gap 0.6→0.7rem (:799, CTL-1) — lines 1–1502
+   keep their count (prefix byte-diff = that one line). No motion
+   growth: nothing below declares a transition or animation — CTL-2
+   is an instant color state per §10 (:525 pattern); the 13-row
+   inventory is untouched. No new tokens (56 holds), no color token
+   moves, so check:contrast's audited set is structurally unaffected.
+   ============================================================ */
+
+/* PDP-1 — Một rail: the PDP right column speaks one grammar. The
+   options block (h3 + .opt-chips + note) is now the FOURTH
+   .story-row inside dl.story-facts (dt = the option's owner-editable
+   name, dd = values joined " · ", each row self-guarding on
+   length > 0; the dl guard gains `|| product.options.length > 0`),
+   the muted price note sits under the dl, and .meta-list drops its
+   dashed box to become the rail's twin — same top rule
+   (--border-strong), same row hairlines (--border), transparent
+   ground, padding mirroring .story-facts so both rules align. The
+   ✍️🌿🚚↩️ emoji stay as the human touch; the 4th row inherits the
+   row-8 view() reveal free (.story-facts .story-row is class-
+   scoped, not count-scoped). Same (0,1,0) as the base :1321-1330,
+   later in source → wins; `border: none` precedes `border-top:` or
+   the shorthand reset wipes the rule (the §10-era BND-1 pattern). */
+.meta-list {
+  padding: var(--space-4) var(--space-5);
+  border: none;
+  border-top: 1px solid var(--border-strong);
+  border-radius: 0;
+  background: transparent;
+}
+
+.meta-list li + li { border-top: 1px solid var(--border); }
+
+/* PDP-3 — Folio cadence: the right column's four inline style
+   attributes are gone ([slug].astro card-cat a, h1, and the options
+   note — the options h3's died with PDP-1's restructure); the
+   cadence they used to boss into place now lives here. The block
+   first REPRODUCES the exact current computed values — h1
+   margin-bottom 0.2em (name→price stays tight), .card-cat a
+   text-decoration none (folded into the PDP-4 rule above, same
+   (0,2,1) specificity band: no underline at rest OR hover, exactly
+   what the inline style computed), the note's --muted/0.9rem — and
+   only then retunes: description→rail→note→meta settle into ONE
+   consistent step (var(--space-4), collapsing with the p's 1em
+   bottom margin exactly as before), and .detail-grid .hero-cta-row
+   gains margin-top var(--space-5) so the CTA earns a deliberate
+   breather after the meta rail (margin-collapse max(1rem, 1.5rem) =
+   24px vs the 16px step). The h1 clamp is untouched. All rules are
+   .detail-grid-scoped (0,1,1)+ so inner-page h1s elsewhere keep the
+   base 0.6em and .hero-cta-row instances (hero, 404, cta-band)
+   keep their own margins. */
+.detail-grid h1 { margin-bottom: 0.2em; }
+
+.detail-grid .story-facts { margin: 0 0 var(--space-4); }
+
+.detail-grid .opt-note {
+  margin: 0 0 var(--space-4);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.detail-grid .meta-list { margin: 0 0 var(--space-4); }
+
+.detail-grid .hero-cta-row { margin-top: var(--space-5); }
+
+/* CTL-4 — One clear action in each empty state: the two catalog
+   empty paragraphs gain real anchors INSIDE the <p> elements the
+   reveal script already toggles ([data-filter-empty] /
+   [data-search-empty] hidden-flag logic untouched, zero script
+   changes) — the filter miss offers clean-URL navigation (asset-
+   prefixed /products/ clears every ?param, works with JS disabled,
+   back button restores), the search miss's "nhắn Zalo" phrase
+   links site.json zaloUrl (placeholder-live by owner decision — the
+   link honestly inherits whatever the owner pastes; target/blank +
+   noopener match the PDP Zalo CTA grammar). Styling rides the base
+   `a` pair (--primary on --bg, audited) plus a 600-weight action
+   read; ≤560px the anchors clear the §8.3 44px tap floor via the
+   .breadcrumb-a pattern (inline-block + min-height + padding) —
+   inline-block is load-bearing, inline boxes ignore min-height.
+   (0,1,1): ContactForm's .form-status regions carry no anchors
+   (JS textContent only), so the rule can only ever apply here. */
+.form-status a {
+  font-weight: 600;
+}
+
+@media (max-width: 560px) {
+  .form-status a {
+    display: inline-block;
+    min-height: 44px;
+    padding-block: 0.55rem;
+  }
+}
+
+/* CTL-2 — Search field focus joins the form-focus grammar: the
+   hairline-bottom field deepens to --primary on :focus-visible —
+   an INSTANT color state only, no transition property added
+   (§10's binding list limits animated properties to transform /
+   opacity / font-variation-settings; the pre-existing .chip
+   border-color transition is grandfathered base styling, not a
+   license for new ones — and .search-input declares no transition
+   list at all, :814-824). Matches the contact-form focus grammar
+   (:1226-1232, border-color: var(--primary)); the global
+   :focus-visible ring (:196-203) stays untouched and still draws.
+   Text inputs match :focus-visible on every focus path, so click
+   and Tab get the same cue. (0,2,0) beats the base (0,1,0);
+   --primary on --bg is the audited 7.29:1 pair. */
+.search-input:focus-visible {
+  border-bottom-color: var(--primary);
+}
+
+/* CTL-1 — Borderless index chips. Cascade, verified against the
+   base :318-341: :where() contributes ZERO specificity, so both
+   rules are (0,1,0) — rule 1, later in source, de-chromes resting
+   chips over base .chip (:318-333): border-color + background →
+   transparent over the page cream (--text on --bg, the audited
+   body pair). RULE 2 IS LOAD-BEARING AND MUST STAY AFTER RULE 1:
+   the base .chip--active (:337-341) is also (0,1,0), so without
+   the re-declaration rule 1 would win the tie and blank the
+   selected pill (--primary-ink text on a transparent ground ≈
+   invisible on cream) — rule 2 re-declares the audited fill at the
+   same (0,1,0), later, so the selected state is identical to today
+   and the default-filled "Tất cả" pill keeps teaching the pattern
+   at first paint. Hover is untouched: .chip:hover /
+   .chip--active:hover are (0,2,0) and beat both appends — the
+   accent border re-draws over the base 120ms transition (:331),
+   the active fill holds under hover. :not(.chip--active) is
+   deliberately NOT used: :not() adopts its argument's
+   specificity, making rule 1 (0,2,0) — it would tie .chip:hover
+   (:335) and, being later, suppress the hover border re-draw. The
+   :where(.filter-row) scope keeps every non-filter .chip (none
+   remain after PDP-1 folded the PDP option spans away) untouched
+   by construction. Paired gap nudge rides above: .filter-row
+   0.6→0.7rem (:799, same-line swap — a :where(.filter-row) append
+   would be (0,0,0) and lose to the base (0,1,0)). Revert = delete
+   this block and swap the gap back; the pills return. */
+:where(.filter-row) .chip { border-color: transparent; background: transparent; }
+
+:where(.filter-row) .chip--active { background: var(--primary); border-color: var(--primary); }
+
+/* ============================================================
+   Owner sign-off pass (2026-10-17, minimal-lane wave 5) — HER-4 →
+   HER-3 → C3 → BND-3, in that fixed order. Markup edits: Hero.astro
+   (band two-button row → one link-more action; "chu đáo" wrapped in
+   span.hero-stroke), ProductCard.astro (the single .card-desc line
+   deleted — the base .card-desc rules at :932-940/:955-958 go DEAD,
+   not away; lines above 1503 are never deleted), CTA.astro (asset
+   import + roofline img above the h2). One swap set above: the
+   hero-band's dashed box → hero-main's ruled-rail grammar, three
+   1:1 value lines (:632-634, border packed on one physical line per
+   the §10 precedent at :603). Lines 1–1502 keep their count. No
+   motion growth — the stroke ships STATIC (entrance explicitly
+   deferred; §10 inventory stays 13 rows); no new tokens (56 holds);
+   no new color pairs (the stroke reuses the audited
+   --accent-strong-as-text set, §3.4).
+   ============================================================ */
+
+/* HER-4 — Band de-chrome, action half: the tile's link-more pattern
+   (:667-673) is .hero-tile-body-SCOPED, so the band's new single
+   action gets NO styling from it — this block is required, not
+   optional, or the link renders as a bare primary anchor. Rest +
+   hover mirror the tile pair (:667-673); one deliberate divergence:
+   as the band's ONLY action this link carries the 44px tap floor
+   the two old .btn rows set (wave-review fix — inline-flex +
+   min-height, CSS-only, no motion, no colors; the tile's link is a
+   secondary adjunct next to the hero's primary buttons, so it keeps
+   the bare-anchor precedent). The phone button is gone by owner
+   sign-off — the persistent header hotline carries that path
+   everywhere. */
+.hero-band .link-more {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+  color: var(--accent-strong);
+  text-decoration: none;
+}
+
+.hero-band .link-more:hover { color: var(--accent-deep); }
+
+/* HER-3 — One hand-drawn stroke under "chu đáo": the site's single
+   organic accent (trend #7), in service of type hierarchy (#2). The
+   span colors the svg through currentColor (--accent-strong as text,
+   the audited §3.4 pair); preserveAspectRatio="none" lets the open
+   brush path stretch to the word at every hero size (viewBox 100×12,
+   round caps, two C-segment wave). STATIC by decision — no entrance
+   animation, so the §10 inventory is untouched. white-space: nowrap
+   is the odd-wrap guard: the h1 is text-wrap: balance (:180) and the
+   abspos stroke must never span a line break. Quality-gated: if the
+   owner's eye dislikes the path, drop the span — the composition
+   survives. */
+.hero-stroke {
+  position: relative;
+  color: var(--accent-strong);
+  white-space: nowrap;
+}
+
+.hero-stroke svg {
+  position: absolute;
+  left: 0;
+  bottom: -0.06em;
+  width: 100%;
+  height: 0.18em;
+}
+
+/* BND-3 — CTA band: pine fill → ruled paper band (renders on /about/
+   and /products/ only). Every rule below wins its cascade tie by
+   source order over the :1244-1276 base, which STAYS in source:
+   check-contrast.mjs:157's structural regex requires the ink ring at
+   :1256 verbatim — the append wins the render, the base satisfies
+   the gate. h2 steps to --text at --font-size-2xl (base h2 is
+   --font-size-xl, :177); p → --muted keeps the base max-width and
+   centering. The ghost pair re-points to the standard paper buttons
+   (:303-313) EXACTLY — any drift and the band's secondary action
+   loses its hover state. */
+.cta-band {
+  background: transparent;
+  color: var(--text);
+  border: none;
+  border-top: 1px solid var(--border-strong);
+  border-radius: 0;
+}
+
+.cta-band h2 {
+  color: var(--text);
+  font-size: var(--font-size-2xl);
+}
+
+.cta-band p { color: var(--muted); }
+
+.cta-band .btn--ghost {
+  background: transparent;
+  border-color: var(--border-strong);
+  color: var(--primary);
+}
+
+.cta-band .btn--ghost:hover {
+  background: var(--surface);
+  border-color: var(--primary);
+  color: var(--primary-deep);
+}
+
+/* BND-3 (cont.) — LOAD-BEARING: on the paper band the base ink ring
+   (:1256, --primary-ink = #ffffff in every theme) would sit at ≈1:1
+   on cream, making keyboard focus invisible. The ring re-points to
+   --primary — the audited non-text pair (:101-102, 3.0:1 floor).
+   Same (0,2,0) as the base rule, later in source → wins the tie. */
+.cta-band :focus-visible { outline-color: var(--primary); }
+
+/* BND-3 (cont.) — the band's roofline instance: 120px centered above
+   the h2 (§6.1 licenses the roofline as a section divider; the band
+   previously carried zero motifs, so one-motif-per-surface holds).
+   (0,2,0) beats the 200px footer base (:1367-1371); the margin also
+   resets the footer's negative bottom pull so the h2 doesn't tuck
+   under the gable. Motion row 13's view() draw now also animates
+   this instance — intended, unchanged. */
+.cta-band .roof-divider {
+  width: 120px;
+  margin: 0 auto var(--space-4);
 }
