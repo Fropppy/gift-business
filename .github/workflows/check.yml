@@ -39,3 +39,15 @@ jobs:
 
       - name: Output gate (dist/ artifact assertions)
         run: node scripts/check-output.mjs
+
+    # Appended AFTER steps: on purpose. Two docs-gate pins sit above this
+    # point: check.yml:15 ('check:', assertion 17) and check.yml:23
+    # ('actions/setup-node', assertion 18's CITED_FACTS, check-docs.mjs:561).
+    # Living citations: ZCODE.md:139 and docs/architecture.md:88 cite
+    # check.yml:15; ZCODE.md:143 cites check.yml:7-8. YAML job-mapping key
+    # order is free; keys inserted above line 24 would move the pins and
+    # fail the docs gate.
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+    timeout-minutes: 15
