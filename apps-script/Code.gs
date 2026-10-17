@@ -47,6 +47,13 @@ const DAILY_SUBMISSION_CAP = 50;
 
 function doPost(e) {
   try {
+    // Payload guard: the /exec URL accepts arbitrary bodies. Missing or
+    // oversized (>10 KB, ~10x the legit form payload) input is rejected
+    // before JSON.parse ever runs, so junk never reaches the parser or
+    // the caps below.
+    if (!e.postData || e.postData.contents.length > 10000) {
+      return json({ ok: false, error: 'payload too large' });
+    }
     const body = JSON.parse(e.postData.contents);
     // Field caps: without them a single POST can stuff a ~49,000-char cell
     // (Sheets' per-cell limit) and bloat the sheet the family opens and
@@ -88,32 +95,49 @@ function doPost(e) {
       return json({ ok: false, error: 'too many requests' });
     }
 
-    const duplicate = findRecentDuplicate(phone, message);
-    if (duplicate) {
-      return json({ ok: true, orderId: duplicate, duplicate: true });
-    }
-
-    const sheet = getOrCreateOrdersSheet();
+    // Order ID is minted BEFORE the dedupe lock on purpose: nextOrderId()
+    // takes the same script lock internally, and LockService has no
+    // reference counting — its releaseLock() inside the locked region
+    // below would drop this lock before appendRow and reopen the race.
+    // Cost: a dedupe hit burns one sequence number (a harmless ID gap).
     const orderId = nextOrderId();
-    const timestamp = Utilities.formatDate(
-      new Date(),
-      'Asia/Ho_Chi_Minh',
-      'yyyy-MM-dd HH:mm:ss',
-    );
-    sheet.appendRow([
-      timestamp,
-      orderId,
-      'Mới',
-      neutralize(name),
-      neutralize(phone),
-      neutralize(product),
-      neutralize(message),
-      neutralize(page),
-      '',
-      '',
-    ]);
 
-    return json({ ok: true, orderId });
+    // Dedupe race lock: two identical concurrent submissions can both
+    // pass findRecentDuplicate before either appends, double-writing the
+    // row. The script lock serializes check-through-append, and the
+    // duplicate check re-runs inside it so the second request sees the
+    // first row and returns the duplicate branch.
+    const lock = LockService.getScriptLock();
+    lock.waitLock(10000);
+    try {
+      const duplicate = findRecentDuplicate(phone, message);
+      if (duplicate) {
+        return json({ ok: true, orderId: duplicate, duplicate: true });
+      }
+
+      const sheet = getOrCreateOrdersSheet();
+      const timestamp = Utilities.formatDate(
+        new Date(),
+        'Asia/Ho_Chi_Minh',
+        'yyyy-MM-dd HH:mm:ss',
+      );
+      sheet.appendRow([
+        timestamp,
+        orderId,
+        'Mới',
+        neutralize(name),
+        neutralize(phone),
+        neutralize(product),
+        neutralize(message),
+        neutralize(page),
+        '',
+        '',
+      ]);
+
+      return json({ ok: true, orderId });
+    } finally {
+      lock.releaseLock();
+    }
   } catch (err) {
     // The /exec URL is deployed "Anyone", so anyone can curl it; raw
     // exception strings (JSON.parse, Sheets, permission errors) disclose

@@ -18,7 +18,7 @@ Everything needed to turn the placeholder site into the real shop:
 3. Replace the placeholder contact data and photos per the table below.
 4. Verify: the live form submits and a test row appears in "Đơn hàng"
    (SETUP.md §2 has the curl), plus a `GET` on the `/exec` URL returns `ok`
-   (Code.gs doGet, line 110-112).
+   (Code.gs doGet, line 153-155).
 
 ## Replacing placeholder content
 
@@ -52,11 +52,11 @@ Triage runbook for "orders stopped arriving", in order:
    redeploy per the section below.
 3. **Rate limit:** more than 3 submissions from one phone in 10 minutes,
    or more than 50 across all phones in a day (spam guard), get
-   `too many requests` — by design (Code.gs:71-89).
+   `too many requests` — by design (Code.gs:78-96).
 4. **Dedupe:** the same phone + message within 5 minutes is silently merged
-   into the existing order ID (Code.gs:169-185) — not data loss.
+   into the existing order ID (Code.gs:113-116, 228-245) — not data loss.
 5. **Honeypot:** submissions with the hidden `company` field filled get a
-   fake success and no row — by design (Code.gs:62-64).
+   fake success and no row — by design (Code.gs:73-76).
 
 The Sheet is the family's back office: schema changes (columns, dropdown
 values) are breaking for their workflow — ask first and update SETUP.md in
