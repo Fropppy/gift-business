@@ -270,3 +270,33 @@ variable-Playfair URL serves 23
 @font-face blocks (35 before) but its axis floor is 400: no keyframe may
 start below `wght` 400. Design record: docs/design-language.md §10.
 
+## ADR-0010: Category landing pages at /danh-muc/ + versioned og:image (2026-10-28, accepted)
+
+### Context
+
+The 7 categories and 12 occasions existed only as client-side
+`?category=`/`?tag=` filter views of `/products/`, so no URL
+could rank for "giỏ quà Tết" / "quà khai trương" (canonicals
+consolidated the variants but nothing targeted the queries); social
+shares rendered with no preview image because `public/images/` held
+only SVGs, which Zalo/Facebook crawlers do not render.
+
+### Decision
+
+Build exactly three landing pages at
+`/danh-muc/<slug>/` (Tết, khai-trương–tân-gia, doanh nghiệp) from one
+`getStaticPaths` over categories — not all 19 category/occasion
+combinations, to avoid templated thin pages; repoint matching internal
+links; ship one sitewide og:image as a **versioned** PNG
+(`og-default-v1.png`, 1200×630, <1 MB — Zalo's 1.39 MB cap binds)
+because Facebook and Zalo cache previews by URL: image swaps ship as
+new filenames plus a re-scrape.
+
+### Consequences
+
+Page count 21→24; sitemap route lists
+(generate-sitemap.mjs + check-output.mjs) move in lockstep by design;
+a new check-output assertion pins the og tags on every page; filter
+views keep the `/products/` self-canonical (no noindex); heading
+skips beyond the Hero tile and real photos remain open (roadmap).
+

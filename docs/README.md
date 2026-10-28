@@ -15,7 +15,7 @@ from here or `npm run check:docs` fails, so un-indexed docs cannot merge.
 | [docs/decisions.md](decisions.md) | Append-only ADR log (ADR-0001…) with rationale. | You need to know WHY something was chosen, or want to change it. |
 | [docs/operations.md](operations.md) | Runbook: go-live checklist, placeholder replacement, order triage, Apps Script redeploy, release flow. | You are doing something repeated, not reading. |
 | [docs/monitoring.md](monitoring.md) | Monitoring runbook: daily 07:00 digest automation (prompt pinned), StatusCake fast lane (pending owner), alert flow, canonical do-not-alarm list, residual risks. | An alert fired, the digest flagged something, or you are (re)creating the watch. |
-| [docs/owner-updates.md](owner-updates.md) | Khanh's own step-by-step guide: real contact data (NAP), og:image, real photos, GBP/Zalo OA, and a 16-product fill-in worksheet. | You are the owner and want to change content yourself. |
+| [docs/owner-updates.md](owner-updates.md) | Khanh's own step-by-step guide: real contact data (NAP), social-preview re-scrape, real photos, GBP/Zalo OA, and a 16-product fill-in worksheet. | You are the owner and want to change content yourself. |
 | [docs/roadmap.md](roadmap.md) | Now / Next / Later / Done — pending owner actions and conditional work. | You are picking work or checking status. |
 | [docs/design-language.md](design-language.md) | The design-language proposal the current UI implements (tokens, themes, WCAG). | You touch themes or design tokens. Historical record. |
 | [docs/ai/memory-system.md](ai/memory-system.md) | The 3-layer memory model and its update rituals. | You are an agent deciding where a fact belongs. |

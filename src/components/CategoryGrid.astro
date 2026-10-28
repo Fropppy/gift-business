@@ -2,6 +2,10 @@
 import { categories } from '../utils/catalog';
 import { asset } from '../utils/asset';
 import SectionHead from './SectionHead.astro';
+
+// SEO suite — the three rankable categories have /danh-muc/ landing pages;
+// the other four keep the ?category= filter link (self-canonical there).
+const LANDING_SLUGS = new Set(['gio-qua-tet', 'qua-khai-truong-tan-gia', 'qua-tang-doanh-nghiep']);
 ---
 
 <section class="section section--surface" id="danh-muc">
@@ -14,7 +18,7 @@ import SectionHead from './SectionHead.astro';
     <div class="cat-grid">
       {
         categories.map((c) => (
-          <a class="cat-card" href={`${asset('/products/')}?category=${c.slug}`}>
+          <a class="cat-card" href={LANDING_SLUGS.has(c.slug) ? asset(`/danh-muc/${c.slug}/`) : `${asset('/products/')}?category=${c.slug}`}>
             <span class="cat-ico" aria-hidden="true">
               {c.icon}
             </span>

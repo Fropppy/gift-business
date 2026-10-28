@@ -2,12 +2,13 @@
 /**
  * Dependency-free sitemap generator (seo-proposal.md P0-6).
  *
- * Reads src/data/products.json plus the four static indexable routes and
+ * Reads src/data/products.json plus the seven static indexable routes and
  * writes dist/sitemap.xml — one absolute <loc> per page. Same input → same
  * output, so it is safe to re-run.
  *
  * URL set: `/`, `/about/`, `/contact/`, `/products/` and every product page
- * `/products/<slug>/` (getStaticPaths builds one page per products.json
+ * `/products/<slug>/` plus the three category landing pages
+ * `/danh-muc/<slug>/` (getStaticPaths builds one page per products.json
  * entry — src/pages/products/[slug].astro). `/404` is deliberately excluded:
  * error pages never belong in a sitemap. No `lastmod`: this repo has no
  * trustworthy modified-date source, and a fabricated date is worse than none.
@@ -43,7 +44,18 @@ const SITE_ORIGIN = 'https://fropppy.github.io';
 const BASE_PATH = '/gift-business';
 
 // Static indexable routes, trailing-slash form. /404 is excluded on purpose.
-const STATIC_ROUTES = ['/', '/about/', '/contact/', '/products/'];
+// The three /danh-muc/ landing pages (src/pages/danh-muc/[slug].astro) are
+// listed here AND in scripts/check-output.mjs SITEMAP_STATIC_ROUTES — the
+// two lists are deliberately independent so one cannot self-validate.
+const STATIC_ROUTES = [
+  '/',
+  '/about/',
+  '/contact/',
+  '/products/',
+  '/danh-muc/gio-qua-tet/',
+  '/danh-muc/qua-khai-truong-tan-gia/',
+  '/danh-muc/qua-tang-doanh-nghiep/',
+];
 
 /* ---- fail loudly if run before a build (dist/ is created by astro build) ---- */
 if (!existsSync(DIST)) {

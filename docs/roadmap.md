@@ -168,3 +168,36 @@ Now/Later stay honest).
   Shipped: 8013b5a → PR #9 (CI green on headSha) → merge a0bf373 → Pages
   deploy verified; live: hero-stroke present, .card-desc gone, floating
   CSS served; QA 1280/390/320+tet (chips 44px, stroke clear); gates green.
+
+- 2026-10-28: SEO suite (seo-proposal P0-4/P0-5/P0-7 + P1-1/P1-2) shipped as
+  one commit — three category landing pages at /danh-muc/ (Tết 8 products,
+  khai trương–tân gia 2, doanh nghiệp 4) built by getStaticPaths with unique
+  Vietnamese copy, ItemList + BreadcrumbList JSON-LD, canonical/og:url free
+  from BaseLayout (src/pages/danh-muc/[slug].astro); internal links repointed
+  (CategoryGrid 3 cards, hero-band CTA, Footer 2 deep links, tet +
+  khai-trương occasion chips, PDP breadcrumb/eyebrow/occasion links;
+  non-landing categories keep the ?category= filter views, no noindex);
+  sitewide og:image og-default-v1.png (1200×630 PNG, 84 KB — under Zalo's
+  1.39 MB preview cap) + og:image:width/height/alt + twitter:card in a
+  6-for-6 swap at src/layouts/BaseLayout.astro:84-89 (net line delta 0, zero
+  CITED_FACTS bumps); Hero tile h3→h2 at src/components/Hero.astro:29 with
+  one compensating append at src/styles/global.css:2351-2363 (region
+  contract held, :root still 56 tokens); site.json:4 description now carries
+  "giao nhanh trong ngày tại TP. HCM"; fetchpriority="high" on the PDP LCP
+  img; sitemap 20→23 URLs in lockstep — scripts/generate-sitemap.mjs and
+  scripts/check-output.mjs route lists extended in the same commit — plus a
+  NEW check-output assertion pinning the og/twitter tags on every page;
+  ADR-0010 (docs/decisions.md) records the route scheme + versioned
+  og:image. Lighthouse 13.6.0 mobile lab runs on the local preview (JSONs
+  in out/seo-suite/lighthouse/, untracked): PDP 90→90 with LCP 3.4→3.3 s
+  and lcp-discovery fixed by fetchpriority; the three landing pages score
+  91/91/91; home heading-order fixed (the P0-4 target). Home perf read 98
+  before vs 94 after, but four identical after-runs spanned 86–95 with TBT
+  170–520 ms and total scripting ~36 ms — host-load noise (load average
+  1.4–1.6 during the runs), recorded per the spec's
+  investigate-and-record guard, not a code regression. Accepted open (audit
+  §1 scope flag): /products/ and /contact/ card h1→h3 skips remain
+  (Lighthouse heading-order still fails on /products/). Browser QA 390px +
+  1280px: tile heading computed 19.2px/margin 0 after the swap, 8/2/4
+  cards, no horizontal overflow anywhere, tet theme applies on the landing
+  pages. All four gates green in this task's verification step.

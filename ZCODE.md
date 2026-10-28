@@ -28,7 +28,7 @@ One question → one file. Links, never summaries.
 | Command | Purpose |
 | --- | --- |
 | `npm run dev` | Local dev server (http://localhost:4321/gift-business/). |
-| `npm run build` | Build the static site (21 pages) into dist/. |
+| `npm run build` | Build the static site (24 pages) into dist/. |
 | `npm run check:contrast` | WCAG gate: token pairs per theme, rest + hover + focus ring. |
 | `npm run check:output` | dist/ artifact assertions — run AFTER `npm run build`. |
 | `npm run check:docs` | Docs gate: index completeness, links, sections, budgets, ADR/log format. |

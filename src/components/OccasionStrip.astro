@@ -2,6 +2,13 @@
 import occasions from '../data/occasions.json';
 import { asset } from '../utils/asset';
 import SectionHead from './SectionHead.astro';
+
+// SEO suite — occasions with a matching landing page link there; the rest
+// keep the ?tag= filter deep link (self-canonical on /products/).
+const LANDING_BY_TAG: Record<string, string> = {
+  tet: '/danh-muc/gio-qua-tet/',
+  'khai-truong': '/danh-muc/qua-khai-truong-tan-gia/',
+};
 ---
 
 <section class="section" id="dip-tang-qua">
@@ -20,7 +27,7 @@ import SectionHead from './SectionHead.astro';
         occasions.map((o) => (
           <a
             class="occ-chip"
-            href={`${asset('/products/')}?tag=${o.tag}`}
+            href={LANDING_BY_TAG[o.tag] ?? `${asset('/products/')}?tag=${o.tag}`}
             data-months={(o.months ?? []).join(' ')}
           >
             <span class="occ-ico" aria-hidden="true">
