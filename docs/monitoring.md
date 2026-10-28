@@ -37,8 +37,9 @@ fire is 2026-10-23.
 Outputs land only under `out/daily/` (gitignored): `<date>.md` ≤ 15 lines
 plus the sitemap-diff baseline, pruned to the newest 30 files. The Friday
 edition (`out/weekly`) is trend research and absorbs the weekly full-sitemap
-sweep — fetch `/sitemap.xml`, probe every `<loc>` (currently 20 = 16
-products + 4 static); sweep everything, do not sample. The write-restriction
+sweep — fetch `/sitemap.xml`, probe every `<loc>` (currently 23 = 16
+products + 7 static, incl. the three `/danh-muc/` landing pages); sweep
+everything, do not sample. The write-restriction
 is instruction-level, not a permission boundary: the scheduled session runs
 with the workspace user's privileges; the prompt is the guard.
 
