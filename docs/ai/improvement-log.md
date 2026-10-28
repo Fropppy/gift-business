@@ -247,3 +247,25 @@ Mark promoted entries with → where they landed.
 - Promoted to → the verification paragraph of
   docs/design-language.md §11 (this entry is the receipt).
 
+
+## 2026-10-28 — Workflow-tool lessons from the SEO suite run
+
+- Observation: five failures across the /workflow runs, all tool-shape, none
+  content: (1) artifact.file description is capped at 500 chars — a
+  subagent-returned summary interpolated into it overran and killed the run
+  at the last step; (2) artifact.file refuses paths under the gitignored
+  out/ tree ("does not exist or is not a regular file") even though the
+  file exists — the artifact store cannot publish untracked outputs, so
+  deliverables in out/ must be surfaced via log() + the final report
+  instead; (3) the workflow facade forbids `typeof world.run` references —
+  declare a structural interface (GateOutcome) for result types; (4) a
+  zsh for-loop variable named `path` silently clobbers $PATH (zsh special
+  variable) and broke every later command in the cell; (5) a dist
+  spot-check regex counting `class="card` prefix-matched card-body/
+  card-zalo subclasses (8 cards read as 72) — count with a boundary
+  (class="card(" |")").
+- Change: all five fixed in-session (script amendments reused cached work;
+  the spot-check was re-verified with boundary regexes and JSON-LD parse);
+  the deterministic gates were never affected.
+- Promoted to → this entry (ZCode-workflow authoring rules also live in
+  personal agent memory; repo gates unchanged).

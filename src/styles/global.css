@@ -2348,3 +2348,16 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
   width: 120px;
   margin: 0 auto var(--space-4);
 }
+
+/* ============================================================
+   SEO pass (2026-10-28) — hero-tile heading level fix. The tile
+   heading went h3 → h2 (Hero.astro:29; the page keeps its single
+   h1 at :15). The base h2 rule (:177) would size it at
+   var(--font-size-xl) and the shared heading margin (:168-174)
+   would add 0 0 0.6em inside the flex-column tile (:656-661 —
+   margins do not collapse there; the old h3 reset at :663 is now
+   dead and stays, frozen region). This append restores the exact
+   pre-swap geometry — appended rules win cascade ties per the
+   :1504-1516 region contract. No new :root tokens.
+   ============================================================ */
+.hero-tile-body h2 { margin: 0; font-size: 1.2rem; }

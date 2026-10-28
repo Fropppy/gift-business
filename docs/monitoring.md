@@ -130,10 +130,10 @@ flag them as incidents:
   are routine GitHub automation — surface new ones informationally.
 - **Theme auto-switching** (Nov–Feb → tet, Sep → trung-thu, localStorage
   override) is applied client-side; served HTML is identical year-round.
-- **Sitemap has no `lastmod`** by design (`scripts/generate-sitemap.mjs:11-13`
+- **Sitemap has no `lastmod`** by design (`scripts/generate-sitemap.mjs:12-14`
   — a fabricated date is worse than none).
 - **`/404` is deliberately excluded from the sitemap**
-  (`scripts/generate-sitemap.mjs:45`); unknown paths returning 404 is correct
+  (`scripts/generate-sitemap.mjs:46`); unknown paths returning 404 is correct
   behavior.
 - **Local `dist/`** is build output — never diffed or alarmed on.
 - **The Apps Script 302 hop** to `script.googleusercontent.com` (once the

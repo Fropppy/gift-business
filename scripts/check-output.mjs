@@ -27,11 +27,16 @@
  *      so omitting it breaks every order-form submit once the webhook is
  *      activated.
  *   8. dist/sitemap.xml exists and carries exactly the expected absolute
- *      URLs — the four static routes plus every src/data/products.json
- *      slug, each prefixed https://fropppy.github.io/gift-business/
- *      (astro.config.mjs site + base), /404 excluded, every URL resolving
- *      to a built dist/ page — and dist/robots.txt (copied from public/)
- *      declares the sitemap (seo-proposal P0-6).
+ *      URLs — the static routes (incl. the three /danh-muc/ landing
+ *      pages) plus every src/data/products.json slug, each prefixed
+ *      https://fropppy.github.io/gift-business/ (astro.config.mjs site +
+ *      base), /404 excluded, every URL resolving to a built dist/ page —
+ *      and dist/robots.txt (copied from public/) declares the sitemap
+ *      (seo-proposal P0-6).
+ *   9. Every page under dist/ ships the social preview tags (SEO suite):
+ *      og:image with the versioned og-default-v1.png at the absolute
+ *      base-prefixed URL, og:image:width 1200, og:image:height 630, and
+ *      twitter:card summary_large_image.
  *
  * Exit 1 on any failed assertion.
  */
@@ -209,6 +214,22 @@ assert(
   noCsp.length ? `missing/failing on: ${noCsp.map((f) => path.relative(distDir, f)).join(', ')}` : `${allHtml.length}/${allHtml.length} pages`
 );
 
+/* --- 9. social preview tags on every page (SEO suite: og:image + twitter:card) --- */
+const missingSocial = allHtml.filter((f) => {
+  const html = readFileSync(f, 'utf8');
+  return !(
+    /<meta\s+property="og:image"\s+content="https:\/\/fropppy\.github\.io\/gift-business\/images\/og-default-v1\.png"/.test(html) &&
+    /<meta\s+property="og:image:width"\s+content="1200"/.test(html) &&
+    /<meta\s+property="og:image:height"\s+content="630"/.test(html) &&
+    /<meta\s+name="twitter:card"\s+content="summary_large_image"/.test(html)
+  );
+});
+assert(
+  'og:image (versioned og-default-v1.png, absolute base-prefixed URL) + dimensions + twitter:card on every page',
+  missingSocial.length === 0,
+  missingSocial.length ? `missing on: ${missingSocial.map((f) => path.relative(distDir, f)).join(', ')}` : `${allHtml.length}/${allHtml.length} pages`
+);
+
 /* --- 8. sitemap.xml + robots.txt (seo-proposal P0-6): full absolute-URL map --- */
 // The expected URL set is derived here independently of
 // scripts/generate-sitemap.mjs — same source data (src/data/products.json,
@@ -216,7 +237,7 @@ assert(
 // static-route list and base prefix — so a wrong, stale, or missing
 // generator cannot self-validate.
 const SITEMAP_BASE = 'https://fropppy.github.io/gift-business'; // astro.config.mjs site + base
-const SITEMAP_STATIC_ROUTES = ['/', '/about/', '/contact/', '/products/'];
+const SITEMAP_STATIC_ROUTES = ['/', '/about/', '/contact/', '/products/', '/danh-muc/gio-qua-tet/', '/danh-muc/qua-khai-truong-tan-gia/', '/danh-muc/qua-tang-doanh-nghiep/'];
 const productsData = JSON.parse(readFileSync(path.join(repoRoot, 'src', 'data', 'products.json'), 'utf8'));
 const expectedUrls = [
   ...SITEMAP_STATIC_ROUTES,

@@ -63,17 +63,20 @@ it is NOT a `site.json`-only edit — the contact page and the
 LocalBusiness schema need a small template change. Give the address to an
 agent and point them at proposal item P1-3.
 
-### 3. One og:image (1200×630 raster) for link previews
+### 3. og:image — re-scrape after deploy (the image is shipped)
 
-Zalo and Facebook are the order channels, and every shared link today
-renders with NO preview image — `public/images/` holds only SVGs, which
-social crawlers will not render (the gap is marked in source at
-`src/layouts/BaseLayout.astro:84-89`). Produce one ~1200×630 PNG or JPEG —
-it can be composed from the existing brand SVGs (`seal.svg`,
-`hoa-mai.svg`) exported to PNG — and drop it into `public/images/` (e.g.
-`og-default.jpg`). Wiring the `og:image` + `twitter:card` meta is then a
-one-spot code change marked by that TODO: hand the file to an agent.
-(Proposal P1-1.)
+The site now ships a default social-preview image
+(`public/images/og-default-v1.png`, 1200×630) with `og:image` +
+`twitter:card` meta on every page. Facebook and Zalo cache link
+previews by URL, so after the next deploy, open the
+[Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/)
+and Zalo's "Gỡ lỗi chia sẻ"
+(developers.zalo.me/tools/debug-sharing — Zalo login required), paste
+the pages you share most, and click re-scrape once. To change the
+image later: publish the new file under a NEW name
+(`og-default-v2.png`), ask an agent to update the one meta line in
+`src/layouts/BaseLayout.astro`, then re-scrape again — same-URL image
+swaps stay cached.
 
 ### 4. Real product photos (800×600)
 
@@ -140,7 +143,7 @@ products. Rules per field, before you fill in the worksheet:
 | `price.amount` | Integer VND only: `850000`, never `850.000` or `850.000₫`. `currency_code` stays `"vnd"`. | `formatVnd()` renders 850000 → 850.000₫ (`src/utils/catalog.ts:66-68`); the JSON-LD Offer also needs the raw number. |
 | `inStock` | `true` / `false`. | Flips the JSON-LD Offer availability InStock/OutOfStock (`src/pages/products/[slug].astro:58`). |
 | `images[]` + `thumbnail` | Point BOTH at `/images/products/<slug>.jpg`. | `productImage()` resolves thumbnail → images[0] → placeholder (`src/utils/catalog.ts:71-74`). |
-| (alt text) | Not a JSON field — it is auto-derived as `Ảnh minh họa: <name>` on the detail page and every card (`src/pages/products/[slug].astro:97`, `src/components/ProductCard.astro:25`). | A descriptive name IS the alt text; write names that describe the actual basket. |
+| (alt text) | Not a JSON field — it is auto-derived as `Ảnh minh họa: <name>` on the detail page and every card (`src/pages/products/[slug].astro:114`, `src/components/ProductCard.astro:25`). | A descriptive name IS the alt text; write names that describe the actual basket. |
 
 ## The 16-product worksheet
 
@@ -201,7 +204,7 @@ agent. Placeholder values are copied verbatim from the current file.
 | `products.json` `slug` | The page URL and its sitemap row — don't change (see field rules). |
 | `public/images/products/<slug>.jpg` + `images[]`/`thumbnail` | Product-page hero image, its card image, and the JSON-LD `image`. |
 | `public/images/hero-*.svg` (and `hero-tet-*.svg`) | Home hero collages; the Tết variants self-activate in season. |
-| `public/images/og-default.jpg` (to come) | Zalo/Facebook link previews once the og:image meta is wired (step 3 above). |
+| `public/images/og-default-v1.png` (shipped) | Every Zalo/Facebook link preview; swap + re-scrape procedure in step 3 above. |
 
 ## Preview and verify
 
@@ -216,8 +219,9 @@ Before calling anything done, run all four gates, in this order
    `products.json`.
 2. `npm run check:contrast` — WCAG color pairs per theme.
 3. `npm run check:output` — runs AFTER build; asserts the built pages,
-   including that `sitemap.xml` carries exactly the URL set your
-   `products.json` implies.
+   including that `sitemap.xml` carries exactly the URL set the built
+   routes imply (your `products.json` slugs plus the static and
+   `/danh-muc/` landing pages).
 4. `npm run check:docs` — links, index, and citation anchors.
 
 If all four pass: commit on develop with a Conventional Commit subject,

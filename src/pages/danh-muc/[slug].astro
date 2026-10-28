@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import { asset } from '../../utils/asset';
+import { products } from '../../utils/catalog';
+import type { Product } from '../../utils/catalog';
+
+export function getStaticPaths() {
+  // SEO suite (ADR-0010) — exactly three rankable category landing pages.
+  // Each entry carries unique copy (anti-doorway) and its match rule
+  // (category slug OR the occasion tag naming the same occasion).
+  // Declared INSIDE getStaticPaths on purpose: Astro hoists this exported
+  // function to module scope but not the frontmatter consts it closes over
+  // (Astro 7.3.5 build died with "LANDINGS is not defined"); imports are the
+  // only frontmatter bindings reliably visible here — the same shape as
+  // src/pages/products/[slug].astro. The page body reads each entry and its
+  // match set from props below.
+  const LANDINGS: Array<{
+    slug: string;
+    h1: string;
+    eyebrow: string;
+    title: string;       // BaseLayout prop; rendered as `${title} · Nhà Mai`
+    description: string; // meta description, 120-160 chars, no prices
+    intro: string;       // SectionHead lead — above the grid
+    supporting: string;  // short block below the grid
+    match: (p: Product) => boolean;
+  }> = [
+    {
+      slug: 'gio-qua-tet',
+      h1: 'Giỏ quà Tết',
+      eyebrow: 'Tết Nguyên Đán',
+      title: 'Giỏ quà Tết TP.HCM, đặt sớm được giá tốt',
+      description: 'Giỏ quà Tết tại TP. HCM nhà mình làm thủ công: bánh kẹo, trà, rượu, hạt dinh dưỡng, thiệp viết tay. Giao nhanh trong ngày — nhắn Zalo tư vấn và báo giá ngay.',
+      intro: 'Tết năm nay biếu gì cho bố mẹ, sếp và đối tác? Nhà mình làm giỏ quà Tết từ phổ thông đến cao cấp — bánh kẹo, trà, rượu, hạt dinh dưỡng tuyển kỹ, gói mới khi có đơn. Dịp cao điểm mình chỉ nhận vừa đủ đơn để gói đẹp được, nên bạn đặt sớm giúp mình — vừa được giá tốt, vừa chắc chắn có giỏ như ý.',
+      supporting: 'Chưa thấy giỏ ưng ý? Bạn nhắn Zalo nói ngân sách và người nhận, mình gợi ý vài giỏ phù hợp rồi báo giá ngay — giỏ riêng cũng làm theo yêu cầu được, giao nhanh trong ngày khu vực TP. Hồ Chí Minh.',
+      match: (p) => p.category === 'gio-qua-tet' || p.tags.includes('tet'),
+    },
+    {
+      slug: 'qua-khai-truong-tan-gia',
+      h1: 'Quà khai trương – tân gia',
+      eyebrow: 'Khai trương – tân gia',
+      title: 'Quà khai trương, tân gia tại TP.HCM',
+      description: 'Quà khai trương, tân gia tại TP. HCM: giỏ quà, bình hoa, chậu cây tài lộc gói đẹp kèm thiệp viết tay. Nhắn Zalo mình tư vấn ngay, giao nhanh trong ngày.',
+      intro: 'Mừng khai trương hay đón nhà mới, món quà phải đẹp và ý nghĩa ngay từ cái nhìn đầu tiên. Nhà mình có sẵn vài mẫu giỏ quà, bình hoa và chậu cây tài lộc; cần giỏ riêng theo ngân sách thì mình làm được. Mỗi giỏ đều gói mới trước khi giao, kèm thiệp viết tay lời chúc bạn gửi.',
+      supporting: 'Không chắc chọn giỏ hay bình hoa? Nhắn Zalo nói dịp và địa điểm giao, mình gợi ý vài phương án chốt liền — cần gấp thì giao nhanh 2h nội thành.',
+      match: (p) => p.category === 'qua-khai-truong-tan-gia' || p.tags.includes('khai-truong'),
+    },
+    {
+      slug: 'qua-tang-doanh-nghiep',
+      h1: 'Quà tặng doanh nghiệp',
+      eyebrow: 'Cho đối tác và nhân viên',
+      title: 'Quà tặng doanh nghiệp TP.HCM',
+      description: 'Quà tặng doanh nghiệp TP. HCM: đặt từ 10 giỏ gắn logo, thiệp chúc theo yêu cầu, đóng giỏ đồng bộ. Báo giá nhanh — nhắn Zalo được tư vấn trong 30 phút.',
+      intro: 'Quà Tết nhân viên, quà biếu đối tác hay quà cho sự kiện — nhà mình đóng giỏ đồng bộ theo bộ nhận diện của bạn. Đặt từ 10 giỏ mình gắn logo và thiệp chúc theo yêu cầu, mỗi giỏ gói mới trước khi giao. Báo giá theo số lượng và cỡ giỏ, nhanh trong 30 phút trong giờ mở cửa.',
+      supporting: 'Cần xem mẫu trước khi chốt? Nhắn Zalo số lượng và ngân sách, mình gửi vài phương án tham khảo — set quà riêng cho công ty mình vẫn làm theo yêu cầu được.',
+      match: (p) => p.category === 'qua-tang-doanh-nghiep' || p.tags.includes('doanh-nghiep'),
+    },
+  ];
+  return LANDINGS.map((landing) => ({
+    params: { slug: landing.slug },
+    props: { landing, items: products.filter(landing.match) },
+  }));
+}
+
+const { landing, items } = Astro.props;
+
+// Absolute URLs per the repo convention (research/landing-pages.md fact 12):
+// Astro.site carries no base (astro.config.mjs:14-15) — always join a path
+// that went through asset() / Astro.url.pathname, never a bare path.
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const homeUrl = new URL(asset('/'), Astro.site).href;
+
+// ItemList (ListItem = position + absolute url ONLY — Google's carousel
+// shape) + BreadcrumbList (Trang chủ → category), one @graph like the PDP.
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'ItemList',
+      itemListElement: items.map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: new URL(asset(`/products/${p.slug}/`), Astro.site).href,
+      })),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Trang chủ', item: homeUrl },
+        { '@type': 'ListItem', position: 2, name: landing.h1, item: canonical },
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout title={landing.title} description={landing.description}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />
+  <section class="section">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href={asset('/')}>Trang chủ</a> › <span aria-current="page">{landing.h1}</span>
+      </nav>
+      <SectionHead eyebrow={landing.eyebrow} title={landing.h1} lead={landing.intro} level="h1" />
+      <div class="grid-products">
+        {items.map((p) => <ProductCard product={p} />)}
+      </div>
+      <p class="lead">{landing.supporting}</p>
+    </div>
+  </section>
+</BaseLayout>
