@@ -27,7 +27,7 @@ const LANDING_BY_TAG: Record<string, string> = {
         occasions.map((o) => (
           <a
             class="occ-chip"
-            href={LANDING_BY_TAG[o.tag] ?? `${asset('/products/')}?tag=${o.tag}`}
+            href={LANDING_BY_TAG[o.tag] ? asset(LANDING_BY_TAG[o.tag]) : `${asset('/products/')}?tag=${o.tag}`}
             data-months={(o.months ?? []).join(' ')}
           >
             <span class="occ-ico" aria-hidden="true">

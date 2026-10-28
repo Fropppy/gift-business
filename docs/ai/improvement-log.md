@@ -285,3 +285,17 @@ Mark promoted entries with → where they landed.
   sweep count updated 20→23 in the same commit.
 - Promoted to → the lockstep comment in deploy.yml; when routes change,
   grep for EXPECT/N+S across scripts/ and .github/ before merging.
+
+## 2026-10-28 — Verbatim specs ship verbatim bugs; check hrefs in dist
+
+- Observation: the W6(d) spec snippet skipped asset() on the
+  LANDING_BY_TAG lookup, so the two repointed occasion chips linked to
+  /danh-muc/... without the /gift-business/ base — a live 404. The
+  implementer copied the spec verbatim (correct per contract), both
+  conformance reviews verified fidelity to the spec, and the browser QA
+  read the href values without checking base-prefixing; only a live href
+  inventory (grep -o 'href=...' | sort -u on dist) exposed it.
+- Change: OccasionStrip.astro wraps the map lookup in asset() (one line);
+  dist href inventory now shows every landing link base-prefixed.
+- Promoted to → this entry; landing/href-affecting changes get a dist-level
+  href-prefix inventory in QA, not only source conformance.
