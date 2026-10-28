@@ -269,3 +269,19 @@ Mark promoted entries with → where they landed.
   the deterministic gates were never affected.
 - Promoted to → this entry (ZCode-workflow authoring rules also live in
   personal agent memory; repo gates unchanged).
+
+## 2026-10-28 — The sitemap route contract has a third copy in deploy.yml
+
+- Observation: the SEO suite moved the sitemap route set 20→23 in the two
+  known lockstep lists (scripts/generate-sitemap.mjs, scripts/check-output.mjs
+  — both audited and extended in the same commit, all four gates green), but
+  the deploy workflow's smoke job computes its own expectation
+  (deploy.yml EXPECT = products + 4) and went red on main after merge — the
+  suite's audit never covered .github/workflows/deploy.yml because the spec
+  scoped "no CI changes" as "no CI edits needed", and the doc-drift audit of
+  2026-10-28 had already flagged the smoke job as documented nowhere.
+- Change: deploy.yml expectation bumped to products + 7 with a lockstep
+  comment naming the two canonical route lists; docs/monitoring.md weekly
+  sweep count updated 20→23 in the same commit.
+- Promoted to → the lockstep comment in deploy.yml; when routes change,
+  grep for EXPECT/N+S across scripts/ and .github/ before merging.

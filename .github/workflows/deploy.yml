@@ -84,7 +84,11 @@ jobs:
           # counting (grep -o | wc -l): line counting silently breaks if
           # products.json is ever reformatted onto fewer lines.
           N=$(grep -o '"slug"' src/data/products.json | wc -l)   # 16 today
-          EXPECT=$((N + 4))   # /, /about/, /contact/, /products/
+          EXPECT=$((N + 7))   # /, /about/, /contact/, /products/ + the three
+                              # /danh-muc/ landing pages (ADR-0010; the route
+                              # list lives in generate-sitemap.mjs and
+                              # check-output.mjs — keep all expectations in
+                              # lockstep when routes change).
           # Home: 200 + title + canonical + CSP with both Apps Script hops
           body=$(curl --fail --retry 5 --retry-delay 3 --retry-connrefused -s "$BASE/")
           printf '%s' "$body" | grep -q 'Nhà Mai'
