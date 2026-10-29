@@ -2361,3 +2361,67 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
    :1504-1516 region contract. No new :root tokens.
    ============================================================ */
 .hero-tile-body h2 { margin: 0; font-size: 1.2rem; }
+
+/* ============================================================
+   Gift finder quiz (2026-10-29) — "Chọn quà nhanh" on /products/.
+   APPEND-ONLY per the :1504 contract: lines 1-1502 untouched, no new
+   :root tokens (56 holds), no new color pairs (chips/buttons ride the
+   audited .chip / .chip--active / .btn--ghost sets), NO motion — §10's
+   13-row inventory untouched, every quiz state is instant.
+   ============================================================ */
+
+/* JS-gated reveal, the theme-switcher grammar (:448-460): inert buttons
+   would be worse than absent ones. The quiz ships display:none until the
+   head script proves JS can run ([data-theme-ui='on'], set pre-paint in
+   BaseLayout). No-JS visitors never see a dead quiz; they keep today's
+   behavior (all cards visible, chip rows inert). */
+.quiz { display: none; }
+
+[data-theme-ui='on'] .quiz { display: block; }
+
+.quiz h2 { margin-bottom: 0.35rem; }
+
+.quiz-lead {
+  margin: 0 0 var(--space-4);
+  color: var(--muted);
+}
+
+/* One question at a time: steps toggle the global [hidden] rule
+   (:154-156, display:none !important) — this rule only sets rhythm. */
+.quiz-step { margin: 0 0 var(--space-4); }
+
+.quiz-q {
+  font-size: var(--font-size-base);
+  margin: 0 0 var(--space-3);
+}
+
+.quiz-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+/* Answer chips keep the base bordered .chip pill (:318-342) — unlike the
+   borderless :where(.filter-row) index chips (:2227-2229), the quiz is a
+   primary-action island and the border marks it. 44px tap floor at every
+   width (§8.3 spirit; the filter-row floor is ≤560px-scoped, quiz answers
+   are the page's primary CTA). */
+.quiz-options .chip { min-height: 44px; }
+
+.quiz-back { margin-top: var(--space-3); }
+
+/* Result panel: the ruled-entry grammar (BND-1 precedent :2035-2059) —
+   a --border-strong top rule, no box. */
+.quiz-result {
+  border-top: 1px solid var(--border-strong);
+  padding-top: var(--space-4);
+}
+
+.quiz-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.quiz-actions .btn { min-height: 44px; }

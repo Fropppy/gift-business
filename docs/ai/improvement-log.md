@@ -299,3 +299,24 @@ Mark promoted entries with → where they landed.
   dist href inventory now shows every landing link base-prefixed.
 - Promoted to → this entry; landing/href-affecting changes get a dist-level
   href-prefix inventory in QA, not only source conformance.
+
+## 2026-10-29 — Sub-200ms races need same-tick event dispatch to test
+
+- Observation: the gift-finder cross-review flagged a real race — a pending
+  200ms search-settle timer firing after finishQuiz() would collapse the
+  just-shown quiz result panel. Browser automation could not enter the
+  window: even a scripted click landed ~3s after arming the timer. Related:
+  a locator click timed out right after two gotos though the element was
+  fine — font-swap reflow kept failing Playwright's stability check, not a
+  missing element.
+- Change: finishQuiz now clearTimeout()s the settle timer before clearing
+  the search box (and the timer moved next to the engine state so the quiz
+  closure can reach it); commit() fires the panel-collapse hook only on a
+  real query change, so Enter in an already-empty box cannot dismiss a
+  showing result. Both verified in-browser, the race one via dispatching
+  the input event and the answer click inside a single evaluate tick, then
+  observing 450ms later.
+- Promoted to → this entry; timed-window bugs are exercised same-tick
+  (dispatchEvent + synchronous click in one page.evaluate), and a
+  post-navigation locator timeout gets a computed-style probe before it is
+  treated as a missing element.
