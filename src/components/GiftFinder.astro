@@ -1,0 +1,77 @@
+---
+// GiftFinder — "Chọn quà nhanh": the three-question guided gift finder
+// (/products/ only — rendered inside ProductGrid's showFilter block).
+//
+// Server-rendered markup ONLY. Every label ships in the HTML; the client
+// wiring lives in ProductGrid.astro's <script> (the filter-engine closure)
+// and only toggles `hidden`, aria-pressed, .chip--active and textContent.
+// Buttons only — zero free-text input, so there is no injection surface and
+// no IME handling. The quiz never fetches anything at runtime: the CSP
+// connect-src allow-list (BaseLayout.astro) is irrelevant to it.
+//
+// CSS lives in the dated append block at the end of global.css: the section
+// is display:none until [data-theme-ui='on'] proves JS can run (the
+// theme-switcher grammar) — no-JS visitors never see an inert quiz.
+import { asset } from '../utils/asset';
+---
+
+<section class="quiz" data-quiz aria-labelledby="quiz-title">
+  <h2 id="quiz-title">Chọn quà nhanh</h2>
+  <p class="quiz-lead">Ba câu nhanh — mình lọc ngay giỏ hợp cho bạn.</p>
+
+  {/* Bước 1 ships visible; steps 2/3 and the result toggle the global
+      [hidden] rule (global.css:154-156). One question at a time. */}
+  <div class="quiz-step" data-quiz-step="recipient">
+    <h3 class="quiz-q" id="quiz-q-recipient" tabindex="-1">1/3 · Người nhận là ai?</h3>
+    <div class="quiz-options" role="group" aria-labelledby="quiz-q-recipient">
+      <button type="button" class="chip" data-quiz-answer="recipient" data-quiz-value="bieu-sep" aria-pressed="false">Sếp, cấp trên</button>
+      <button type="button" class="chip" data-quiz-answer="recipient" data-quiz-value="gia-dinh" aria-pressed="false">Bố mẹ, người thân</button>
+      <button type="button" class="chip" data-quiz-answer="recipient" data-quiz-value="doanh-nghiep" aria-pressed="false">Công ty — đối tác, nhân viên</button>
+      <button type="button" class="chip" data-quiz-answer="recipient" data-quiz-value="tham-benh" aria-pressed="false">Người đang ốm</button>
+    </div>
+  </div>
+
+  <div class="quiz-step" data-quiz-step="occasion" hidden>
+    <h3 class="quiz-q" id="quiz-q-occasion" tabindex="-1">2/3 · Tặng dịp nào?</h3>
+    <div class="quiz-options" role="group" aria-labelledby="quiz-q-occasion">
+      <button type="button" class="chip" data-quiz-answer="occasion" data-quiz-value="tet" aria-pressed="false">Tết</button>
+      <button type="button" class="chip" data-quiz-answer="occasion" data-quiz-value="sinh-nhat" aria-pressed="false">Sinh nhật</button>
+      <button type="button" class="chip" data-quiz-answer="occasion" data-quiz-value="khai-truong" aria-pressed="false">Khai trương – tân gia</button>
+      <button type="button" class="chip" data-quiz-answer="occasion" data-quiz-value="cuoi-hoi" aria-pressed="false">Cưới hỏi</button>
+      <button type="button" class="chip" data-quiz-answer="occasion" data-quiz-value="tri-an" aria-pressed="false">Tốt nghiệp – tri ân</button>
+    </div>
+    <button type="button" class="btn btn--ghost quiz-back" data-quiz-back>Quay lại</button>
+  </div>
+
+  <div class="quiz-step" data-quiz-step="price" hidden>
+    <h3 class="quiz-q" id="quiz-q-price" tabindex="-1">3/3 · Ngân sách khoảng bao nhiêu?</h3>
+    <div class="quiz-options" role="group" aria-labelledby="quiz-q-price">
+      <button type="button" class="chip" data-quiz-answer="price" data-quiz-value="duoi-500" aria-pressed="false">Dưới 500k</button>
+      <button type="button" class="chip" data-quiz-answer="price" data-quiz-value="500-1tr" aria-pressed="false">500k – 1tr</button>
+      <button type="button" class="chip" data-quiz-answer="price" data-quiz-value="tren-1tr" aria-pressed="false">Trên 1tr</button>
+    </div>
+    <button type="button" class="btn btn--ghost quiz-back" data-quiz-back>Quay lại</button>
+  </div>
+
+  <div class="quiz-result" data-quiz-result hidden>
+    <h3 class="quiz-q" id="quiz-result-title" tabindex="-1">Kết quả</h3>
+    {/* Result-count status region — the existing data-search-status pattern
+        (ProductGrid.astro:57-67): present in initial markup before its first
+        textContent update, polite, atomic. Copy is set by the script (§(d)). */}
+    <p
+      class="form-status is-info"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      data-quiz-count
+      hidden
+    ></p>
+    <div class="quiz-actions">
+      <button type="button" class="btn btn--ghost" data-quiz-redo>Chọn lại</button>
+      {/* Exact reuse of the existing empty-state recovery anchor text
+          (ProductGrid.astro:118-121); a clean-URL navigation that clears
+          every ?param and works with JS disabled. */}
+      <a class="btn btn--ghost" href={asset('/products/')}>Bỏ lọc — xem tất cả giỏ quà</a>
+    </div>
+  </div>
+</section>

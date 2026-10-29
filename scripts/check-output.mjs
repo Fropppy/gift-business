@@ -37,6 +37,8 @@
  *      og:image with the versioned og-default-v1.png at the absolute
  *      base-prefixed URL, og:image:width 1200, og:image:height 630, and
  *      twitter:card summary_large_image.
+ *  10. The gift-finder quiz ships on dist/products/index.html: the [data-quiz]
+ *      section with its question steps and the data-quiz-count result region.
  *
  * Exit 1 on any failed assertion.
  */
@@ -289,6 +291,29 @@ if (robots) {
   assert(
     'robots.txt declares the sitemap with the full base-prefixed URL',
     /^Sitemap: https:\/\/fropppy\.github\.io\/gift-business\/sitemap\.xml$/m.test(robots)
+  );
+}
+
+/* --- 10. gift-finder quiz ships on /products/ (2026-10-29) --- */
+/* The quiz is a /products/-only surface (ProductGrid's showFilter block).
+   Both assertions ride SERVER-RENDERED markup, not the client bundle:
+   ProductGrid's <script> (quiz wiring included) is shared with the homepage
+   grid, so script strings like 'data-quiz' would false-positive there —
+   'data-quiz-step="recipient"' and the h2 copy exist only in the rendered
+   markup of the quiz component. */
+const productsHtml = read(path.join('products', 'index.html'));
+assert('dist/products/index.html exists', productsHtml !== null);
+if (productsHtml) {
+  assert(
+    'gift finder: [data-quiz] section with question steps present on /products/',
+    productsHtml.includes('data-quiz') &&
+      productsHtml.includes('data-quiz-step="recipient"') &&
+      productsHtml.includes('Chọn quà nhanh'),
+    'quiz marker + step markup + h2 copy'
+  );
+  assert(
+    'gift finder: result-count status region present (data-quiz-count)',
+    productsHtml.includes('data-quiz-count')
   );
 }
 

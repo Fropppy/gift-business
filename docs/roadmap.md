@@ -201,3 +201,23 @@ Now/Later stay honest).
   1280px: tile heading computed 19.2px/margin 0 after the swap, 8/2/4
   cards, no horizontal overflow anywhere, tet theme applies on the landing
   pages. All four gates green in this task's verification step.
+
+- 2026-10-29: guided gift finder "Chọn quà nhanh" live on /products/ — a
+  three-question, button-only quiz (người nhận → dịp → ngân sách) rendered
+  by the new GiftFinder component inside ProductGrid's filter block, with
+  all client logic in the existing ProductGrid script so the filter engine
+  stays the single writer of card visibility. The engine's tag state became
+  a LIST (?tag=bieu-sep+tet composes; single-tag deep links unchanged) so
+  the quiz's recipient×occasion pair filters the server-rendered cards via
+  their data-cat/data-tags/data-price datasets; empty pairs widen to the
+  occasion tag and say so in the result copy, and zero results land on the
+  existing data-filter-empty state with its "Bỏ lọc" recovery. Result URLs
+  are shareable (?tag=…&price=…), one-tap "Chọn lại" restores the pre-run
+  filter state, analytics ride the nmEvent queue (quiz_start /
+  quiz_complete with the three answers + result count), and a JS-gated CSS
+  reveal (data-theme-ui) keeps no-JS visitors from ever seeing an inert
+  quiz. a11y: native buttons, aria-pressed, per-step focus moves, a
+  role=status result region, h2 section heading. New CSS in one dated
+  append block (no new :root tokens, no motion); check-output gains the
+  quiz marker + count-region assertions on dist/products/. Gates: all four
+  run green in this change's verification step.
