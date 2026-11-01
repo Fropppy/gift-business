@@ -12,6 +12,7 @@ from here or `npm run check:docs` fails, so un-indexed docs cannot merge.
 | --- | --- | --- |
 | [docs/README.md](README.md) | This index. | You are lost. |
 | [docs/architecture.md](architecture.md) | Site, theme engine, order pipeline, build/CI, security posture, known limitations. | You need to know how the system IS. |
+| [docs/security-baseline.md](security-baseline.md) | Security baseline snapshot (alerts, audit, Mimosa seal), defense-layer index, re-baselining procedure, alert history. | You are proving the repo is clean as of a date, or re-establishing that. |
 | [docs/decisions.md](decisions.md) | Append-only ADR log (ADR-0001…) with rationale. | You need to know WHY something was chosen, or want to change it. |
 | [docs/operations.md](operations.md) | Runbook: go-live checklist, placeholder replacement, order triage, Apps Script redeploy, release flow. | You are doing something repeated, not reading. |
 | [docs/monitoring.md](monitoring.md) | Monitoring runbook: daily 07:00 digest automation (prompt pinned), StatusCake fast lane (pending owner), alert flow, canonical do-not-alarm list, residual risks. | An alert fired, the digest flagged something, or you are (re)creating the watch. |
@@ -44,6 +45,9 @@ Short task paths; follow only the one that matches your task.
 - **Monitoring** → [monitoring.md](monitoring.md) (the two lanes + the
   do-not-alarm list) + [operations.md](operations.md#release-flow) (what to
   do when the deploy is red).
+- **Security baseline / re-scan** → [security-baseline.md](security-baseline.md)
+  (snapshot + procedure) + [architecture.md](architecture.md#security-posture)
+  (the standing layers).
 
 ## Conventions
 

@@ -16,6 +16,7 @@ One question → one file. Links, never summaries.
 | How does the owner update products / contact data himself? | [docs/owner-updates.md](docs/owner-updates.md) |
 | What is pending / blocked / conditional? | [docs/roadmap.md](docs/roadmap.md) |
 | How is the live site monitored? Alerts, digest, do-not-alarm? | [docs/monitoring.md](docs/monitoring.md) |
+| Is the repo clean security-wise? Baseline, seals, dependabot history? | [docs/security-baseline.md](docs/security-baseline.md) |
 | How does the memory system work? | [docs/ai/memory-system.md](docs/ai/memory-system.md) |
 | Design-system rationale (tokens, themes, WCAG)? | [docs/design-language.md](docs/design-language.md) |
 | Full platform-comparison evidence behind ADR-0001? | [docs/research/ecommerce-platform-research.md](docs/research/ecommerce-platform-research.md) |
