@@ -28,7 +28,7 @@ jobs:
         # (.github/dependabot.yml) keeps these current.
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Install, build, and upload your site output
-        uses: withastro/action@3eafd002e65cc31b4f0eae0bb05450d521562247 # v6
+        uses: withastro/action@a8b97df764791eb61fbf3338ef713b0e61ae05c5 # v6
         with:
           # The action defaults to Node 24, but the required check
           # (check.yml) builds on Node 22 — the published build must be
@@ -84,7 +84,11 @@ jobs:
           # counting (grep -o | wc -l): line counting silently breaks if
           # products.json is ever reformatted onto fewer lines.
           N=$(grep -o '"slug"' src/data/products.json | wc -l)   # 16 today
-          EXPECT=$((N + 4))   # /, /about/, /contact/, /products/
+          EXPECT=$((N + 7))   # /, /about/, /contact/, /products/ + the three
+                              # /danh-muc/ landing pages (ADR-0010; the route
+                              # list lives in generate-sitemap.mjs and
+                              # check-output.mjs — keep all expectations in
+                              # lockstep when routes change).
           # Home: 200 + title + canonical + CSP with both Apps Script hops
           body=$(curl --fail --retry 5 --retry-delay 3 --retry-connrefused -s "$BASE/")
           printf '%s' "$body" | grep -q 'Nhà Mai'

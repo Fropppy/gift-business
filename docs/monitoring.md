@@ -37,8 +37,9 @@ fire is 2026-10-23.
 Outputs land only under `out/daily/` (gitignored): `<date>.md` ≤ 15 lines
 plus the sitemap-diff baseline, pruned to the newest 30 files. The Friday
 edition (`out/weekly`) is trend research and absorbs the weekly full-sitemap
-sweep — fetch `/sitemap.xml`, probe every `<loc>` (currently 20 = 16
-products + 4 static); sweep everything, do not sample. The write-restriction
+sweep — fetch `/sitemap.xml`, probe every `<loc>` (currently 23 = 16
+products + 7 static, incl. the three `/danh-muc/` landing pages); sweep
+everything, do not sample. The write-restriction
 is instruction-level, not a permission boundary: the scheduled session runs
 with the workspace user's privileges; the prompt is the guard.
 
@@ -130,10 +131,10 @@ flag them as incidents:
   are routine GitHub automation — surface new ones informationally.
 - **Theme auto-switching** (Nov–Feb → tet, Sep → trung-thu, localStorage
   override) is applied client-side; served HTML is identical year-round.
-- **Sitemap has no `lastmod`** by design (`scripts/generate-sitemap.mjs:11-13`
+- **Sitemap has no `lastmod`** by design (`scripts/generate-sitemap.mjs:12-14`
   — a fabricated date is worse than none).
 - **`/404` is deliberately excluded from the sitemap**
-  (`scripts/generate-sitemap.mjs:45`); unknown paths returning 404 is correct
+  (`scripts/generate-sitemap.mjs:46`); unknown paths returning 404 is correct
   behavior.
 - **Local `dist/`** is build output — never diffed or alarmed on.
 - **The Apps Script 302 hop** to `script.googleusercontent.com` (once the

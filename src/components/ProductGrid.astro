@@ -2,6 +2,7 @@
 import type { Product } from '../utils/catalog';
 import { categories } from '../utils/catalog';
 import ProductCard from './ProductCard.astro';
+import GiftFinder from './GiftFinder.astro';
 import { fold } from '../utils/search';
 import occasions from '../data/occasions.json';
 import { site } from '../utils/site';
@@ -40,6 +41,7 @@ const searchIndex = products.map((p) => ({
 {
   showFilter && (
     <>
+      <GiftFinder />
       <form class="filter-row search-row" role="search" data-search-form>
         <label class="filter-label" for="product-q">Tìm kiếm giỏ quà</label>
         <input
@@ -175,35 +177,47 @@ const searchIndex = products.map((p) => ({
     }
 
     let currentCat = '';
-    let currentTag: string | null = null;
+    let currentTags: string[] = [];
     let currentPrice = '';
     let currentQ = ''; // active (folded) text query — '' means not filtering
     let lastCommitted = ''; // de-dupes URL writes and search_apply events
+    // The search debounce's pending timer, hoisted here (not scoped to the
+    // searchInput block) so finishQuiz can cancel it: a settle armed in the
+    // last 200ms before the quiz finishes would fire AFTER the quiz cleared
+    // the box, and its commit() would collapse the just-shown result panel.
+    let searchSettleTimer: ReturnType<typeof setTimeout> | undefined;
+    // Assigned by the quiz wiring below; called at the top of every non-quiz
+    // engine mutation (chip clicks, search commits) so the quiz result panel
+    // can never assert a count for a grid the user has since changed.
+    let onEngineMutation: (() => void) | null = null;
 
-    function apply(cat: string, tag: string | null, price: string, q: string) {
+    function apply(cat: string, tags: string[], price: string, q: string) {
       let shown = 0;
       const tier = price ? PRICE_TIERS[price] : undefined;
       const tokens = q.split(/\s+/).filter(Boolean);
       cards.forEach((card) => {
         const matchCat = !cat || card.dataset.cat === cat;
-        const tags = (card.dataset.tags || '').split(' ');
-        const matchTag = !tag || tags.includes(tag);
+        const cardTags = (card.dataset.tags || '').split(' ');
+        const matchTags = tags.length === 0 || tags.every((t) => cardTags.includes(t));
         const amount = Number(card.dataset.price ?? '');
         const matchPrice = !tier || (Number.isFinite(amount) && tier(amount));
         // Token-AND by substring containment over the folded haystack —
         // "qua gio tet" (any word order, any tone) must match.
         const haystack = tokens.length ? cardHaystack(card) : null;
         const matchText = !tokens.length || (haystack !== null && matchesTokens(tokens, haystack));
-        const visible = matchCat && matchTag && matchPrice && matchText;
+        const visible = matchCat && matchTags && matchPrice && matchText;
         card.hidden = !visible;
         if (visible) shown += 1;
       });
       catChips.forEach((chip) =>
         chip.classList.toggle('chip--active', (chip.dataset.filterCat || '') === cat)
       );
-      // tag ?? '' unlights every chip when tag is null (?category= deep link)
+      // A chip is lit only when the tag list is EXACTLY this single tag —
+      // a quiz pair (recipient+occasion) lights nothing; the quiz result
+      // panel is the visible truth there, and any chip click collapses
+      // the pair to that single tag.
       tagChips.forEach((chip) =>
-        chip.classList.toggle('chip--active', (chip.dataset.filterTag || '') === (tag ?? ''))
+        chip.classList.toggle('chip--active', tags.length === 1 && tags[0] === (chip.dataset.filterTag || ''))
       );
       priceChips.forEach((chip) =>
         chip.classList.toggle('chip--active', chip.dataset.filterPrice === price)
@@ -246,9 +260,15 @@ const searchIndex = products.map((p) => ({
     function commit(raw: string, cause: 'load' | 'settle' | 'enter' | 'clear') {
       const q = activeQuery(raw);
       const changed = q !== lastCommitted;
+      // Fire the mutation hook only on a real state change: a no-op commit
+      // (Enter in an already-empty box) must not collapse a showing quiz
+      // result panel — the grid state is exactly what that panel asserts.
+      // Clearing a live query still fires: it changes q away from
+      // lastCommitted, so `changed` covers it.
+      if (changed) onEngineMutation?.();
       lastCommitted = q;
       currentQ = q;
-      const shown = apply(currentCat, currentTag, currentPrice, q);
+      const shown = apply(currentCat, currentTags, currentPrice, q);
       if (changed) {
         const url = new URL(window.location.href);
         if (q) url.searchParams.set('q', raw.trim());
@@ -265,6 +285,7 @@ const searchIndex = products.map((p) => ({
 
     catChips.forEach((chip) => {
       chip.addEventListener('click', () => {
+        onEngineMutation?.();
         const cat = chip.dataset.filterCat || '';
         const url = new URL(window.location.href);
         if (cat) url.searchParams.set('category', cat);
@@ -272,13 +293,14 @@ const searchIndex = products.map((p) => ({
         url.searchParams.delete('tag');
         history.replaceState(null, '', url);
         currentCat = cat;
-        currentTag = null;
-        apply(currentCat, currentTag, currentPrice, currentQ);
+        currentTags = [];
+        apply(currentCat, currentTags, currentPrice, currentQ);
       });
     });
 
     priceChips.forEach((chip) => {
       chip.addEventListener('click', () => {
+        onEngineMutation?.();
         // click the active tier again to clear it
         const price = chip.dataset.filterPrice === currentPrice ? '' : (chip.dataset.filterPrice ?? '');
         const url = new URL(window.location.href);
@@ -286,29 +308,31 @@ const searchIndex = products.map((p) => ({
         else url.searchParams.delete('price');
         history.replaceState(null, '', url);
         currentPrice = price;
-        apply(currentCat, currentTag, currentPrice, currentQ);
+        apply(currentCat, currentTags, currentPrice, currentQ);
       });
     });
 
     tagChips.forEach((chip) => {
       chip.addEventListener('click', () => {
+        onEngineMutation?.();
         // click the active occasion again to clear it (price-toggle pattern).
-        // Setting a tag REPLACES any category — URL param and state change in
-        // the same stroke, mirroring the cat handler's discipline: editing the
-        // URL alone would leave cards filtered by cat+tag while the address
-        // bar shows only ?tag=, silently changing results on reload.
-        const tag = chip.dataset.filterTag === currentTag ? null : (chip.dataset.filterTag ?? null);
+        // Setting a tag REPLACES the whole list (a quiz pair collapses to the
+        // clicked tag) and REPLACES any category — URL param and state change
+        // in the same stroke, mirroring the cat handler's discipline.
+        const chipTag = chip.dataset.filterTag ?? '';
+        const nextTags =
+          currentTags.length === 1 && currentTags[0] === chipTag ? [] : [chipTag];
         const url = new URL(window.location.href);
-        if (tag) {
-          url.searchParams.set('tag', tag);
+        if (nextTags.length) {
+          url.searchParams.set('tag', nextTags.join('+'));
           url.searchParams.delete('category');
         } else {
           url.searchParams.delete('tag');
         }
         history.replaceState(null, '', url);
-        if (tag) currentCat = '';
-        currentTag = tag;
-        apply(currentCat, currentTag, currentPrice, currentQ);
+        if (nextTags.length) currentCat = '';
+        currentTags = nextTags;
+        apply(currentCat, currentTags, currentPrice, currentQ);
       });
     });
 
@@ -317,14 +341,13 @@ const searchIndex = products.map((p) => ({
     // URL; the native ⓧ of type="search" arrives as an empty `search` event.
     if (searchInput) {
       const form = searchInput.closest<HTMLFormElement>('[data-search-form]');
-      let timer: ReturnType<typeof setTimeout> | undefined;
       const flush = (cause: 'enter' | 'clear') => {
-        clearTimeout(timer);
+        clearTimeout(searchSettleTimer);
         commit(searchInput.value, cause);
       };
       const settle = () => {
-        clearTimeout(timer);
-        timer = setTimeout(() => commit(searchInput.value, 'settle'), 200);
+        clearTimeout(searchSettleTimer);
+        searchSettleTimer = setTimeout(() => commit(searchInput.value, 'settle'), 200);
       };
 
       searchInput.addEventListener('input', (event) => {
@@ -357,7 +380,10 @@ const searchIndex = products.map((p) => ({
 
     // initial state from URL (?category= wins over ?tag=; ?price= and ?q= combine)
     currentCat = params.get('category') || '';
-    currentTag = currentCat ? null : params.get('tag');
+    const tagParam = currentCat ? null : params.get('tag');
+    // Tolerant parse: URLSearchParams decodes a bare '+' as a SPACE, so split on
+    // both — the script's own %2B form and a hand-shared bare-+ form both work.
+    currentTags = tagParam ? tagParam.split(/[+\s]+/).filter(Boolean) : [];
     const priceParam = params.get('price');
     currentPrice = priceParam && priceParam in PRICE_TIERS ? priceParam : '';
     // ?q= only means something where the data island shipped. On grids
@@ -367,6 +393,218 @@ const searchIndex = products.map((p) => ({
     // their pre-existing behavior on those grids.
     const qParam = island ? params.get('q') || '' : '';
     if (searchInput && qParam) searchInput.value = qParam; // deep link fills the box
-    if (currentCat || currentTag || currentPrice || qParam) commit(qParam, 'load');
+    if (currentCat || currentTags.length > 0 || currentPrice || qParam) commit(qParam, 'load');
+
+    // --- "Chọn quà nhanh" guided gift finder (3 questions → existing grid) ---
+    // Markup: src/components/GiftFinder.astro (showFilter block, /products/ only).
+    // The quiz NEVER writes card.hidden itself — it computes answer tags and
+    // routes them through apply() above, so the engine stays the single writer
+    // of card visibility. Zero-result runs land on the engine's existing
+    // [data-filter-empty] state (its "Bỏ lọc" recovery included) exactly like a
+    // chip dead end; the result panel's status region narrates the outcome.
+    const quiz = document.querySelector<HTMLElement>('[data-quiz]');
+    if (quiz) {
+      const steps = Array.from(quiz.querySelectorAll<HTMLElement>('[data-quiz-step]'));
+      const resultPanel = quiz.querySelector<HTMLElement>('[data-quiz-result]');
+      const answerBtns = Array.from(quiz.querySelectorAll<HTMLButtonElement>('[data-quiz-answer]'));
+      const backBtns = Array.from(quiz.querySelectorAll<HTMLButtonElement>('[data-quiz-back]'));
+      const redoBtn = quiz.querySelector<HTMLButtonElement>('[data-quiz-redo]');
+      const countRegion = quiz.querySelector<HTMLElement>('[data-quiz-count]');
+      const answers: Record<'recipient' | 'occasion' | 'price', string> = {
+        recipient: '',
+        occasion: '',
+        price: '',
+      };
+      let quizStep = 0; // 0..2 = questions, 3 = result
+      let quizStarted = false;
+      // Engine snapshot captured at the run's FIRST answer (the same moment
+      // quiz_start fires — DECISIONS 14): "Chọn lại" restores it (grid, chips,
+      // search box and URL return to their pre-run state in one tap; chip/search
+      // changes made mid-quiz are deliberately NOT baked in).
+      let preQuiz: { cat: string; tags: string[]; price: string; rawQ: string } | null = null;
+
+      // Label of the chosen answer, read from the button's own textContent —
+      // the Vietnamese label lives in ONE place (the markup).
+      function quizLabel(q: 'recipient' | 'occasion' | 'price'): string {
+        const btn = answerBtns.find(
+          (b) => b.dataset.quizAnswer === q && b.dataset.quizValue === answers[q]
+        );
+        return btn?.textContent?.trim() ?? answers[q];
+      }
+
+      function showQuizStep(idx: number) {
+        quizStep = idx;
+        steps.forEach((s, i) => {
+          s.hidden = i !== idx;
+        });
+        if (resultPanel) resultPanel.hidden = idx !== 3;
+        // Move focus to the newly revealed heading — screen-reader users hear
+        // the next question (or the result) without hunting for it. Page load
+        // never lands here: step 0 ships visible, no focus steal. Keyboard
+        // activation gets the :focus-visible ring on the heading; pointer
+        // activation does not — the browser heuristic, no CSS needed.
+        const target = idx === 3 ? resultPanel : steps[idx];
+        target?.querySelector<HTMLElement>('.quiz-q')?.focus();
+      }
+
+      // DECISIONS 13: while the result panel is showing, any non-quiz engine
+      // mutation (chip click / search commit — those call onEngineMutation before
+      // apply) collapses the quiz to question 1 with answers preserved. The
+      // panel only ever exists while the grid is in the quiz-produced state.
+      onEngineMutation = () => {
+        if (quizStep !== 3) return;
+        if (countRegion) {
+          countRegion.textContent = '';
+          countRegion.hidden = true;
+        }
+        showQuizStep(0);
+      };
+
+      function writeQuizUrl(tags: string[], price: string) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('category');
+        url.searchParams.delete('q');
+        if (tags.length) url.searchParams.set('tag', tags.join('+'));
+        else url.searchParams.delete('tag');
+        if (price) url.searchParams.set('price', price);
+        else url.searchParams.delete('price');
+        history.replaceState(null, '', url);
+      }
+
+      function finishQuiz() {
+        // Quiz answers own the whole filter for this stroke: category and text
+        // search clear (the box included — a stale query would keep filtering
+        // invisibly otherwise; same URL/state discipline as the chip handlers).
+        // Cancel any armed settle first (searchSettleTimer's hoist comment):
+        // finishQuiz runs inside the click handler, a pending 200ms settle
+        // would otherwise land right after this and collapse this result.
+        clearTimeout(searchSettleTimer);
+        if (searchInput) searchInput.value = '';
+        lastCommitted = '';
+        currentQ = '';
+        currentCat = '';
+        const pairTags = [answers.recipient, answers.occasion].filter(Boolean);
+        // WIDEN GATE = the PAIR COUNT WITHOUT PRICE (DECISIONS 5): apply() with
+        // price '' matches every tier, so pairCount is the pure pair overlap —
+        // NOT the pair×price count (that would silently widen away the recipient
+        // choice whenever only the budget emptied the grid). Two synchronous
+        // apply() passes never paint between them; the final call below is the
+        // state the user sees.
+        const pairCount = apply('', pairTags, '', '');
+        let appliedTags = pairTags;
+        if (pairCount === 0 && answers.recipient && answers.occasion) {
+          // Most recipient×occasion pairs are empty in a 16-product catalog —
+          // filter by the occasion alone and SAY so in the result copy. The
+          // budget is the shopper's hard constraint and is never silently
+          // dropped: the price tier still applies to the widened filter.
+          appliedTags = [answers.occasion];
+        }
+        const shown = apply('', appliedTags, answers.price, '');
+        currentTags = appliedTags;
+        currentPrice = answers.price;
+        writeQuizUrl(appliedTags, answers.price);
+        if (countRegion) {
+          countRegion.hidden = false;
+          const choices = `Bạn chọn: ${quizLabel('recipient')} · ${quizLabel('occasion')} · ${quizLabel('price')}`;
+          const occasionLabel = quizLabel('occasion');
+          if (appliedTags.length === 2) {
+            if (shown > 1) {
+              countRegion.textContent = `${choices}. Mình tìm thấy ${shown} giỏ hợp — xem dưới đây nhé.`;
+            } else if (shown === 1) {
+              countRegion.textContent = `${choices}. Đúng luôn — mình có 1 giỏ rất hợp, xem ngay dưới đây nhé.`;
+            } else {
+              countRegion.textContent = `${choices}. Trong tầm giá này mình chưa có giỏ nào khớp — bạn nhắn Zalo, mình gửi ảnh mẫu mới nhất và làm giỏ theo đúng ngân sách nhé.`;
+            }
+          } else if (shown > 1) {
+            countRegion.textContent = `${choices}. Chưa có giỏ nào khớp cả hai lựa chọn đầu — mình tạm lọc theo dịp ${occasionLabel}: ${shown} giỏ hợp.`;
+          } else if (shown === 1) {
+            countRegion.textContent = `${choices}. Chưa có giỏ nào khớp cả hai lựa chọn đầu — mình tạm lọc theo dịp ${occasionLabel}: 1 giỏ rất hợp.`;
+          } else {
+            countRegion.textContent = `${choices}. Chưa có giỏ nào khớp cả hai lựa chọn đầu — mình tạm lọc theo dịp ${occasionLabel}, nhưng chưa có giỏ nào trong tầm giá bạn chọn. Bạn nhắn Zalo, mình làm giỏ thiết kế theo ngân sách của bạn nhé.`;
+          }
+        }
+        nmEvent('quiz_complete', {
+          recipient: answers.recipient,
+          occasion: answers.occasion,
+          budget: answers.price,
+          result_count: shown,
+        });
+        showQuizStep(3);
+      }
+
+      answerBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const q = btn.dataset.quizAnswer as 'recipient' | 'occasion' | 'price';
+          answers[q] = btn.dataset.quizValue ?? '';
+          // Single-select within the step: aria-pressed mirrors the
+          // .chip--active visual so going back shows the earlier choice lit.
+          answerBtns
+            .filter((b) => b.dataset.quizAnswer === q)
+            .forEach((b) => {
+              const on = b === btn;
+              b.setAttribute('aria-pressed', String(on));
+              b.classList.toggle('chip--active', on);
+            });
+          if (!quizStarted) {
+            quizStarted = true;
+            // Snapshot BEFORE any quiz effect exists (DECISIONS 14): the grid is
+            // still exactly as the user left it when this run started.
+            preQuiz = {
+              cat: currentCat,
+              tags: currentTags.slice(),
+              price: currentPrice,
+              rawQ: searchInput?.value ?? '',
+            };
+            nmEvent('quiz_start', {});
+          }
+          if (quizStep < 2) showQuizStep(quizStep + 1);
+          else finishQuiz();
+        });
+      });
+
+      backBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (quizStep > 0 && quizStep < 3) showQuizStep(quizStep - 1);
+        });
+      });
+
+      redoBtn?.addEventListener('click', () => {
+        // Undo + restart: restore the first-answer snapshot (grid, chips,
+        // search box, URL — the pre-run state), clear answers, back to
+        // question 1. The next run's first answer overwrites the snapshot.
+        if (preQuiz) {
+          currentCat = preQuiz.cat;
+          currentTags = preQuiz.tags.slice();
+          currentPrice = preQuiz.price;
+          if (searchInput) searchInput.value = preQuiz.rawQ;
+          currentQ = activeQuery(preQuiz.rawQ);
+          lastCommitted = currentQ;
+          apply(currentCat, currentTags, currentPrice, currentQ);
+          const url = new URL(window.location.href);
+          if (currentCat) url.searchParams.set('category', currentCat);
+          else url.searchParams.delete('category');
+          if (currentTags.length) url.searchParams.set('tag', currentTags.join('+'));
+          else url.searchParams.delete('tag');
+          if (currentPrice) url.searchParams.set('price', currentPrice);
+          else url.searchParams.delete('price');
+          if (currentQ) url.searchParams.set('q', preQuiz.rawQ.trim());
+          else url.searchParams.delete('q');
+          history.replaceState(null, '', url);
+        }
+        answers.recipient = '';
+        answers.occasion = '';
+        answers.price = '';
+        answerBtns.forEach((b) => {
+          b.setAttribute('aria-pressed', 'false');
+          b.classList.remove('chip--active');
+        });
+        if (countRegion) {
+          countRegion.textContent = '';
+          countRegion.hidden = true;
+        }
+        quizStarted = false; // a redo is a new run — its first answer re-fires quiz_start
+        showQuizStep(0);
+      });
+    }
   }
 </script>

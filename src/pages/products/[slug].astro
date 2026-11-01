@@ -77,6 +77,23 @@ const productSchema = {
     },
   ],
 };
+
+// SEO suite — links whose category/tag owns a landing page repoint there;
+// everything else keeps the ?category=/?tag= filter URLs of /products/
+// (the self-canonical there consolidates the variants).
+const LANDING_BY_CATEGORY: Record<string, string> = {
+  'gio-qua-tet': '/danh-muc/gio-qua-tet/',
+  'qua-khai-truong-tan-gia': '/danh-muc/qua-khai-truong-tan-gia/',
+  'qua-tang-doanh-nghiep': '/danh-muc/qua-tang-doanh-nghiep/',
+};
+const LANDING_BY_TAG: Record<string, string> = {
+  tet: '/danh-muc/gio-qua-tet/',
+  'khai-truong': '/danh-muc/qua-khai-truong-tan-gia/',
+};
+const categoryHref = (slug: string) =>
+  LANDING_BY_CATEGORY[slug] ? asset(LANDING_BY_CATEGORY[slug]) : `${asset('/products/')}?category=${slug}`;
+const tagHref = (tag: string) =>
+  LANDING_BY_TAG[tag] ? asset(LANDING_BY_TAG[tag]) : `${asset('/products/')}?tag=${tag}`;
 ---
 
 <BaseLayout title={product.name} description={metaDescription} ogType="product">
@@ -85,7 +102,7 @@ const productSchema = {
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href={asset('/')}>Trang chủ</a> ›
       <a href={asset('/products/')}>Giỏ quà</a> ›
-      {category && <a href={`${asset('/products/')}?category=${category.slug}`}>{category.name}</a>} ›
+      {category && <a href={categoryHref(category.slug)}>{category.name}</a>} ›
       <span aria-current="page">{product.name}</span>
     </nav>
 
@@ -97,13 +114,14 @@ const productSchema = {
           alt={`Ảnh minh họa: ${product.name}`}
           width="800"
           height="600"
+          fetchpriority="high"
         />
       </div>
 
       <div>
         {category && (
           <span class="card-cat">
-            <a href={`${asset('/products/')}?category=${category.slug}`}>{category.name}</a>
+            <a href={categoryHref(category.slug)}>{category.name}</a>
           </span>
         )}
         <h1>{product.name}</h1>
@@ -134,7 +152,7 @@ const productSchema = {
                     {occasionLinks.map((o, i) => (
                       <Fragment>
                         {i > 0 && ' · '}
-                        <a href={`${asset('/products/')}?tag=${o.tag}`}>{o.name}</a>
+                        <a href={tagHref(o.tag)}>{o.name}</a>
                       </Fragment>
                     ))}
                   </dd>

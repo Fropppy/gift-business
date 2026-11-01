@@ -81,12 +81,12 @@ const localBusiness = {
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:locale" content="vi_VN" />
-    {/* TODO(og:image — seo-proposal P1-1): deliberately NOT emitted yet.
-        public/images/ holds only SVGs and social crawlers (Zalo/Facebook)
-        won't render them; needs a real ~1200×630 raster (PNG/JPEG) from the
-        owner. Once it exists, add og:image + og:image:width/height/alt
-        (+ twitter:card=summary_large_image). Astro comment on purpose so the
-        TODO stays in source without shipping to the built HTML. */}
+    <meta property="og:image" content={new URL(asset('/images/og-default-v1.png'), Astro.site).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Nhà Mai — giỏ quà Tết và quà tặng giao nhanh TP. HCM, con dấu vàng và cành mai trên nền kem" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {/* og:image is versioned on purpose — Facebook and Zalo cache previews by URL: to swap the image, ship a NEW filename (og-default-v2.png), update the meta line above, then re-scrape via Facebook Sharing Debugger and Zalo "Gỡ lỗi chia sẻ". */}
     <link rel="canonical" href={canonical} />
     <script type="application/ld+json" set:html={JSON.stringify(localBusiness).replace(/</g, '\\u003c')} />
     <link rel="icon" type="image/svg+xml" href={asset('/favicon.svg')} />

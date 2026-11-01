@@ -247,3 +247,76 @@ Mark promoted entries with → where they landed.
 - Promoted to → the verification paragraph of
   docs/design-language.md §11 (this entry is the receipt).
 
+
+## 2026-10-28 — Workflow-tool lessons from the SEO suite run
+
+- Observation: five failures across the /workflow runs, all tool-shape, none
+  content: (1) artifact.file description is capped at 500 chars — a
+  subagent-returned summary interpolated into it overran and killed the run
+  at the last step; (2) artifact.file refuses paths under the gitignored
+  out/ tree ("does not exist or is not a regular file") even though the
+  file exists — the artifact store cannot publish untracked outputs, so
+  deliverables in out/ must be surfaced via log() + the final report
+  instead; (3) the workflow facade forbids `typeof world.run` references —
+  declare a structural interface (GateOutcome) for result types; (4) a
+  zsh for-loop variable named `path` silently clobbers $PATH (zsh special
+  variable) and broke every later command in the cell; (5) a dist
+  spot-check regex counting `class="card` prefix-matched card-body/
+  card-zalo subclasses (8 cards read as 72) — count with a boundary
+  (class="card(" |")").
+- Change: all five fixed in-session (script amendments reused cached work;
+  the spot-check was re-verified with boundary regexes and JSON-LD parse);
+  the deterministic gates were never affected.
+- Promoted to → this entry (ZCode-workflow authoring rules also live in
+  personal agent memory; repo gates unchanged).
+
+## 2026-10-28 — The sitemap route contract has a third copy in deploy.yml
+
+- Observation: the SEO suite moved the sitemap route set 20→23 in the two
+  known lockstep lists (scripts/generate-sitemap.mjs, scripts/check-output.mjs
+  — both audited and extended in the same commit, all four gates green), but
+  the deploy workflow's smoke job computes its own expectation
+  (deploy.yml EXPECT = products + 4) and went red on main after merge — the
+  suite's audit never covered .github/workflows/deploy.yml because the spec
+  scoped "no CI changes" as "no CI edits needed", and the doc-drift audit of
+  2026-10-28 had already flagged the smoke job as documented nowhere.
+- Change: deploy.yml expectation bumped to products + 7 with a lockstep
+  comment naming the two canonical route lists; docs/monitoring.md weekly
+  sweep count updated 20→23 in the same commit.
+- Promoted to → the lockstep comment in deploy.yml; when routes change,
+  grep for EXPECT/N+S across scripts/ and .github/ before merging.
+
+## 2026-10-28 — Verbatim specs ship verbatim bugs; check hrefs in dist
+
+- Observation: the W6(d) spec snippet skipped asset() on the
+  LANDING_BY_TAG lookup, so the two repointed occasion chips linked to
+  /danh-muc/... without the /gift-business/ base — a live 404. The
+  implementer copied the spec verbatim (correct per contract), both
+  conformance reviews verified fidelity to the spec, and the browser QA
+  read the href values without checking base-prefixing; only a live href
+  inventory (grep -o 'href=...' | sort -u on dist) exposed it.
+- Change: OccasionStrip.astro wraps the map lookup in asset() (one line);
+  dist href inventory now shows every landing link base-prefixed.
+- Promoted to → this entry; landing/href-affecting changes get a dist-level
+  href-prefix inventory in QA, not only source conformance.
+
+## 2026-10-29 — Sub-200ms races need same-tick event dispatch to test
+
+- Observation: the gift-finder cross-review flagged a real race — a pending
+  200ms search-settle timer firing after finishQuiz() would collapse the
+  just-shown quiz result panel. Browser automation could not enter the
+  window: even a scripted click landed ~3s after arming the timer. Related:
+  a locator click timed out right after two gotos though the element was
+  fine — font-swap reflow kept failing Playwright's stability check, not a
+  missing element.
+- Change: finishQuiz now clearTimeout()s the settle timer before clearing
+  the search box (and the timer moved next to the engine state so the quiz
+  closure can reach it); commit() fires the panel-collapse hook only on a
+  real query change, so Enter in an already-empty box cannot dismiss a
+  showing result. Both verified in-browser, the race one via dispatching
+  the input event and the answer click inside a single evaluate tick, then
+  observing 450ms later.
+- Promoted to → this entry; timed-window bugs are exercised same-tick
+  (dispatchEvent + synchronous click in one page.evaluate), and a
+  post-navigation locator timeout gets a computed-style probe before it is
+  treated as a missing element.

@@ -7,7 +7,7 @@ for how to operate it, [operations.md](operations.md).
 
 Static Astro 7 (`astro ^7.3.5` — the sole dependency in package.json; no
 adapter, pure static output, `astro.config.mjs:13-16`). `npm run build`
-emits 21 pages into dist/. There is no JS framework and no server.
+emits **24** pages into dist/. There is no JS framework and no server.
 
 - `src/layouts/BaseLayout.astro` — theme engine + CSP meta + the Zalo/hotline
   floating button (BaseLayout.astro:184-200) on every page.
@@ -103,7 +103,7 @@ chain also runs in CI).
 
 ## Security posture
 
-CSP meta on every page (BaseLayout.astro:72-75; asserted on 21/21 dist/
+CSP meta on every page (BaseLayout.astro:72-75; asserted on 24/24 dist/
 pages by check-output.mjs): `default-src 'none'`, and `connect-src`
 allow-lists BOTH https://script.google.com AND
 https://script.googleusercontent.com — the Apps Script /exec URL answers
