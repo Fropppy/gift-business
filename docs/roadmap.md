@@ -12,8 +12,6 @@ Now/Later stay honest).
   scheduled task per session and this repo's session already owns the
   Friday weekly). Then StatusCake free signup + test-fire and residual-risk
   sign-off (monitoring.md → Fast lane / Residual risks).
-- Review-merge Dependabot PR #8 (actions/setup-node 7.0.0 → 7.1.0) — a CI
-  change, owner's call.
 - Deploy the Apps Script and set `orderEndpoint` (unblocks real orders; full
   path in operations.md → Go-live checklist).
 - Replace placeholder content that is LIVE on the public site today: sample
@@ -221,3 +219,11 @@ Now/Later stay honest).
   append block (no new :root tokens, no motion); check-output gains the
   quiz marker + count-region assertions on dist/products/. Gates: all four
   run green in this change's verification step.
+
+- 2026-11-01: all 9 open Dependabot alerts (5 high, 4 moderate — 8× undici
+  under astro→unifont, 1× zod under astro) fixed by merging dependabot PR
+  #15 (undici 8.11.2→8.12.3, zod 4.6.5→4.6.7, lockfile-only) into main
+  (f68779a) after a two-workflow audit + verify pass; both packages are
+  build-time only, dist/ ships zero references. npm audit exit 0, alerts
+  0 open, deploy + smoke green. The security baseline (snapshot + seals +
+  re-baselining procedure) is now documented in security-baseline.md.
