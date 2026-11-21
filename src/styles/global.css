@@ -2526,11 +2526,12 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
    (between #gio-noi-bat and the Steps section).
 
    The band is seasonal CONTENT, not theme-scoped, so it must be
-   tet-visible in EVERY theme. Tokens only: --tet and --bg are both
-   theme-overridden (base :14/:32, tet :98/:101, trung-thu :121),
-   so the 6% wash stays light in all themes and body/muted text on
-   it keeps AA contrast (gate pairs, scripts/check-contrast.mjs:84+,
-   are token-level and unaffected by this component rule).
+   tet-visible in EVERY theme. Tokens only: --tet is defined at base
+   :32 and tet :101 (trung-thu inherits base), --bg at base :14,
+   tet :98, trung-thu :121 — so the 6% wash stays light in all
+   themes and body/muted text on it keeps AA contrast (gate pairs,
+   scripts/check-contrast.mjs:84+, are token-level and unaffected
+   by this component rule).
    ============================================================ */
 .tet-band {
   background: color-mix(in srgb, var(--tet) 6%, var(--bg));

@@ -676,9 +676,9 @@
       ],
       "variants": [],
       "images": [
-        "/images/products/cat-tuong-an-khang.png"
+        "/images/products/cat-tuong-an-khang.jpg"
       ],
-      "thumbnail": "/images/products/cat-tuong-an-khang.png",
+      "thumbnail": "/images/products/cat-tuong-an-khang.jpg",
       "inStock": true
     },
     {
@@ -716,9 +716,9 @@
       "options": [],
       "variants": [],
       "images": [
-        "/images/products/thanh-mai-tu-quy.png"
+        "/images/products/thanh-mai-tu-quy.jpg"
       ],
-      "thumbnail": "/images/products/thanh-mai-tu-quy.png",
+      "thumbnail": "/images/products/thanh-mai-tu-quy.jpg",
       "inStock": true
     }
   ]

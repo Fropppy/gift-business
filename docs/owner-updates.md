@@ -138,7 +138,7 @@ products. Rules per field, before you fill in the worksheet:
 | `slug` | Never change it. | It IS the page URL (`/products/<slug>/`) and a sitemap row (`scripts/generate-sitemap.mjs` builds the URL list from it). A changed slug silently moves the page and 404s the old URL. |
 | `name` | Keep the buyer's search words in it — "Giỏ quà Tết…", "Giỏ trái cây…", "quà biếu sếp". ≤ ~60 chars. | It becomes the page title, the `h1`, the image alt text, and the Product JSON-LD name. |
 | `subtitle` | One short positioning line. | Shows in the detail page's "Tặng ai" story row and on cards; also leads the meta description (`src/pages/products/[slug].astro:37-38`). |
-| `description` | UNIQUE across all 18, ~120–160 characters, your shop voice. | Card text, product-page body copy, and the JSON-LD description Google reads. Duplicate boilerplate across products wastes all three. |
+| `description` | UNIQUE across all 18, ~70–160 characters, your shop voice (the Tết Đinh Mùi 2027 brochure narratives run longer by design; the meta description clamps to 160 chars). | Card text, product-page body copy, and the JSON-LD description Google reads. Duplicate boilerplate across products wastes all three. |
 | `contents[]` | List exactly what is really in the basket. | Renders in the detail page's "Bên trong giỏ" story row as "Gồm N món: món này · món kia". |
 | `price.amount` | Integer VND only: `850000`, never `850.000` or `850.000₫`. `currency_code` stays `"vnd"`. | `formatVnd()` renders 850000 → 850.000₫ (`src/utils/catalog.ts:66-68`); the JSON-LD Offer also needs the raw number. |
 | `inStock` | `true` / `false`. | Flips the JSON-LD Offer availability InStock/OutOfStock (`src/pages/products/[slug].astro:58`). |
@@ -176,7 +176,7 @@ agent. Placeholder values are copied verbatim from the current file.
 
 ### Descriptions
 
-| slug | Description — placeholder | Description — real (unique, ~120–160 chars) |
+| slug | Description — placeholder | Description — real (unique, ~120–160 chars; brochure narratives may run longer) |
 | --- | --- | --- |
 | `gio-trai-cay-nhap-khau-cao-cap` | Nho Mỹ, cherry, việt quất, kiwi xanh… tuyển quả tươi, gói mica màu đỏ sang trọng, hợp biếu sếp và đối tác. | |
 | `gio-trai-cay-sach-viet-nam-cho-gia-dinh` | Ổi ruột đỏ, vú sữa, hồng giòn, xoài cát, táo… quà biếu gia đình vừa đẹp vừa thực. | |
