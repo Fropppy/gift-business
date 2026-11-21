@@ -38,6 +38,24 @@ const featured = [...withBadge, ...products.filter((p) => !p.badge)].slice(0, 8)
     </div>
   </section>
 
+  <!-- 4b. Bộ sưu tập Tết Đinh Mùi 2027 (plan v2 stage 2 — homepage divider
+       band). No new route: the collection surface is /products/?tag=tet-2027,
+       the same asset()-prefixed filtered URL the PDP breadcrumbs and occasion
+       strip use (src/pages/products/[slug].astro:96, OccasionStrip.astro:30)
+       — asset() carries the /gift-business base path, never a bare /products
+       link. The two collection SKUs are badge-less, so the featured selection
+       above is untouched. -->
+  <section class="section tet-band" aria-label="Bộ sưu tập Tết Đinh Mùi 2027">
+    <div class="container">
+      <SectionHead
+        eyebrow="Bộ sưu tập"
+        title="Tết Đinh Mùi 2027 — bộ sưu tập mới"
+        lead="Hai bộ sản phẩm cao cấp mới cho mùa Tết Đinh Mùi 2027 — đặt sớm để nhận huy hiệu chúc Tết viết tay và giao hàng tháng Chạp."
+      />
+      <a class="btn btn--primary" href={`${asset('/products/')}?tag=tet-2027`}>Xem bộ sưu tập Tết Đinh Mùi 2027</a>
+    </div>
+  </section>
+
   <!-- 5. Quy trình đặt quà 4 bước -->
   <Steps />
 

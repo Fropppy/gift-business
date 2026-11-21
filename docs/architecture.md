@@ -7,13 +7,13 @@ for how to operate it, [operations.md](operations.md).
 
 Static Astro 7 (`astro ^7.3.5` — the sole dependency in package.json; no
 adapter, pure static output, `astro.config.mjs:13-16`). `npm run build`
-emits **24** pages into dist/. There is no JS framework and no server.
+emits **26** pages into dist/. There is no JS framework and no server.
 
 - `src/layouts/BaseLayout.astro` — theme engine + CSP meta + the Zalo/hotline
   floating button (BaseLayout.astro:184-200) on every page.
 - `src/components/ContactForm.astro` — the enquiry form incl. the honesty
   gate.
-- Data layer: `src/data/products.json` (16 products across 7 category
+- Data layer: `src/data/products.json` (18 products across 7 category
   slugs), `occasions.json` (12), `categories.json` (7). Product shape follows
   the Medusa model — slug→handle, name→title, `price` is a Pricing-Module
   record `{ "amount": 850000, "currency_code": "vnd" }`
@@ -103,7 +103,7 @@ chain also runs in CI).
 
 ## Security posture
 
-CSP meta on every page (BaseLayout.astro:72-75; asserted on 24/24 dist/
+CSP meta on every page (BaseLayout.astro:72-75; asserted on 26/26 dist/
 pages by check-output.mjs): `default-src 'none'`, and `connect-src`
 allow-lists BOTH https://script.google.com AND
 https://script.googleusercontent.com — the Apps Script /exec URL answers

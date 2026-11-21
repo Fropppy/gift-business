@@ -227,3 +227,11 @@ Now/Later stay honest).
   build-time only, dist/ ships zero references. npm audit exit 0, alerts
   0 open, deploy + smoke green. The security baseline (snapshot + seals +
   re-baselining procedure) is now documented in security-baseline.md.
+
+- 2026-11-21: Tết Đinh Mùi 2027 collection start (plan v2 stage 2) — two
+  non-wine SKUs live (`cat-tuong-an-khang` 665.000₫, `thanh-mai-tu-quy`
+  495.000₫); `tet-2027` tag introduced; collection surface = homepage
+  divider band + /products/?tag=tet-2027 (no new route). The collection's
+  wine-bearing SKUs stay parked pending the owner's written compliance
+  sign-off (pointer line recorded in owner-updates.md). Docs counts synced
+  (18 products, 26 built pages).
