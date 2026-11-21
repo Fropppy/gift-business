@@ -19,6 +19,7 @@ from here or `npm run check:docs` fails, so un-indexed docs cannot merge.
 | [docs/owner-updates.md](owner-updates.md) | Khanh's own step-by-step guide: real contact data (NAP), social-preview re-scrape, real photos, GBP/Zalo OA, and a 16-product fill-in worksheet. | You are the owner and want to change content yourself. |
 | [docs/roadmap.md](roadmap.md) | Now / Next / Later / Done — pending owner actions and conditional work. | You are picking work or checking status. |
 | [docs/design-language.md](design-language.md) | The design-language proposal the current UI implements (tokens, themes, WCAG). | You touch themes or design tokens. Historical record. |
+| [docs/tet2027-rollback.md](tet2027-rollback.md) | Rollback runbook for the Tết Đinh Mùi 2027 season recast (ADR-0011): revert sequence, post-rollback live-site checks, fulfillment-season freeze. | The season dressing regressed live or a gate broke after the season merge. |
 | [docs/ai/memory-system.md](ai/memory-system.md) | The 3-layer memory model and its update rituals. | You are an agent deciding where a fact belongs. |
 | [docs/ai/improvement-log.md](ai/improvement-log.md) | Append-only dated log of observations and promotions. | You want the incremental history of lessons. |
 | [docs/research/ecommerce-platform-research.md](research/ecommerce-platform-research.md) | Verbatim 2026-10-06 six-platform comparison (Shopify/WooCommerce/Medusa/Vendure/Snipcart/Foxy) — the evidence behind ADR-0001. Historical record, quotes third-party commands. | You are re-evaluating the platform decision. |

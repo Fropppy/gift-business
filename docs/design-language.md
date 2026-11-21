@@ -79,7 +79,7 @@ Rejected alternatives (per the switcher study): body-class strategy (namespace c
 | id | Label (UI only) | When | Justification |
 |---|---|---|---|
 | `base` | *Mùa thường* (implicit default) | Always, when nothing else applies | The complete brand palette — cream/pine/terracotta (`global.css:10-42`). Carries every token; the no-JS world only ever sees this. |
-| `tet` | **Tết** | Auto Nov–Feb (`BaseLayout.astro:59-60` already checks months 11, 12, 1, 2) + manual any time | Existing, shipped, verified in `dist/`. Tết is the demand curve for a Vietnamese gift shop (`products.json`: 8 of 16 products tagged `tet` — node count this session). Crimson field + antique gold (`global.css:48-58`). |
+| `tet` | **Tết** | Auto Nov–Feb (`BaseLayout.astro:59-60` already checks months 11, 12, 1, 2) + manual any time | Existing, shipped, verified in `dist/`. Tết is the demand curve for a Vietnamese gift shop (`products.json`: 8 of 16 products tagged `tet` — node count this session). Warm blush field + brick-red accents + antique gold (`global.css:97-115`; palette re-cast 2026-11-21 — §12 / ADR-0011). |
 | `trung-thu` | **Trung Thu** | Auto September + manual any time | **New — justified:** a real catalog moment (`products.json` `prod_nm_016` "Set quà Trung Thu sang trọng", tags `trung-thu`; `occasions.json:5` "Tết Trung Thu — Tháng 9"), a theme block already sketched at `global.css:60-64`, and moon-gold on warm grey is the same muted-recolor move the culture study endorses (Thai SACIT: recoloring traditional motifs into a restrained palette "de-tourists" them). |
 
 Theme ids are machine strings used verbatim as attribute values; Vietnamese display labels live only in the switcher UI. The whitelist exists in exactly two places by necessity (the `is:inline` script cannot import — Astro docs): the head script and the switcher component. Adding a theme = edit `global.css` block + whitelist array + one switcher button.
@@ -87,8 +87,8 @@ Theme ids are machine strings used verbatim as attribute values; Vietnamese disp
 ### 2.3 Token layering (4 layers)
 
 - **L1 — `:root`** = the base theme AND the completeness contract. Every token has a value here, so theme blocks stay sparse and no-JS never renders a hole. See §3.
-- **L2 — `[data-theme='x']` sparse overrides.** Tết and Trung Thu each override 12 tokens (the accent role set + primary ramp + bg + borders). Never layout or typography — themes are palette registers only (the Tết block's own comment, `global.css:44`, states "tokens only — zero layout/typography changes"; keep that rule).
-- **L3 — component-scoped theme rules.** Currently exactly two exist (`[data-theme='tet'] .badge--hot` at `global.css:249` — the lì-xì envelope tag reshape — and `[data-theme='tet'] .price` at `:678`). Keep this layer at ~zero; if a third instance appears, promote a token instead.
+- **L2 — `[data-theme='x']` sparse overrides.** Tết and Trung Thu each override 12 tokens (the accent role set + primary ramp + bg + borders). Never layout or typography — themes are palette registers only (the Tết block's own comment, `global.css:93-96`, states "tokens only — zero layout/typography changes"; the block itself still honors that). One recorded exception since 2026-11-21 (ADR-0011, §12): tet additionally carries a tet-scoped append-region dressing layer — caps + ornaments living as component-scoped rules (L3 below), hidden in base/trung-thu — while trung-thu stays a pure palette register.
+- **L3 — component-scoped theme rules.** As first written this layer held exactly two rules (`[data-theme='tet'] .badge--hot` at `global.css:361` — the lì-xì envelope tag reshape — and `[data-theme='tet'] .price` at `:971`). The 2026-10-08 append-region architecture made theme-scoped rules safe to add without touching frozen lines, and the 2026-11-21 Tết recast (§12, ADR-0011) uses that deliberately: the `.tet-divider` / `.price-rule` ornaments and the ≥700px caps rule are appended, tet-scoped, and `display: none` outside tet. Still the exception, not a license: additions must be seasonal dressing a token cannot express, scoped and gated.
 - **L4 — runtime-set tokens** (`--motif-image`, `--motif-opacity`, `--hero-1/2/tile`), set as inline style on `<html>` from the head script because a CSS `url()` cannot carry `import.meta.env.BASE_URL` and `public/` assets need the `/gift-business` prefix (documented at `BaseLayout.astro:44-49`). This stays JS-side; it is correct.
 
 Color values live **only** in `global.css` (the file's own header rule, `global.css:2-4` — honor it).
@@ -189,22 +189,27 @@ The base block, with fixes and additions marked. Existing names are kept (semant
 Theme blocks — sparse, colors only:
 
 ```css
+/* tet block re-cast 2026-11-21 (ADR-0011, §12) — values as shipped at
+   global.css:97-115; the redundant --primary-ink override (same white
+   as root) made way for the --tet red fix (b). Ratios below are the
+   season's measured gate values, recorded in the source comments. */
 [data-theme='tet'] {
-  --bg: #fdf3e7;
-  --primary: #c0272d;        /* white ink 5.88:1 */
-  --primary-deep: #a11f26;   /* white ink 7.67:1 */
-  --primary-ink: #ffffff;
+  --bg: #fbeae6;             /* primary ink on bg 7.36:1; cocoa ink 13.51:1 */
+  --primary: #961914;        /* white ink 8.59:1 */
+  --primary-deep: #7c130f;   /* white ink 10.73:1 */
+  --tet: #b73927;            /* price ink on bg 4.97:1, white badge fill 5.79:1 */
   --accent: #c89b3c;         /* decorative gold: seals, ribbons, borders */
-  --accent-strong: #7a611f;  /* gold AS TEXT on #fdf3e7: 5.38:1. NOT #b0872f — that is
-                                3.01:1 as text here; it is the fill value below. */
-  --accent-deep: #6a541d;    /* gold text hover on #fdf3e7: 6.61:1 */
+  --accent-strong: #7a611f;  /* gold AS TEXT on #fbeae6: 5.06:1. NOT #b0872f —
+                                that is 2.84:1 as text here; it is the fill
+                                value below. */
+  --accent-deep: #6a541d;    /* gold text hover on #fbeae6: 6.21:1 */
   --accent-fill: #b0872f;    /* .btn--accent fill, cocoa ink 4.76:1 */
   --accent-fill-hover: #c89b3c; /* Hover fill is LIGHTER here (cocoa ink 6.16:1). In a
                                 dark-ink theme a lighter fill raises contrast; the
                                 base-theme instinct (darker hover) would lower it. */
   --accent-ink: #2b2118;     /* dark ink on gold fills — white on gold fails AA */
-  --border: #ebd9c3;
-  --border-strong: #dec9ae;
+  --border: #ecd9c9;
+  --border-strong: #dfc7b3;
 }
 
 [data-theme='trung-thu'] {   /* NEW — activates the sketched block at global.css:60-64 */
@@ -224,10 +229,10 @@ Theme blocks — sparse, colors only:
 ```
 
 **Usage rules.**
-- **Accent role map (the polarity rule):** `--accent` decorative; `--accent-strong` accent *text* on light bg (`.eyebrow`, `.link-more`, `.card-zalo`); `--accent-deep` accent *text* hover (`a:hover`, `.chip:hover`, `.link-more:hover`); `--accent-fill` / `--accent-fill-hover` the `.btn--accent` fill pair with `--accent-ink`. In the white-ink base theme, deeper = safer for every role. In the cocoa-ink seasonal themes the roles pull apart: text wants a *darker* gold (`#7a611f`/`#6a541d`) while fills want a *lighter* one (`#b0872f` → hover `#c89b3c`) — hence fill and text are separate tokens, and `#b0872f` must never serve as text on a seasonal bg (3.01:1 on `#fdf3e7`, verified).
-- `--tet` is a fill only inside the tet theme; year-round it is badge/error color only (white on `#c0272d` = 5.88:1 — passes).
+- **Accent role map (the polarity rule):** `--accent` decorative; `--accent-strong` accent *text* on light bg (`.eyebrow`, `.link-more`, `.card-zalo`); `--accent-deep` accent *text* hover (`a:hover`, `.chip:hover`, `.link-more:hover`); `--accent-fill` / `--accent-fill-hover` the `.btn--accent` fill pair with `--accent-ink`. In the white-ink base theme, deeper = safer for every role. In the cocoa-ink seasonal themes the roles pull apart: text wants a *darker* gold (`#7a611f`/`#6a541d`) while fills want a *lighter* one (`#b0872f` → hover `#c89b3c`) — hence fill and text are separate tokens, and `#b0872f` must never serve as text on a seasonal bg (2.84:1 on the re-cast `#fbeae6`, measured 2026-11-21; was 3.01:1 on the pre-recast `#fdf3e7`).
+- `--tet` is a fill only inside the tet theme; year-round it is badge/error color only (root value stays `#c0272d`; white on it 5.88:1 at the 2026-10-06 audit — the year-round pair is unchanged). Since 2026-11-21 (red fix (b), ADR-0011) the tet block overrides it to `#b73927` — the season's price/badge red sits at the brick end of the red family: price ink on tet bg 4.97:1, white badge fill 5.79:1, both from the real gate run. Legacy placeholder SVG art keeps the old crimson this season, by design.
 - Gold: one gold element per surface (the seal, one line, one ribbon) — antique/matte register per the culture study (Marou's silk-screen antique gold ink; our `#b0872f`/`#c89b3c` are exactly this register).
-- `.price` in tet theme keeps `var(--tet)` (`global.css:678`; crimson on tet bg = 5.37:1 ✓).
+- `.price` in tet theme keeps `var(--tet)` (`global.css:971`; the 2026-11-21 brick red `#b73927` on the re-cast bg = 4.97:1, measured by the gate run ✓).
 
 ### 3.2 Type scale, spacing, radius, shadow, motion, layout
 
@@ -290,13 +295,13 @@ Theme blocks — sparse, colors only:
 - Any `*-ink` token paired with its fill must clear 4.5:1 **in both states and both polarities**: white-ink themes deepen fills on hover; dark-ink (cocoa-on-gold) themes *lighten* them. Every fill token is audited with its hover token, not alone.
 - Accent text tokens are audited against **both** `--bg` and `--surface` per theme, because accent text sits on page backgrounds (eyebrows) and on white cards (`.link-more`, `.card-zalo`) — a value can pass on one and fail on the other.
 - `--accent` is *not* text-safe on light backgrounds (3.36:1); text roles use `--accent-strong`, text hovers use `--accent-deep`. `--accent-fill`/`--accent-fill-hover` are fill-only.
-- Focus rings: `:focus-visible { outline: 3px solid var(--primary) }` — sourced from `--primary` **in every theme** (base 7.29:1 on cream / 7.85:1 on white; tet 5.37 / 5.88; trung-thu 10.2 / 11.5 — all clear the 3:1 non-text minimum with margin). The accent route fails in seasonal themes: today's ring is in-theme gold `#c89b3c` at 2.33:1 on tet bg, and even `#b0872f` is only 3.01:1 on tet bg and 2.93:1 on trung-thu bg. Exception: focusable elements on dark media/scrim panels get `outline-color: #fff` (a `--primary` ring can vanish over dark imagery).
+- Focus rings: `:focus-visible { outline: 3px solid var(--primary) }` — sourced from `--primary` **in every theme** (base 7.29:1 on cream / 7.85:1 on white; tet 7.36:1 on the re-cast bg, measured 2026-11-21, full 60-pair gate run green — the white-surface ring figure not re-published this season; trung-thu 10.2 / 11.5 — all clear the 3:1 non-text minimum with margin). The accent route fails in seasonal themes: today's ring is in-theme gold `#c89b3c` at 2.33:1 on tet bg, and even `#b0872f` is only 3.01:1 on tet bg and 2.93:1 on trung-thu bg. Exception: focusable elements on dark media/scrim panels get `outline-color: #fff` (a `--primary` ring can vanish over dark imagery).
 - No color-only status: `.form-status` variants already pair color with distinct text (`ContactForm.astro:108-114`); keep words + color, never color alone.
 - `scripts/contrast.mjs` (plan step 1) must check **selector-level pairs** — each rendered (selector, state, theme) combination, rest *and* hover, ring against both `--bg` and `--surface` — not bare token pairs, or hover-state and per-theme failures stay invisible in CI.
 
 ### 3.4 Contrast audit (run this session — keep as a checklist)
 
-All ratios computed this session with the WCAG 2.x relative-luminance formula (node). An independent reviewer re-ran the audit with a slightly different linearization constant; every pair agrees within ≤0.08 with identical pass/fail verdicts.
+All ratios computed this session with the WCAG 2.x relative-luminance formula (node). An independent reviewer re-ran the audit with a slightly different linearization constant; every pair agrees within ≤0.08 with identical pass/fail verdicts. *(2026-11-21: the tet token values were re-cast and re-audited by the real gate run — the season's measured table lives in §12; the tables below stand as their 2026-10-06 writing-time record.)*
 
 **Current site — failing pairs (what step 1 fixes):**
 
@@ -589,6 +594,96 @@ Built on §1–§10; no earlier decision reopened. All five waves of the minimal
 - §5.2's card anatomy includes "description clamp-2" and §8.3 records "≤560px `.card-desc` hides" — C3 takes the description off the card at ALL widths; the PDP keeps the full text.
 
 **Verification:** each wave's build ran the four-gate suite as its own definition of done; this docs pass itself touched only doc files, and its gate (`npm run check:docs`) is run by the task script's verification step after this edit — that step's output is the verdict, not this paragraph. The one browser measurement quoted here (HEA-2's bar/wordmark figures) is recorded in-source at `global.css:2001-2006`; the three-theme shadow eyeball remains a manual obligation no gate covers. Pins in this section were verified line-by-line against the working tree this session — this file sits outside check-docs' citation-integrity set (see the 2026-10-17 improvement-log entry), so its pins are only as good as their writing-time verification.
+
+---
+
+## 12. Tết Đinh Mùi 2027 recast (2026-11-21)
+
+Built on §1–§11, deliberately reopening one doctrine: L2's "themes are
+palette registers only". The owner-approved plan v2 of 2026-11-21
+(stage 1a + stage-2 non-wine items, dual-brand line, photos + line
+art, red fix (b)) re-casts the tet theme for the Đinh Mùi 2027
+season: same-line token swaps inside the tet block, a tet-scoped
+append-region dressing layer (caps + ornaments), and pre-paint hero
+art tokens. Decision: ADR-0011. Rollback runbook (merge = live on
+GitHub Pages, so this ships before the season's first merge):
+[docs/tet2027-rollback.md](tet2027-rollback.md). All pins in this
+section were verified against the working tree as read this session.
+
+**Palette swaps** (same-line, tet block `global.css:97-115`; `:root`
+stays 56 tokens and tet stays 12 overrides — the redundant
+`--primary-ink` override's slot is reused, not added to; gold family
+unchanged):
+
+| Token | Was | Now |
+|---|---|---|
+| `--bg` | #fdf3e7 | #fbeae6 |
+| `--primary` | #c0272d | #961914 |
+| `--primary-deep` | #a11f26 | #7c130f |
+| `--primary-ink` override | #ffffff (redundant) | removed — slot now carries `--tet` #b73927 (red fix (b)) |
+| `--border` | #ebd9c3 | #ecd9c9 |
+| `--border-strong` | #dec9ae | #dfc7b3 |
+
+The brochure palette behind the new values was measured, not eyeballed
+(median-cut quantization of the brochure art). Legacy placeholder SVG
+art keeps the old crimson this season — the two reds coexist by
+design until real photos land.
+
+**Measured on the new background `#fbeae6`** (real check-contrast run,
+exit 0, 60 pairs):
+
+| Pair | Ratio |
+|---|---|
+| primary ink (`--primary`) on bg | 7.36:1 |
+| price ink (`--tet`) on bg | 4.97:1 |
+| white badge ink on `--tet` | 5.79:1 |
+| muted ink on bg | 5.24:1 |
+| gold text (`--accent-strong`) on bg | 5.06:1 |
+| deep gold hover (`--accent-deep`) on bg | 6.21:1 |
+
+**Tet-scoped dressing** (append region; first rule — the
+`display: none` default — at `global.css:2446-2447`; every rule
+`[data-theme='tet']`-scoped, hidden in base and trung-thu by
+default):
+
+- Section headings render ALL-CAPS with 0.08em tracking at ≥700px
+  only (house breakpoint step, `global.css:2514-2518`). The source
+  text stays mixed case so screen readers announce it correctly —
+  presentation separated from content via CSS; line-height is
+  untouched, because the shared heading rule needs its vertical room
+  for Vietnamese stacked diacritics (Ẳ, Ặ, Ồ).
+- `.tet-divider` — rule–star–rule ornament under section titles
+  (`SectionHead.astro:17-20` ships two hairline spans + the star
+  SVG); hairlines ride `--border-strong`, the star rides
+  `--accent-strong`.
+- `.price-rule` — a short price bracket above every price render site
+  (card foot `ProductCard.astro:38`, PDP `products/[slug].astro:130`);
+  the star rides `--tet`.
+
+**Ornament conventions (binding):** inline SVG, `aria-hidden`,
+`focusable="false"`, colored through `currentColor`; the star is an
+SVG path — never the text glyph U+2726, which screen readers announce
+and system emoji fonts render on their own terms.
+
+**Hero art, pre-paint:** hero-tet-1/2/tile.svg ship in
+`public/images/` (brochure-language botanical line art on the new
+background). The theme script's hero probe sets the three `--hero-*`
+tokens synchronously before paint (`BaseLayout.astro:159-166`) — the
+previous onload swap fired after first paint and flashed the base
+hero — while keeping the onerror guard that removes the token if the
+file 404s.
+
+**Doc-truth edits made by this section:** the §2.2 tet registry row,
+§2.3's L2/L3 bullets, §3.1's tet block and usage rules, and §3.3's
+tet ring figure were updated in place to the shipped values (dated
+2026-11-21); §3.4's audit tables stand as their 2026-10-06
+writing-time record, superseded for tet by the measured table above.
+Base and trung-thu render identically to before — every addition is
+tet-scoped and hidden by default. Before the season's first merge the
+owner reviews the built site (merge = live); the revert sequence and
+post-rollback checks live in
+[docs/tet2027-rollback.md](tet2027-rollback.md), and 2027-01-20 →
+~2027-02-15 is order-fulfillment season: content fixes only.
 
 ---
 

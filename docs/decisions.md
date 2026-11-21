@@ -300,3 +300,60 @@ a new check-output assertion pins the og tags on every page; filter
 views keep the `/products/` self-canonical (no noindex); heading
 skips beyond the Hero tile and real photos remain open (roadmap).
 
+## ADR-0011: Tết theme recast — tokens plus tet-scoped dressing for Đinh Mùi 2027 (2026-11-21, accepted)
+
+### Context
+
+For the Tết Đinh Mùi 2027 season the tet theme stops being a
+tokens-only palette register and gains tet-scoped typography and
+ornament dressing. The forces at play, all fixed by the
+owner-approved plan v2 of 2026-11-21: scope covers plan stage 1a plus
+the stage-2 non-wine items; the dual-brand line and the photos + line
+art art direction are in; red fix (b) is chosen — the season's price
+and badge red moves to the deeper brick end of the red family instead
+of retuning the year-round crimson; the brochure palette behind the
+new values was measured, not eyeballed (median-cut quantization of
+the brochure art); and the legacy placeholder SVG art keeps the old
+crimson this season, so the two reds coexist by design until real
+photos land. The season's first merge is live publishing: merge to
+main deploys to GitHub Pages immediately, so a rollback runbook has
+to exist before that merge.
+
+### Decision
+
+Same-line swaps inside the tet block of src/styles/global.css (root
+token count stays 56, tet override count stays 12): `--bg`
+#fdf3e7 → #fbeae6; `--primary` #c0272d → #961914; `--primary-deep`
+#a11f26 → #7c130f; the redundant `--primary-ink` override (same white
+as the root token) is replaced by a `--tet` override #b73927 — red
+fix (b); `--border` #ebd9c3 → #ecd9c9; `--border-strong` #dec9ae →
+#dfc7b3. The gold family is unchanged. Append-region additions,
+tet-scoped and `display: none` in base and trung-thu: ALL-CAPS +
+0.08em tracking on section headings at the 700px breakpoint and up
+(source text stays mixed case for screen readers; line-height is
+untouched because Vietnamese stacked diacritics need the vertical
+room), the `.tet-divider` rule–star–rule ornament under section
+titles, and the `.price-rule` price bracket. The ornaments are
+inline SVG, `aria-hidden`, `focusable="false"`, colored through
+`currentColor`; the star is an SVG path, never the text glyph
+U+2726. Hero art ships as hero-tet-1/2/tile.svg (brochure-language
+botanical line art on the new background), and the theme script's
+hero probe now sets the three `--hero-*` tokens synchronously before
+paint — the old onload swap flashed the base hero — keeping the
+onerror guard that drops the token if a file 404s.
+
+### Consequences
+
+The contrast gate still audits the season's load-bearing pairs, now
+on the new background, measured by the real check-contrast run
+(exit 0, 60 pairs): price ink (--tet) on tet bg 4.97:1 and white
+badge on --tet 5.79:1, with primary ink on bg 7.36:1, muted ink
+5.24:1, gold text 5.06:1, and deep gold hover 6.21:1 around them.
+Base and trung-thu render identically to before — every addition is
+scoped to `[data-theme='tet']` and hidden by default. The owner
+reviews the built site before merge; merge = live on GitHub Pages,
+which is why docs/tet2027-rollback.md (revert sequence + post-rollback
+verification + the 2027-01-20 → ~2027-02-15 fulfillment-season
+freeze) ships with this decision. Design record:
+docs/design-language.md §12.
+

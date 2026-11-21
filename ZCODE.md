@@ -19,6 +19,7 @@ One question → one file. Links, never summaries.
 | Is the repo clean security-wise? Baseline, seals, dependabot history? | [docs/security-baseline.md](docs/security-baseline.md) |
 | How does the memory system work? | [docs/ai/memory-system.md](docs/ai/memory-system.md) |
 | Design-system rationale (tokens, themes, WCAG)? | [docs/design-language.md](docs/design-language.md) |
+| How do I roll back the Tết Đinh Mùi 2027 dressing if it regresses live? | [docs/tet2027-rollback.md](docs/tet2027-rollback.md) |
 | Full platform-comparison evidence behind ADR-0001? | [docs/research/ecommerce-platform-research.md](docs/research/ecommerce-platform-research.md) |
 | How to set up the Apps Script webhook? | [apps-script/SETUP.md](apps-script/SETUP.md) |
 | What has been learned, incrementally? | [docs/ai/improvement-log.md](docs/ai/improvement-log.md) |

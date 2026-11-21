@@ -158,10 +158,10 @@ const localBusiness = {
           // later activates the swap without touching any component.
           ['1', '2', 'tile'].forEach(function (key) {
             var url = base + '/images/hero-tet-' + key + '.svg';
-            var probe = new Image();
-            probe.onload = function () {
-              root.style.setProperty('--hero-' + key, 'url("' + url + '")');
-            };
+            // Set pre-paint: the old onload swap fired after first paint (flash).
+            root.style.setProperty('--hero-' + key, 'url("' + url + '")');
+            var probe = new Image(); // guard only: drop the token if the file 404s
+            probe.onerror = function () { root.style.removeProperty('--hero-' + key); };
             probe.src = url;
           });
         }

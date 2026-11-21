@@ -14,5 +14,10 @@ const Heading = level;
 <div class:list={['section-head', { 'section-head--center': center }]}>
   {eyebrow && <span class="eyebrow">{eyebrow}</span>}
   <Heading>{title}</Heading>
+  <div class="tet-divider" aria-hidden="true">
+    <span class="tet-divider__rule"></span>
+    <svg class="tet-divider__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="14" height="14"><path fill="currentColor" d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"></path></svg>
+    <span class="tet-divider__rule"></span>
+  </div>
   {lead && <p class="lead">{lead}</p>}
 </div>
