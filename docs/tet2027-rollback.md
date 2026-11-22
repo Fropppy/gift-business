@@ -103,7 +103,7 @@ for each:
    `display: none` default lives INSIDE the append block — delete the
    block without this line and an unstyled "Đinh Mùi 2027" renders in
    every theme, base included.
-5. **The band eyebrow + lead copy** (src/pages/index.astro:52-53) —
+5. **The band eyebrow + lead copy** (src/pages/index.astro:51 and :53) —
    reverting restores the pre-S1 wording (the old lead carried the
    "huy hiệu" phasing this stage retired).
 6. **The three hero SVGs** (hero-tet-1/2/tile.svg) — replaced in

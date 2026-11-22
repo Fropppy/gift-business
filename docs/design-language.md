@@ -778,18 +778,21 @@ the fonts origins (src/layouts/BaseLayout.astro:74), so no
 security-meta change.
 
 **Band lead.** The collection band's eyebrow + lead
-(src/pages/index.astro:52-53) tell the hộ-mệnh story — nạp âm Thiên
+(src/pages/index.astro:51 and :53) tell the hộ-mệnh story — nạp âm Thiên
 Hà Thủy, lapis (xanh lưu ly) with vàng kim, the chàm-dyeing and
 gold-embossing craft narrative — and promise the handwritten thiệp;
-the old "huy hiệu" wording is retired in favor of "thiệp".
+the old "huy hiệu" wording is retired in favor of "thiệp". This copy
+is theme-independent seasonal content (the `.tet-band` precedent), so
+it renders in base and trung-thu too — only the special styling is
+tet-scoped.
 
 **Mechanism and the gate.** Every rule is `[data-theme='tet']`-scoped
 or default-hidden (`.tet-year-wordmark` is `display: none` outside
 tet); scoped selectors never form a bare `[data-theme]` block, so the
 gate's theme parser (scripts/check-contrast.mjs:51) still sees exactly
-3 themes, the audited table stays 60 pairs, and base and trung-thu
-render pixel-identical. Base/trung-thu hold the pre-S1 pixels by
-construction.
+3 themes and the audited table stays 60 pairs. Base and trung-thu
+hold the pre-S1 pixels for the styled surfaces; the one unscoped delta
+is the band eyebrow + lead copy noted above.
 
 ---
 

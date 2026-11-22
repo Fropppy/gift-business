@@ -429,7 +429,7 @@ Stage S1 slice:
   jewel core; and the collection band's eyebrow + lead retell the
   hộ-mệnh story (Thiên Hà Thủy, lapis with gold, the chàm-dyeing and
   gold-embossing craft), retiring the old "huy hiệu" wording in favor
-  of "thiệp" (index.astro:52-53).
+  of "thiệp" (index.astro:51 and :53).
 
 ### Consequences
 
