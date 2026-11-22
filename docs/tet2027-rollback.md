@@ -81,6 +81,58 @@ Both checks run against the LIVE site, not dist/.
 If both checks pass, the rollback is done. Report it with the exact
 commands and outputs, per ZCODE.md working rule 9.
 
+## Rolling back the Stage S1 special layer
+
+The special layer (ADR-0012; design record
+[docs/design-language.md](design-language.md) §13) adds six things on
+top of the 2026-11-21 recast, and a surgical rollback must account
+for each:
+
+1. **The append block** — one contiguous region at the end of
+   `src/styles/global.css`, from the header comment "APPENDED for the
+   Tết hộ-mệnh special layer" (`global.css:2540`) through end of file
+   (`:2746`). It can be deleted as one unit.
+2. **The porcelain swap** — tet `--bg` `#fbeae6` → `#fffef1`, a
+   same-line swap inside the tet token block (`global.css:98`). It
+   does NOT ride the append-block deletion: it must be swapped back
+   in the same change, or the body ground changes with the layer
+   already gone.
+3. **The Fraunces segment** of the single css2 link
+   (src/layouts/BaseLayout.astro:102).
+4. **The year-wordmark markup** (src/components/Hero.astro:16). Its
+   `display: none` default lives INSIDE the append block — delete the
+   block without this line and an unstyled "Đinh Mùi 2027" renders in
+   every theme, base included.
+5. **The band eyebrow + lead copy** (src/pages/index.astro:52-53) —
+   reverting restores the pre-S1 wording (the old lead carried the
+   "huy hiệu" phasing this stage retired).
+6. **The three hero SVGs** (hero-tet-1/2/tile.svg) — replaced in
+   place, so the pre-S1 art comes back with the revert.
+
+The clean rollback is therefore git-level, not surgical:
+
+- **Before the Stage S1 commit is pushed:** `git revert
+  <stage-s1-sha>` on develop — one commit undoing all six things at
+  once; the porcelain swap rides the same revert.
+- **After S1 reaches main:** run the exact revert-PR sequence above
+  against the merge commit that carried S1. As before, the revert
+  must be the only change the deploy carries.
+
+**Post-rollback verification, S1 delta.** The CSS check above still
+works, with one drift to know about: once S1 ships, `#fffef1` is the
+tet ground and `#fbeae6` exists nowhere in the served CSS. So after
+an S1-only revert the expected state is `fffef1` gone, `fbeae6` back,
+and the recast values (`961914`, `7c130f`, `b73927`, `ecd9c9`,
+`dfc7b3`) still present — that is the correct pre-S1 season look, NOT
+a failed rollback; a full-season rollback (S1 revert plus the
+recast-merge revert) is what returns the expected count to 0 for
+every value. The special layer's own clean marker is its unique
+class: `grep -c 'tet-year-wordmark'` over the served CSS and the
+homepage HTML returns 0 after the S1 revert (the `.tet-band` class
+predates S1 — its base wash rule landed with the 2026-11-21 recast —
+so `tet-band` is not an S1 marker). As above, run both checks against
+the LIVE site and report exact commands and outputs.
+
 ## The freeze note
 
 2027-01-20 to ~2027-02-15 is order-fulfillment season: the family is

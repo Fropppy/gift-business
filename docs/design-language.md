@@ -687,6 +687,112 @@ post-rollback checks live in
 
 ---
 
+## 13. Tết special layer — hộ-mệnh navy on porcelain (2026-11-22)
+
+Built on §1–§12; one doctrine change, recorded as the supersession
+below. The owner-approved plan v1 Stage S1 (decisions D1–D4 of
+2026-11-22) adds a season special riding on the tet theme: direction
+A "Ink Lacquer Classic" plus direction B's sapphire jewel, mechanism
+= tet-scoped append layer. Decision: ADR-0012. Rollback:
+[docs/tet2027-rollback.md](tet2027-rollback.md). Every value below is
+from the validated set — the real `npm run check:contrast` dry-run in
+scratch copies (exit 0, re-run by the judge) BEFORE implementation —
+and every pin in this section was verified against the working tree
+as read this session.
+
+**The porcelain swap** (same-line, tet block `global.css:97-115`;
+`--bg` at `:98`): `#fbeae6` → `#fffef1`. The tet block stays exactly
+12 overrides and `:root` stays 56 tokens. Block comments recomputed on
+the new ground: primary ink 7.36 → 8.46:1, cocoa ink 13.51 → 15.52:1,
+gold text (`--accent-strong`) 5.06 → 5.82:1, deep-gold hover
+(`--accent-deep`) 6.21 → 7.14:1, price ink (`--tet`) 4.97 → 5.71:1
+(white badge ink on `--tet` unchanged at 5.79:1). The swap improves
+the season's worst body pair. §3.1's tet block and §12's measured
+table stand as their 2026-11-21 records; this section is the
+porcelain-swap record.
+
+**The validated special-layer palette** (append block
+`global.css:2540-2746`; measured pairs as recorded in the block's
+header and rule comments):
+
+| Role | Value | Measured pair |
+|---|---|---|
+| Navy field — the hero band and the one collection band | `#10233f` | the ground |
+| White ink — h2, links, ghost button, focus rings | `#fffdf5` | 15.46:1 on navy |
+| Light muted — band secondary text | `#b3ad9f` | 7.04:1 on navy |
+| Matte gold — band eyebrows, price, hero-stroke, hairlines, CTA fill | `#c89b3c` | 6.15:1 as text on navy; ≥3:1 non-text |
+| Cocoa ink on gold fills | `#2b2118` | 6.16:1 |
+| Hover gold — fills go LIGHTER on the dark field | `#d6b569` | cocoa ink 8.00:1 on it |
+| Sapphire jewel — DECOR-ONLY | `#1b3f8d` | 1.61:1 on navy — below every threshold on purpose |
+
+Rejected as ink on navy (the block header records the traps):
+inherited `--muted` #6c6053 at 2.58:1, cocoa `--text` inheritance from
+the shared heading rule at 1.00:1, tet `--primary` #961914 at 1.83:1,
+`--tet` #b73927 at 2.72:1, `--accent-strong` #7a611f at 2.67:1 — every
+band render site is re-pointed to the validated set above.
+
+**Discipline rules (binding):**
+
+- **Sapphire is decor-only.** It ships solely as the `.tet-band`
+  radial glow inside a gold hairline ring (`.tet-band::before` /
+  `::after`, `pointer-events: none`) and inside the three hero
+  artworks — never text, never border, never an interactive fill.
+  The hex is APPROXIMATE: no official sRGB value is published for
+  Coloro 125-28-38 (WGSN×Coloro COTY 2027 "Luminous Blue"), so the
+  physical swatch is authoritative; a later swatch-approved correction
+  touches only the art/glow literals, never a text pair.
+- **Dark fields stay moments.** Navy appears exactly twice — the hero
+  band and the one collection band. Body copy never sits on navy; the
+  page ground stays porcelain. The dark field is a ceremonial moment
+  in the page rhythm, not a mode.
+- **Gold's role inverts on navy.** On the navy field #c89b3c is
+  text-grade (6.15:1) while the season's reds fail there (`--primary`
+  1.83:1, `--tet` 2.72:1) — so band ink and CTAs go gold/white. On
+  the porcelain body the same gold stays decorative-only and §3.1's
+  accent role map is unchanged. The §3.1 polarity lesson extends to
+  component literals: hover fills go LIGHTER on a dark field
+  (#d6b569, cocoa ink 8.00:1); the base-theme darker-hover instinct
+  would lower contrast.
+
+**Hero art and the year wordmark.** hero-tet-1/2/tile.svg are
+replaced in place — same filenames, same viewBox/aspect (1200×800 /
+600×800) — recomposed as navy + gold composed art with the sapphire
+jewel core, permanently fixing the documented blank-tile failure. The
+year wordmark "Đinh Mùi 2027" (src/components/Hero.astro:16) renders
+in Fraunces italic, gold — allowed only inside the navy hero field.
+
+**§4.1 supersession (2026-11-22): Fraunces joins the family set for
+the special layer.** §4.1's "No additional families" stands as its
+2026-10-06 record; from this date the year wordmark is set in
+Fraunces, and nothing else on the site changes family. Verification
+uses the method this document already prescribes (preamble: fetch the
+css2 URL with a full Chrome UA and read the `/* vietnamese */`
+`@font-face` blocks — the 2026-11-21 improvement-log entry is the
+method's receipt): the single css2 request at
+src/layouts/BaseLayout.astro:102 now carries Fraunces alongside the
+two existing families, and the Fraunces query
+`ital,opsz,wght@0,9..144,100..900;1,9..144,100..900` was verified
+against the css2 API before landing — a dedicated `/* vietnamese */`
+block in BOTH roman and italic, HTTP 200. The CSP already allow-lists
+the fonts origins (src/layouts/BaseLayout.astro:74), so no
+security-meta change.
+
+**Band lead.** The collection band's eyebrow + lead
+(src/pages/index.astro:52-53) tell the hộ-mệnh story — nạp âm Thiên
+Hà Thủy, lapis (xanh lưu ly) with vàng kim, the chàm-dyeing and
+gold-embossing craft narrative — and promise the handwritten thiệp;
+the old "huy hiệu" wording is retired in favor of "thiệp".
+
+**Mechanism and the gate.** Every rule is `[data-theme='tet']`-scoped
+or default-hidden (`.tet-year-wordmark` is `display: none` outside
+tet); scoped selectors never form a bare `[data-theme]` block, so the
+gate's theme parser (scripts/check-contrast.mjs:51) still sees exactly
+3 themes, the audited table stays 60 pairs, and base and trung-thu
+render pixel-identical. Base/trung-thu hold the pre-S1 pixels by
+construction.
+
+---
+
 ### Source studies
 
 This document synthesizes four research inputs supplied with the ask (trends, gift-patterns, switcher mechanics, culture), each with their own cited sources, plus direct reads of this repository listed in the preamble. Code citations reference `path:line` as read this session; checks are listed with exact commands and outputs at the top. Claims I could not verify myself are attributed to their study rather than stated as fact.

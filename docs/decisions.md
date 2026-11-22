@@ -357,3 +357,100 @@ verification + the 2027-01-20 → ~2027-02-15 fulfillment-season
 freeze) ships with this decision. Design record:
 docs/design-language.md §12.
 
+## ADR-0012: Season special layer on tet — hộ-mệnh hero band + porcelain ground (2026-11-22, accepted)
+
+### Context
+
+The vermilion tet recast (ADR-0011) is the season's base look; plan
+v1 of 2026-11-22 added a differentiated "special" riding on it for
+the Đinh Mùi 2027 selling window. The forces at play, all fixed by
+the owner's answered decisions D1–D4 of 2026-11-22 (plan v1 §5): the
+hộ-mệnh anchor reads Đinh Mùi 2027 as nạp âm Thiên Hà Thủy — ink-navy
+plus white and metallic gold, green supportive — while every competitor
+capture is red+gold, so the differentiation case is market evidence,
+not taste; direction A "Ink Lacquer Classic" (lacquer-navy hero +
+one navy band on porcelain) plus direction B's sapphire jewel won the
+design-judge ranking over B's full indigo ground and a vermilion-seal
+variant whose reds are rejected outright on the navy field; the
+mechanism choice was live — recast tet in place (destroys yesterday's
+shipped look), a fourth `[data-theme]` (proven feasible by a probe,
+but a page-wide navy token theme is mathematically forced onto a
+near-black #010409 ground — the #10233f sketch ground cannot satisfy
+the gate's binding pairs — and carries a razor-thin `--tet` pair as a
+permanent liability, plus the ask-first fourth-theme red line), or a
+tet-scoped append layer; and the design-language §4.1 one-family font
+rule blocked the ceremonial year wordmark. Nothing shipped on spot
+arithmetic: every palette value was validated BEFORE implementation
+by dry-running the real `npm run check:contrast` in three scratch
+copies — direction A, direction B, and the fourth-theme probe, exit 0
+in each, the judge re-running every exit rather than inheriting the
+verdict engineers' claims.
+
+### Decision
+
+Owner decisions D1–D4, answered 2026-11-22: (D1) direction A "Ink
+Lacquer Classic" + sapphire jewel; (D2) mechanism = tet-scoped append
+layer, not a fourth theme and not a recast; (D3) Fraunces as the
+year-wordmark family, superseding the §4.1 one-family rule for this
+layer only; (D4) emoji→SVG stage art included in S1. The landed
+Stage S1 slice:
+
+- Porcelain swap, same-line inside the tet token block
+  (global.css:97-115): `--bg` #fbeae6 → #fffef1. The tet block stays
+  exactly 12 overrides and `:root` stays 56 tokens; the block's ratio
+  comments were recomputed on the new ground (gold text `--accent-strong`
+  5.06 → 5.82:1, price ink `--tet` 4.97 → 5.71:1, deep-gold hover
+  6.21 → 7.14:1, primary link 7.36 → 8.46:1) — the swap improves the
+  season's worst body pair.
+- The special layer as one append block (global.css:2540-2746), every
+  rule `[data-theme='tet']`-scoped or default-hidden: navy #10233f
+  hero band and one navy collection band; white ink #fffdf5 (15.46:1
+  on navy); light muted #b3ad9f (7.04:1 — the inherited `--muted`
+  #6c6053 fails on navy at 2.58:1 and is re-pointed); matte gold
+  #c89b3c at 6.15:1 as TEXT on navy — gold's role inverts, it stays
+  decorative-only on the porcelain body; cocoa ink on gold fills
+  6.16:1 with hover going LIGHTER on the dark field (#d6b569, cocoa
+  8.00:1); sapphire #1b3f8d strictly decor-only — the .tet-band
+  radial glow inside a gold hairline ring, 1.61:1 on the field, below
+  every threshold on purpose. The sapphire hex is APPROXIMATE: no
+  official sRGB value is published for Coloro 125-28-38 (WGSN×Coloro
+  COTY 2027), so the physical swatch is authoritative and any later
+  correction touches only art/glow literals, never a text pair.
+- Fraunces joined to the single css2 request (BaseLayout.astro:102;
+  Vietnamese subset verified roman + italic, variable
+  ital,opsz,wght@0,9..144,100..900;1,9..144,100..900, via the css2
+  API with a full Chrome UA — the repo's documented verification
+  method). The CSP already allow-lists both font origins, so no
+  security-meta change. The `.tet-year-wordmark` "Đinh Mùi 2027"
+  (Hero.astro:16) is default-hidden and gold on the navy hero field
+  only — the same gold fails as text on the porcelain body.
+- hero-tet-1/2/tile.svg replaced in place — same filenames, same
+  viewBox/aspect — recomposed as navy + gold art with the sapphire
+  jewel core; and the collection band's eyebrow + lead retell the
+  hộ-mệnh story (Thiên Hà Thủy, lapis with gold, the chàm-dyeing and
+  gold-embossing craft), retiring the old "huy hiệu" wording in favor
+  of "thiệp" (index.astro:52-53).
+
+### Consequences
+
+Provenance: every value above is a real-gate dry-run value —
+`npm run check:contrast` exit 0 in the direction-A copy (60 pairs),
+the direction-B copy (60), and the fourth-theme probe (80 pairs
+across 4 themes), re-run by the judge; the landed tree then gated as
+a whole (recorded in this date's improvement-log entry). The append
+block is invisible to the gate's theme parser — scoped selectors
+never form a bare `[data-theme]` block — so the audited table stays
+60 pairs and base and trung-thu render pixel-identical; the
+fourth-theme route stays in reserve with its near-black ground,
+razor-thin `--tet` pair, and ask-first red line recorded. Governance:
+§4.1's "no additional families" is superseded for the special layer
+(the dated record lives in docs/design-language.md §13); D4's
+emoji→SVG stage art is decided but NOT part of the landed slice — the
+emoji icons still stand in the data files and that work stays open.
+Rollback: revert the Stage S1 commit (before push, on develop; after
+merge, via the existing revert-PR sequence in docs/tet2027-rollback.md)
+— the porcelain swap rides the same revert; the append block can also
+be deleted as one unit with its markup. The 2027-01-20 → ~2027-02-15
+fulfillment-season freeze is unchanged. Design record:
+docs/design-language.md §13.
+

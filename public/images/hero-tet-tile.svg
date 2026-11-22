@@ -1,122 +1,177 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800" role="img">
-  <title>Hoa văn Tết liền mạch — sen, quất, hoa mai và mây</title>
-  <rect width="600" height="800" fill="#FBEAE6"/>
+  <title>Hoa văn đêm Tết — huy hiệu sen lõi xanh lam với nhánh văn vàng trên nền navy của Nhà Mai</title>
+  <defs>
+    <!-- field glow behind the medallion (mock A layering) -->
+    <radialGradient id="ttHalo" cx="0.5" cy="0.5" r="0.68">
+      <stop offset="0" stop-color="#C89B3C" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#C89B3C" stop-opacity="0"/>
+    </radialGradient>
+    <!-- sapphire core: decor-only #1B3F8D, strictly inside the gold rings -->
+    <radialGradient id="ttJewel" cx="0.5" cy="0.4" r="0.65">
+      <stop offset="0" stop-color="#1B3F8D" stop-opacity="1"/>
+      <stop offset="0.55" stop-color="#1B3F8D" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#1B3F8D" stop-opacity="0.72"/>
+    </radialGradient>
+  </defs>
 
-  <!-- motif: cloud curl -->
-  <g transform="translate(64 92)" fill="none" stroke="#C89B3C" stroke-width="1.8" stroke-linecap="round" opacity="0.4">
+  <rect width="600" height="800" fill="#10233F"/>
+  <rect width="600" height="800" fill="url(#ttHalo)"/>
+
+  <!-- Composition is built for the 4/3 cover window: with background-position
+       center the visible band is y≈175–625 (tile-drift ±4% moves it
+       ±32px), so every key motif sits inside that band. Edge-wrap pairs at
+       the borders keep the repeating-motif role. -->
+
+  <!-- motif: cloud curls, upper corners inside the live band -->
+  <g transform="translate(52 196)" fill="none" stroke="#C89B3C" stroke-width="1.8" stroke-linecap="round" opacity="0.5">
     <path d="M0 26 C 0 12, 12 2, 26 6 C 37 9, 41 21, 33 28 C 27 34, 16 31, 15 23 C 14.5 17, 20 13, 25 15.5"/>
     <path d="M40 30 C 46 20, 58 16, 68 22"/>
   </g>
-  <g transform="translate(330 470)" fill="none" stroke="#C89B3C" stroke-width="1.8" stroke-linecap="round" opacity="0.38">
+  <g transform="translate(478 196)" fill="none" stroke="#C89B3C" stroke-width="1.8" stroke-linecap="round" opacity="0.45">
+    <path d="M0 26 C 0 12, 12 2, 26 6 C 37 9, 41 21, 33 28 C 27 34, 16 31, 15 23 C 14.5 17, 20 13, 25 15.5"/>
+    <path d="M40 30 C 46 20, 58 16, 68 22"/>
+  </g>
+  <g transform="translate(300 588)" fill="none" stroke="#C89B3C" stroke-width="1.8" stroke-linecap="round" opacity="0.4">
     <path d="M0 26 C 0 12, 12 2, 26 6 C 37 9, 41 21, 33 28 C 27 34, 16 31, 15 23 C 14.5 17, 20 13, 25 15.5"/>
     <path d="M40 30 C 46 20, 58 16, 68 22"/>
   </g>
 
-  <!-- motif: blossom sprig -->
-  <g transform="translate(430 140)">
-    <path d="M0 60 C 14 38, 32 20, 56 8" fill="none" stroke="#961914" stroke-width="1.8" stroke-linecap="round" opacity="0.32"/>
-    <g transform="translate(62 2)" fill="#B73927" fill-opacity="0.1" stroke="#B73927" stroke-width="1.4" opacity="0.4">
+  <!-- motif: blossom sprigs, upper band, gold hairline -->
+  <g transform="translate(56 210)">
+    <path d="M0 60 C 14 38, 32 20, 56 8" fill="none" stroke="#C89B3C" stroke-width="1.6" stroke-linecap="round" opacity="0.5"/>
+    <g transform="translate(62 2)" fill="none" stroke="#C89B3C" stroke-width="1.3" opacity="0.6">
       <ellipse rx="5" ry="11" transform="rotate(0) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(72) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(144) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(216) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(288) translate(0 -11)"/>
     </g>
-    <circle cx="62" cy="2" r="3.5" fill="#C89B3C" opacity="0.45"/>
+    <circle cx="62" cy="2" r="3.5" fill="#E8C96A" opacity="0.7"/>
   </g>
-  <g transform="translate(90 540)">
-    <path d="M0 60 C 14 38, 32 20, 56 8" fill="none" stroke="#961914" stroke-width="1.8" stroke-linecap="round" opacity="0.32"/>
-    <g transform="translate(62 2)" fill="#B73927" fill-opacity="0.1" stroke="#B73927" stroke-width="1.4" opacity="0.4">
+  <g transform="translate(544 226) scale(-1 1)">
+    <path d="M0 60 C 14 38, 32 20, 56 8" fill="none" stroke="#C89B3C" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+    <g transform="translate(62 2)" fill="none" stroke="#C89B3C" stroke-width="1.3" opacity="0.55">
       <ellipse rx="5" ry="11" transform="rotate(0) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(72) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(144) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(216) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(288) translate(0 -11)"/>
     </g>
-    <circle cx="62" cy="2" r="3.5" fill="#C89B3C" opacity="0.45"/>
+    <circle cx="62" cy="2" r="3.5" fill="#E8C96A" opacity="0.65"/>
   </g>
 
-  <!-- motif: lotus buds -->
-  <g transform="translate(150 300)" stroke="#961914" opacity="0.34" fill="none" stroke-linecap="round">
-    <path d="M20 56 C 28 40, 28 24, 20 10 C 12 24, 12 40, 20 56 Z" stroke-width="1.6" fill="#B73927" fill-opacity="0.07"/>
-    <path d="M44 56 C 50 44, 50 32, 44 22 C 38 32, 38 44, 44 56 Z" stroke-width="1.4" fill="#B73927" fill-opacity="0.05"/>
-    <path d="M4 62 C 14 58, 30 58, 58 62" stroke-width="1.6"/>
-  </g>
-  <g transform="translate(330 680)" stroke="#961914" opacity="0.32" fill="none" stroke-linecap="round">
-    <path d="M20 56 C 28 40, 28 24, 20 10 C 12 24, 12 40, 20 56 Z" stroke-width="1.6" fill="#B73927" fill-opacity="0.07"/>
-    <path d="M44 56 C 50 44, 50 32, 44 22 C 38 32, 38 44, 44 56 Z" stroke-width="1.4" fill="#B73927" fill-opacity="0.05"/>
-    <path d="M4 62 C 14 58, 30 58, 58 62" stroke-width="1.6"/>
+  <!-- motif: kumquat pair, mid-right, gold hairline -->
+  <g transform="translate(424 528)">
+    <path d="M0 6 C 12 12, 24 18, 36 26" fill="none" stroke="#C89B3C" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+    <circle cx="14" cy="22" r="8" fill="none" stroke="#C89B3C" stroke-width="1.4" opacity="0.5"/>
+    <circle cx="34" cy="30" r="6.5" fill="none" stroke="#C89B3C" stroke-width="1.3" opacity="0.45"/>
+    <path d="M0 6 q 2 -10 12 -12 q 2 9 -12 12 Z" fill="#C89B3C" opacity="0.4"/>
   </g>
 
-  <!-- motif: kumquat pair -->
-  <g transform="translate(360 330)">
-    <path d="M0 6 C 12 12, 24 18, 36 26" fill="none" stroke="#961914" stroke-width="1.6" stroke-linecap="round" opacity="0.3"/>
-    <circle cx="14" cy="22" r="9" fill="#B73927" fill-opacity="0.08" stroke="#B73927" stroke-width="1.6" opacity="0.35"/>
-    <circle cx="34" cy="30" r="7.5" fill="#B73927" fill-opacity="0.08" stroke="#B73927" stroke-width="1.4" opacity="0.35"/>
-    <path d="M0 6 q 2 -10 12 -12 q 2 9 -12 12 Z" fill="#C89B3C" opacity="0.35"/>
-  </g>
-  <g transform="translate(90 700)">
-    <path d="M0 6 C 12 12, 24 18, 36 26" fill="none" stroke="#961914" stroke-width="1.6" stroke-linecap="round" opacity="0.3"/>
-    <circle cx="14" cy="22" r="9" fill="#B73927" fill-opacity="0.08" stroke="#B73927" stroke-width="1.6" opacity="0.35"/>
-    <circle cx="34" cy="30" r="7.5" fill="#B73927" fill-opacity="0.08" stroke="#B73927" stroke-width="1.4" opacity="0.35"/>
-    <path d="M0 6 q 2 -10 12 -12 q 2 9 -12 12 Z" fill="#C89B3C" opacity="0.35"/>
-  </g>
-
-  <!-- motif: dot triplet -->
-  <g transform="translate(330 130)" fill="#C89B3C" opacity="0.4">
+  <!-- motif: dot triplets + pairs -->
+  <g transform="translate(150 250)" fill="#FFFDF5" opacity="0.55">
     <circle cx="0" cy="0" r="2.2"/>
     <circle cx="14" cy="-6" r="1.6"/>
     <circle cx="24" cy="4" r="1.8"/>
   </g>
-  <g transform="translate(500 540)" fill="#C89B3C" opacity="0.38">
+  <g transform="translate(452 306)" fill="#C89B3C" opacity="0.5">
     <circle cx="0" cy="0" r="2.2"/>
     <circle cx="14" cy="-6" r="1.6"/>
     <circle cx="24" cy="4" r="1.8"/>
   </g>
-  <g transform="translate(70 400)" fill="#B73927" opacity="0.3">
+  <g transform="translate(110 470)" fill="#C89B3C" opacity="0.45">
     <circle cx="0" cy="0" r="2"/>
     <circle cx="13" cy="6" r="1.5"/>
   </g>
-  <g transform="translate(520 690)" fill="#C89B3C" opacity="0.35">
+  <g transform="translate(416 586)" fill="#FFFDF5" opacity="0.45">
     <circle cx="0" cy="0" r="2"/>
     <circle cx="-12" cy="7" r="1.5"/>
   </g>
 
-  <!-- edge-wrap motifs: kumquat crossing the right edge (duplicate enters from the left) -->
-  <g transform="translate(566 240)">
-    <path d="M0 6 C 12 12, 24 18, 36 26" fill="none" stroke="#961914" stroke-width="1.6" stroke-linecap="round" opacity="0.3"/>
-    <circle cx="14" cy="22" r="9" fill="#B73927" fill-opacity="0.08" stroke="#B73927" stroke-width="1.6" opacity="0.35"/>
-    <circle cx="34" cy="30" r="7.5" fill="#B73927" fill-opacity="0.08" stroke="#B73927" stroke-width="1.4" opacity="0.35"/>
-    <path d="M0 6 q 2 -10 12 -12 q 2 9 -12 12 Z" fill="#C89B3C" opacity="0.35"/>
-  </g>
-  <g transform="translate(-34 240)">
-    <path d="M0 6 C 12 12, 24 18, 36 26" fill="none" stroke="#961914" stroke-width="1.6" stroke-linecap="round" opacity="0.3"/>
-    <circle cx="14" cy="22" r="9" fill="#B73927" fill-opacity="0.08" stroke="#B73927" stroke-width="1.6" opacity="0.35"/>
-    <circle cx="34" cy="30" r="7.5" fill="#B73927" fill-opacity="0.08" stroke="#B73927" stroke-width="1.4" opacity="0.35"/>
-    <path d="M0 6 q 2 -10 12 -12 q 2 9 -12 12 Z" fill="#C89B3C" opacity="0.35"/>
+  <!-- four-point stars: SectionHead.astro:19 geometry, never the glyph -->
+  <g fill="#E8C96A">
+    <path transform="translate(184 296) scale(0.4)" opacity="0.45" d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/>
+    <path transform="translate(386 478) scale(0.35)" opacity="0.4" d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/>
   </g>
 
-  <!-- edge-wrap motifs: blossom crossing the bottom edge (duplicate enters from the top) -->
+  <!-- hairline ground anchoring the medallion vines -->
+  <path d="M228 598 C 260 594, 340 594, 372 598" fill="none" stroke="#C89B3C" stroke-width="1.6" stroke-linecap="round" opacity="0.4"/>
+
+  <!-- motif: vines rooting the medallion to the ground line, drawn before
+       the medallion so they slip behind the rings -->
+  <g fill="none" stroke="#C89B3C" stroke-width="1.4" stroke-linecap="round" opacity="0.55">
+    <path d="M258 598 C 238 560, 240 516, 266 486 C 282 468, 296 458, 306 452"/>
+    <path d="M342 598 C 362 560, 360 516, 334 486 C 318 468, 304 458, 294 452"/>
+    <path d="M244 540 C 236 552, 234 564, 238 576"/>
+    <path d="M356 540 C 364 552, 366 564, 362 576"/>
+  </g>
+  <g fill="#C89B3C" fill-opacity="0.12" stroke="#C89B3C" stroke-width="1.4" stroke-linejoin="round" opacity="0.85">
+    <path d="M246 566 C 240 552, 242 536, 252 526 C 262 536, 262 554, 246 566 Z"/>
+    <path d="M354 566 C 360 552, 358 536, 348 526 C 338 536, 338 554, 354 566 Z"/>
+  </g>
+  <circle cx="236" cy="584" r="7.5" fill="none" stroke="#C89B3C" stroke-width="1.4" opacity="0.5"/>
+  <path d="M236 576 q 5 -7 13 -6 q -4 7 -13 6 Z" fill="#C89B3C" opacity="0.45"/>
+  <path d="M364 590 C 358 580, 358 566, 364 556 C 370 566, 370 580, 364 590 Z" fill="#C89B3C" fill-opacity="0.10" stroke="#C89B3C" stroke-width="1.4" stroke-linejoin="round" opacity="0.7"/>
+
+  <!-- central medallion: gold rings around the sapphire jewel -->
+  <g fill="none" stroke="#C89B3C" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="300" cy="400" r="118" stroke-width="1.2" opacity="0.55" stroke-dasharray="2 9"/>
+    <circle cx="300" cy="400" r="96" stroke-width="3" opacity="1"/>
+    <circle cx="300" cy="400" r="82" stroke-width="1.4" opacity="0.85"/>
+  </g>
+  <circle cx="300" cy="400" r="70" fill="none" stroke="#E8C96A" stroke-width="1.4" opacity="0.95"/>
+  <circle cx="300" cy="400" r="62" fill="url(#ttJewel)"/>
+  <ellipse cx="280" cy="352" rx="13" ry="6.5" transform="rotate(-24 280 352)" fill="#FFFEF1" opacity="0.26"/>
+  <circle cx="277" cy="349" r="1.8" fill="#E8C96A" opacity="0.8"/>
+  <g fill="none" stroke="#E8C96A" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M300 448 C 290 424, 290 396, 300 376 C 310 396, 310 424, 300 448 Z" stroke-width="2.2"/>
+    <path d="M300 448 C 282 436, 268 416, 264 396 C 282 404, 296 424, 300 448 Z" stroke-width="2" opacity="0.9"/>
+    <path d="M300 448 C 318 436, 332 416, 336 396 C 318 404, 304 424, 300 448 Z" stroke-width="2" opacity="0.9"/>
+    <path d="M262 458 L338 458" stroke-width="2"/>
+  </g>
+  <g fill="#FFFDF5" opacity="0.9">
+    <circle cx="300" cy="368" r="3"/>
+    <circle cx="291" cy="377" r="2"/>
+    <circle cx="309" cy="377" r="2"/>
+  </g>
+
+  <!-- edge-wrap motifs: kumquat crossing the right edge (duplicate enters
+       from the left) -->
+  <g transform="translate(566 240)">
+    <path d="M0 6 C 12 12, 24 18, 36 26" fill="none" stroke="#C89B3C" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+    <circle cx="14" cy="22" r="8" fill="none" stroke="#C89B3C" stroke-width="1.4" opacity="0.5"/>
+    <circle cx="34" cy="30" r="6.5" fill="none" stroke="#C89B3C" stroke-width="1.3" opacity="0.45"/>
+    <path d="M0 6 q 2 -10 12 -12 q 2 9 -12 12 Z" fill="#C89B3C" opacity="0.4"/>
+  </g>
+  <g transform="translate(-34 240)">
+    <path d="M0 6 C 12 12, 24 18, 36 26" fill="none" stroke="#C89B3C" stroke-width="1.5" stroke-linecap="round" opacity="0.45"/>
+    <circle cx="14" cy="22" r="8" fill="none" stroke="#C89B3C" stroke-width="1.4" opacity="0.5"/>
+    <circle cx="34" cy="30" r="6.5" fill="none" stroke="#C89B3C" stroke-width="1.3" opacity="0.45"/>
+    <path d="M0 6 q 2 -10 12 -12 q 2 9 -12 12 Z" fill="#C89B3C" opacity="0.4"/>
+  </g>
+
+  <!-- edge-wrap motifs: blossom crossing the bottom edge (duplicate enters
+       from the top) -->
   <g transform="translate(300 812)">
-    <path d="M0 60 C 14 38, 32 20, 56 8" fill="none" stroke="#961914" stroke-width="1.8" stroke-linecap="round" opacity="0.32"/>
-    <g transform="translate(62 2)" fill="#B73927" fill-opacity="0.1" stroke="#B73927" stroke-width="1.4" opacity="0.4">
+    <path d="M0 60 C 14 38, 32 20, 56 8" fill="none" stroke="#C89B3C" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+    <g transform="translate(62 2)" fill="none" stroke="#C89B3C" stroke-width="1.3" opacity="0.55">
       <ellipse rx="5" ry="11" transform="rotate(0) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(72) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(144) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(216) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(288) translate(0 -11)"/>
     </g>
-    <circle cx="62" cy="2" r="3.5" fill="#C89B3C" opacity="0.45"/>
+    <circle cx="62" cy="2" r="3.5" fill="#E8C96A" opacity="0.6"/>
   </g>
   <g transform="translate(300 12)">
-    <path d="M0 60 C 14 38, 32 20, 56 8" fill="none" stroke="#961914" stroke-width="1.8" stroke-linecap="round" opacity="0.32"/>
-    <g transform="translate(62 2)" fill="#B73927" fill-opacity="0.1" stroke="#B73927" stroke-width="1.4" opacity="0.4">
+    <path d="M0 60 C 14 38, 32 20, 56 8" fill="none" stroke="#C89B3C" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+    <g transform="translate(62 2)" fill="none" stroke="#C89B3C" stroke-width="1.3" opacity="0.55">
       <ellipse rx="5" ry="11" transform="rotate(0) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(72) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(144) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(216) translate(0 -11)"/>
       <ellipse rx="5" ry="11" transform="rotate(288) translate(0 -11)"/>
     </g>
-    <circle cx="62" cy="2" r="3.5" fill="#C89B3C" opacity="0.45"/>
+    <circle cx="62" cy="2" r="3.5" fill="#E8C96A" opacity="0.6"/>
   </g>
 </svg>

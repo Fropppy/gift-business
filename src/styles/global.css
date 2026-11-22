@@ -95,15 +95,15 @@
    --motif-image at the hoa-mai.svg watermark (base-prefixed from JS so
    the public/ URL survives the /gift-business subpath). */
 [data-theme='tet'] {
-  --bg: #fbeae6;             /* primary ink on bg 7.36:1; cocoa ink 13.51:1 */
+  --bg: #fffef1;             /* porcelain (c2 swap, verdict A-c1+c2); primary ink on bg 8.46:1; cocoa ink 15.52:1 */
   --primary: #961914;        /* white ink 8.59:1 */
   --primary-deep: #7c130f;   /* white ink 10.73:1 */
-  --tet: #b73927;            /* price ink on bg 4.97:1, white badge fill 5.79:1 */
+  --tet: #b73927;            /* price ink on bg 5.71:1, white badge fill 5.79:1 */
   --accent: #c89b3c;         /* decorative gold: seals, ribbons, borders */
-  --accent-strong: #7a611f;  /* gold AS TEXT on #fbeae6: 5.06:1. NOT #b0872f —
-                                that is 2.84:1 as text here; it is the fill
+  --accent-strong: #7a611f;  /* gold AS TEXT on #fffef1: 5.82:1. NOT #b0872f —
+                                that is 3.26:1 as text here; it is the fill
                                 value below. */
-  --accent-deep: #6a541d;    /* gold text hover on #fbeae6: 6.21:1 */
+  --accent-deep: #6a541d;    /* gold text hover on #fffef1: 7.14:1 */
   --accent-fill: #b0872f;    /* .btn--accent fill, cocoa ink 4.76:1 */
   --accent-fill-hover: #c89b3c; /* Hover fill is LIGHTER here (cocoa ink 6.16:1).
                                 In a dark-ink theme a lighter fill raises
@@ -2536,3 +2536,211 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
 .tet-band {
   background: color-mix(in srgb, var(--tet) 6%, var(--bg));
 }
+
+/* ============================================================
+   2026-11-22 — APPENDED for the Tết hộ-mệnh special layer (plan v1
+   stage S1, owner-approved 2026-11-22: direction A + sapphire jewel,
+   mechanism c). APPEND-ONLY per the :1504 contract: lines 1-1502 and
+   every earlier append region untouched, except the tet token block's
+   same-line porcelain swap #fffef1 + recomputed comment truths
+   (:97-115 — still exactly 12 overrides, same 19-line count; block
+   pairs now: primary ink 8.46:1, cocoa 15.52:1, price 5.71:1,
+   accent-strong 5.82:1, hover gold 7.14:1). No new :root tokens, no
+   motion, no JS. Every rule below is scoped under [data-theme='tet']
+   + a component class, or defaults to display:none outside tet
+   (.tet-year-wordmark), so base and trung-thu render pixel-identical;
+   scoped selectors never form a bare [data-theme] block, so the
+   gate's theme parser (scripts/check-contrast.mjs:51) still sees
+   exactly 3 themes.
+
+   Values = the direction A validated set (gate dry-run, exit 0);
+   every pair below was recomputed this session with the gate's WCAG
+   math (node helper mirroring scripts/check-contrast.mjs:62-79):
+   navy field #10233f; white ink #fffdf5 15.46:1; light muted
+   #b3ad9f 7.04:1 (--muted #6c6053 FAILS on navy at 2.58:1 — never
+   used here); matte gold #c89b3c 6.15:1 as text AND ≥3:1 as the
+   2px/hairline borders; cocoa #2b2118 on gold fills 6.16:1; hover
+   gold #d6b569 (verdict B-c1's validated hover fill; luminance
+   0.484 > #c89b3c's 0.360 — hover fills go LIGHTER on a dark field),
+   cocoa on it 8.00:1. Named traps, computed on the field: cocoa
+   --text inheritance 1.00:1, tet --primary 1.83:1, --tet 2.72:1,
+   --accent-strong 2.67:1 — all rejected as text/ink on navy.
+   Sapphire #1b3f8d is DECOR-ONLY: 1.61:1 on THIS field (the often
+   cited 1.12:1 is its ratio on mock B's indigo #2a3b66) — it ships
+   solely as the .tet-band radial glow inside a gold hairline ring;
+   never text, never border, never interactive fill. Selector set
+   from the screenshot-verified direction A mock (/tmp/nm-mock-a
+   :2566-2637); the jewel pattern from mock B (/tmp/nm-mock-b
+   :2640-2700) with direction A values.
+   ============================================================ */
+
+/* --- Tết year wordmark (new hero element; markup lands separately) ---
+   Hidden default: outside tet it must not render at all. Under tet it
+   is a gold display accent that belongs ON THE NAVY HERO FIELD:
+   #c89b3c on #10233f = 6.15:1 AA text (the same gold fails as text on
+   the porcelain bg — keep the element inside .hero-main). Fraunces is
+   the Vietnamese-complete display serif (css2 API verified this
+   session, roman + italic axes; CSP already allows the fonts origins);
+   serif is the safe fallback. letter-spacing 0.12em sits inside the
+   0.06–0.14em display-caps band. line-height is deliberately NOT set
+   — Vietnamese stacked diacritics (Ẳ Ặ Ồ) keep every bit of inherited
+   room (house rule :2507-2513; shared heading rule :168-174). */
+.tet-year-wordmark { display: none; }
+
+[data-theme='tet'] .tet-year-wordmark {
+  display: block;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  color: #c89b3c; /* on navy field #10233f: 6.15:1 — AA text */
+  letter-spacing: 0.12em;
+}
+
+/* --- ink-navy hero band (the .hero-grid panel; mock-a selector set) --- */
+[data-theme='tet'] .hero-grid {
+  background: #10233f; /* navy field */
+  border-radius: var(--radius-lg);
+  padding-inline: clamp(1rem, 2.5vw, 1.75rem);
+}
+
+/* gold hairline replaces the paper rule (base .hero-main :596);
+   #c89b3c vs #10233f = 6.15:1 — non-text ≥3:1 */
+[data-theme='tet'] .hero-main { border-top-color: #c89b3c; }
+
+/* hero text inks — validated light set; guards the cocoa --text
+   inheritance from the shared heading rule (:168-174 → 1.00:1 on
+   navy) and the tet reds (--primary 1.83:1, --tet 2.72:1 — rejected) */
+[data-theme='tet'] .hero-main .hero-title { color: #fffdf5; } /* 15.46:1 */
+
+[data-theme='tet'] .hero-main .eyebrow { color: #c89b3c; } /* 6.15:1 */
+
+[data-theme='tet'] .hero-main .hero-stroke { color: #c89b3c; } /* decor SVG stroke, 6.15:1 */
+
+[data-theme='tet'] .hero-main .hero-promise { color: #b3ad9f; } /* 7.04:1 */
+
+[data-theme='tet'] .hero-main a:not(.btn) { color: #fffdf5; } /* 15.46:1 */
+
+/* tet ghost button is --primary #961914 text on navy (1.83:1 — verdict
+   REJECTED); re-pointed to the validated white ink + white-mix border
+   (mirrors the base .cta-band ghost pattern :1268-1270). Computed
+   blends over the field: 55% white border = #939ba3 → 5.59:1 non-text;
+   hover 12% white = #2d3d55 → white ink on it 10.79:1. */
+[data-theme='tet'] .hero-main .btn--ghost {
+  border-color: color-mix(in srgb, #fffdf5 55%, transparent);
+  color: #fffdf5; /* 15.46:1 */
+}
+
+[data-theme='tet'] .hero-main .btn--ghost:hover {
+  background: color-mix(in srgb, #fffdf5 12%, transparent);
+  color: #fffdf5; /* on the #2d3d55 blend: 10.79:1 */
+}
+
+/* CTA on the navy band — gold fill #c89b3c with cocoa ink #2b2118
+   (6.16:1 AA, the cross-validation anchor pair; gold edge vs field
+   6.15:1 ≥3:1). Hover goes LIGHTER on the dark field: #d6b569
+   (luminance 0.484 > 0.360), cocoa on it 8.00:1 (≥4.5 ✓); #d6b569 vs
+   field 8.00:1 non-text. The base-theme darker-hover instinct would
+   LOWER contrast on dark — the dark-polarity lesson. */
+[data-theme='tet'] .hero-main .btn--accent {
+  background: #c89b3c;
+  color: #2b2118; /* 6.16:1 */
+}
+
+[data-theme='tet'] .hero-main .btn--accent:hover {
+  background: #d6b569; /* lighter hover gold; cocoa ink keeps 8.00:1 */
+}
+
+/* default tet ring (--primary, 1.83:1) vanishes on navy — white ink */
+[data-theme='tet'] .hero-main :focus-visible { outline-color: #fffdf5; } /* 15.46:1 ≥3:1 */
+
+/* --- ink-navy collection band (the one navy .tet-band) + jewel --- */
+[data-theme='tet'] .tet-band {
+  position: relative;  /* jewel anchoring (mock-B pattern) */
+  overflow: hidden;    /* the glow never leaks past the band */
+  background: #10233f; /* overrides the :2536 wash inside tet ONLY */
+  border-top: 2px solid #c89b3c; /* band boundary: 6.15:1 non-text */
+}
+
+/* The one display jewel — sapphire radial glow, DECOR-ONLY:
+   #1b3f8d on this field is 1.61:1, below every threshold on purpose
+   (depth, not information). pointer-events:none; never text, never
+   border, never an interactive fill. The gold hairline ring frames
+   it; the 50%-gold blend (#6c5f3e over navy) computes 2.51:1 — pure
+   ornament around decor, exempt from 1.4.11, craft bar kept by the
+   full-gold 2px band border above (6.15:1). */
+[data-theme='tet'] .tet-band::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: clamp(2rem, 9vw, 8rem);
+  width: 210px;
+  height: 210px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    #1b3f8d 0%,
+    rgba(27, 63, 141, 0.55) 36%, /* mid-stop blend #16326a = 1.27:1 — decor */
+    rgba(27, 63, 141, 0) 72%
+  );
+  pointer-events: none;
+}
+
+[data-theme='tet'] .tet-band::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: clamp(2rem, 9vw, 8rem);
+  width: 256px;
+  height: 256px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  border: 1.5px solid rgba(200, 155, 60, 0.5); /* blend 2.51:1 — decor ring */
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  [data-theme='tet'] .tet-band::before {
+    width: 140px;
+    height: 140px;
+    right: -48px;
+    top: 12%;
+    transform: none;
+  }
+
+  [data-theme='tet'] .tet-band::after {
+    width: 172px;
+    height: 172px;
+    right: -62px;
+    top: 12%;
+    transform: none;
+  }
+}
+
+[data-theme='tet'] .tet-band .eyebrow { color: #c89b3c; } /* 6.15:1 */
+
+[data-theme='tet'] .tet-band .section-head h2 { color: #fffdf5; } /* 15.46:1 */
+
+[data-theme='tet'] .tet-band .section-head .lead { color: #b3ad9f; } /* 7.04:1 */
+
+/* section-head hairline follows the band's gold ornament
+   (base .section-head::after :1612); 6.15:1 non-text */
+[data-theme='tet'] .tet-band .section-head::after { background: #c89b3c; }
+
+/* divider star was --accent-strong #7a611f — 2.67:1 on navy; gold now
+   (6.15:1). The __rule hairlines keep --border-strong (9.71:1 decor). */
+[data-theme='tet'] .tet-band .tet-divider__star { color: #c89b3c; }
+
+/* tet --primary fill is REJECTED on navy (1.83:1): the band CTA takes
+   the same gold treatment as the hero — cocoa ink 6.16:1 on #c89b3c */
+[data-theme='tet'] .tet-band .btn--primary {
+  background: #c89b3c;
+  color: #2b2118; /* 6.16:1 */
+}
+
+[data-theme='tet'] .tet-band .btn--primary:hover {
+  background: #d6b569; /* lighter hover gold; cocoa ink keeps 8.00:1 */
+}
+
+[data-theme='tet'] .tet-band a:not(.btn) { color: #fffdf5; } /* 15.46:1 */
+
+[data-theme='tet'] .tet-band :focus-visible { outline-color: #fffdf5; } /* 15.46:1 ≥3:1 */
