@@ -796,6 +796,67 @@ is the band eyebrow + lead copy noted above.
 
 ---
 
+## 14. Line icons — LineIcon replaces the emoji glyphs (2026-11-22)
+
+Built on §1–§13; no earlier decision reopened. Plan v1 Stage S1,
+decision D4: the four emoji glyph render sites swap to the LineIcon
+component (`src/components/LineIcon.astro`), which renders decorative
+inline SVG per §12's binding ornament conventions — the component
+contract is `aria-hidden`/`focusable="false"`, colored through
+`currentColor` so themes tint it via CSS `color`, and SVG paths only,
+never a text glyph the fonts lack (the U+2726 lesson). The visible
+Vietnamese label next to each icon carries the meaning, so the SVG
+ships no title/desc/aria-label. Swapped sites (verified this session,
+post-edit): homepage occasion chips (`OccasionStrip.astro:34-36`,
+`<LineIcon id={o.tag} />` at `:35`), homepage category cards
+(`CategoryGrid.astro:23-25`, `id={c.slug}` at `:24`), and the catalog
+filter rows' occasion + category chips (`ProductGrid.astro:80` and
+`:88`). The wrapping `aria-hidden="true"` spans stay untouched.
+Inline-SVG-switching-on-a-name is already the house pattern
+(`Commitments.astro:39-64` renders its sun/ribbon/clock/refresh icons
+the same way); no client JS ships with an Astro component.
+
+The id vocabulary is the data's own keys — occasion `tag`
+(`src/data/occasions.json`, 12 values) and category `slug`
+(`src/data/categories.json`, 7 values; the identifier field of the
+`Category` interface, `src/utils/catalog.ts:51-56` — the JSON carries
+`slug`, not a literal `id`).
+
+**Zero data churn (binding):** the `icon` fields in
+`src/data/occasions.json` and `src/data/categories.json` stay in place
+UNTOUCHED — the family's data contract stays stable, and rendering
+simply stops reading them. The emoji strings become dormant data by
+design — legacy-unused, not deleted; removing the fields later is a
+separate owner-approved decision, not part of this swap.
+
+**Icon style — the hero's botanical stroke language (2026-11-22):**
+the set is hairline line art on one 24×24 grid — primary strokes 2,
+detail strokes 1.5, round caps/joins, no fills, ≥2px canvas margin at
+every glyph's outer stroke edge — with its stroke vocabulary borrowed
+from the shipped hero art (`public/images/hero-tet-1.svg`: the
+cloud-spiral curl, the almond leaf, the q-curve fruit leaf, the vesica
+bud, the five-petal rotated-ellipse blossom; the four-point star is
+path geometry from SectionHead.astro, never a text glyph). Every glyph
+runs stroke/fill on `currentColor`, so themes tint the icons through
+CSS `color` exactly as they tint §12's ornaments, and an unknown id
+renders nothing — callers never get an empty box.
+
+**Scope limit (2026-11-22): the remaining inline text emoji are NOT
+part of this pass and stay.** The footer contact lines
+(`src/components/Footer.astro:63-73`), the story signature
+(`src/pages/index.astro:86`), and the PDP service bullets
+(`src/pages/products/[slug].astro:190-197`) — together with the other
+inline prose emoji, the contact-channel icons
+(`src/pages/index.astro:145-172`, `src/pages/contact.astro:54-99`) and
+the form's delivery-promise line (`src/components/ContactForm.astro:78`)
+— are inline prose decoration inside running text, not card-scale
+iconography; §14's swap covers only the chip/card icon slots where a
+data key selects a glyph. Any site-wide emoji retirement is a separate
+off-season language pass (a copy/voice decision), not this swap and not
+a follow-on to it.
+
+---
+
 ### Source studies
 
 This document synthesizes four research inputs supplied with the ask (trends, gift-patterns, switcher mechanics, culture), each with their own cited sources, plus direct reads of this repository listed in the preamble. Code citations reference `path:line` as read this session; checks are listed with exact commands and outputs at the top. Claims I could not verify myself are attributed to their study rather than stated as fact.

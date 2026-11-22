@@ -1,0 +1,97 @@
+---
+/**
+ * LineIcon — the site's one line-art icon set (plan v1 Stage S1, decision D4,
+ * docs/design-language.md §14). Replaces the emoji glyphs that used to ship
+ * in the `icon` fields of src/data/occasions.json and src/data/categories.json.
+ *
+ * Contract (§14, binding):
+ * - Decorative inline SVG: aria-hidden + focusable="false", no title/desc/
+ *   aria-label — the visible Vietnamese label next to the icon carries the
+ *   meaning. Never render this inside an element that needs an accessible name.
+ * - stroke/fill run on currentColor so themes tint the icon via CSS `color`.
+ * - SVG paths only, never a text glyph the fonts lack (the U+2726 lesson).
+ *
+ * Zero data churn: the emoji `icon` fields stay in both JSON files untouched —
+ * the family's data contract is stable; rendering simply stops reading them.
+ *
+ * Style: hairline botanical line art in the shipped hero language
+ * (public/images/hero-tet-1.svg) — one 24×24 grid, ≥2px canvas margin at
+ * every glyph's outer stroke edge, primary strokes 2, detail strokes 1.5,
+ * round caps/joins, no fills. Stroke vocabulary borrowed from the hero art:
+ * cloud-spiral curl (:55), almond leaf (:100), q-curve fruit leaf (:82),
+ * vesica bud (:115), five-petal ellipse blossom (:120-124), four-point star
+ * path (SectionHead.astro:19 — path geometry, never the glyph).
+ *
+ * ids are the data's own keys: occasions.json `tag` (12) + categories.json
+ * `slug` (7). An unknown id renders nothing — callers never get an empty box.
+ */
+interface Props {
+  id: string;
+  size?: number;
+}
+
+const { id, size = 18 } = Astro.props;
+
+const GLYPHS: Record<string, string> = {
+  /* — occasions (occasions.json `tag`) — */
+  // Tết: lì xì money envelope with a cloud curl
+  tet: '<rect x="4.5" y="4.5" width="15" height="15.4" rx="1.8"/><path d="M4.5 7.3 12 10.7 19.5 7.3"/><path stroke-width="1.5" d="M14.6 15.2a2.6 2.6 0 1 0-2.6 2.6c1 0 1.9-.7 2.1-1.7"/>',
+  // Valentine: tulip
+  valentine: '<path d="M12 4.2c1.1 1.3 2.5 2 3.9 2 .3 4.4-1.6 7-3.9 7s-4.2-2.6-3.9-7c1.4 0 2.8-.7 3.9-2Z"/><path stroke-width="1.5" d="M8.6 6.8c.5 2.6 1.6 4.3 3.4 5.4"/><path stroke-width="1.5" d="M15.4 6.8c-.5 2.6-1.6 4.3-3.4 5.4"/><path d="M12 13.2v6.6"/><path stroke-width="1.5" d="M12 16.6c-2.4-.1-4.3-1.9-4.5-4.3 2.4.1 4.3 1.9 4.5 4.3Z"/><path stroke-width="1.5" d="M12 14.4c2.3-.2 4.1-1.8 4.4-4.1-2.3.2-4.1 1.8-4.4 4.1Z"/>',
+  // 8/3: rose — a true spiral bloom, three open decreasing turns
+  '8-3': '<path d="M16.8 9.4a4.8 4.8 0 1 0-4.8 4.8 3.4 3.4 0 1 0 3.4-3.4 2.2 2.2 0 1 0-2.2 2.2"/><path d="M12 14.4v6.4"/><path stroke-width="1.5" d="M12 16.4c-2.3-.1-4.1-1.8-4.3-4.1 2.3.1 4.1 1.8 4.3 4.1Z"/><path stroke-width="1.5" d="M12 17.6c2.1-.1 3.8-1.6 4-3.7-2.1.1-3.8 1.6-4 3.7Z"/>',
+  // 1/6: balloon on a wavy string
+  '1-6': '<ellipse cx="12" cy="8.8" rx="4.4" ry="5"/><path d="M12 13.8l-1.1 1.7h2.2Z"/><path d="M12 15.5c-1.7 1.6 1.7 2.5 0 4.9"/><path stroke-width="1.5" d="M9.6 7a3.2 3.2 0 0 1 1.5-2"/>',
+  // Trung Thu: full moon over a lotus blossom on a curved sprig
+  'trung-thu': '<circle cx="15" cy="8.2" r="4.6"/><path d="M9.9 11.8c-1.2 1.4-1.2 3.4 0 4.8 1.2-1.4 1.2-3.4 0-4.8Z"/><path stroke-width="1.5" d="M9.9 17.5c-1.4-.5-2.4-1.6-2.7-3 1.3.4 2.3 1.5 2.7 3Z"/><path stroke-width="1.5" d="M9.9 17.5c1.4-.5 2.4-1.6 2.7-3-1.3.4-2.3 1.5-2.7 3Z"/><path d="M4.4 20.5c2.4-.3 4.3-1.3 5.5-3"/><path stroke-width="1.5" d="M6.9 20c-1.8-.3-3-1.4-3.3-3.2 1.8.3 3 1.4 3.3 3.2Z"/>',
+  // 20/10: five-petal daisy ring (the hero blossom, iconized)
+  '20-10': '<circle cx="12" cy="8.6" r="0.9" stroke-width="1.5"/><ellipse cx="12" cy="8.6" rx="1.5" ry="2" transform="rotate(270 12 8.6) translate(0 -2.6)" stroke-width="1.5"/><ellipse cx="12" cy="8.6" rx="1.5" ry="2" transform="rotate(342 12 8.6) translate(0 -2.6)" stroke-width="1.5"/><ellipse cx="12" cy="8.6" rx="1.5" ry="2" transform="rotate(54 12 8.6) translate(0 -2.6)" stroke-width="1.5"/><ellipse cx="12" cy="8.6" rx="1.5" ry="2" transform="rotate(126 12 8.6) translate(0 -2.6)" stroke-width="1.5"/><ellipse cx="12" cy="8.6" rx="1.5" ry="2" transform="rotate(198 12 8.6) translate(0 -2.6)" stroke-width="1.5"/><path d="M12 13.4v7.4"/><path stroke-width="1.5" d="M12 17.8c-2.2-.1-3.9-1.7-4.1-3.9 2.2.1 3.9 1.7 4.1 3.9Z"/><path stroke-width="1.5" d="M12 16.4c2-.1 3.6-1.5 3.8-3.5-2 .1-3.6 1.5-3.8 3.5Z"/>',
+  // 20/11: open book with a sprig rising from the spine
+  '20-11': '<path d="M12 8.8C10.2 7.2 7.6 6.7 4.6 7.2v9.2c3-.5 5.6 0 7.4 1.6"/><path d="M12 8.8c1.8-1.6 4.4-2.1 7.4-1.6v9.2c-3-.5-5.6 0-7.4 1.6"/><path d="M12 8.8v9.2"/><path d="M12 8.8c.2-1.8 1.2-3.3 3-4.6"/><circle cx="15.4" cy="4" r="1" stroke-width="1.5"/>',
+  // Birthday: small cake, one candle
+  'sinh-nhat': '<path d="M4.8 19.6h14.4"/><rect x="6.4" y="14.2" width="11.2" height="5.4" rx="1"/><path stroke-width="1.5" d="M6.4 16.4c.9.8 1.9.8 2.8 0s1.9-.8 2.8 0 1.9.8 2.8 0 1.9-.8 2.8 0"/><path d="M12 11.6v2.6"/><path stroke-width="1.5" d="M12 5.9c.8.8 1.2 1.5 1.2 2.1a1.2 1.2 0 1 1-2.4 0c0-.6.4-1.3 1.2-2.1Z"/>',
+  // Khai trương: shopfront awning over a door
+  'khai-truong': '<path d="M4 10V7.3C4 6.6 4.6 6 5.3 6h13.4c.7 0 1.3.6 1.3 1.3V10a2 2 0 0 1-4 0 2 2 0 0 1-4 0 2 2 0 0 1-4 0 2 2 0 0 1-4 0Z"/><path d="M4 19.6h16"/><path d="M9.4 19.6v-3.6c0-.6.5-1.1 1.1-1.1h3c.6 0 1.1.5 1.1 1.1v3.6"/>',
+  // Cưới hỏi: interlocked rings under a four-point sparkle
+  'cuoi-hoi': '<circle cx="9.3" cy="13.6" r="4.5"/><circle cx="14.7" cy="13.6" r="4.5"/><path stroke-width="1.5" d="M12 3.7l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6Z"/>',
+  // Thăm bệnh: open fruit basket — two kumquat apples and a q-curve leaf
+  'tham-benh': '<path d="M4.8 11.6h14.4"/><path d="M6.2 11.6a5.8 5.8 0 0 0 11.6 0"/><circle cx="9.4" cy="9.9" r="1.7" stroke-width="1.5"/><circle cx="14.6" cy="9.9" r="1.7" stroke-width="1.5"/><path stroke-width="1.5" d="M14.6 8.2q1.7-2.1 4-1.7q-1.3 2.1-4 1.7Z"/>',
+  // Tốt nghiệp – tri ân: curled-corner scroll with a ribbon band and tail
+  'tri-an': '<path d="M5.4 8.6c0-1.3 1-2.4 2.4-2.4h11.4c-1.3 0-2.4 1.1-2.4 2.4v5.2c0 1.3-1.1 2.4-2.4 2.4H5.4c1.3 0 2.4-1.1 2.4-2.4V8.6Z"/><path d="M11.5 6.2v10"/><path d="M10.1 16.2v1.1l1.4 1.6 1.4-1.6v-1.1"/>',
+
+  /* — categories (categories.json `slug`) — */
+  // Giỏ trái cây cao cấp: heaped fruit basket with weave lines
+  'gio-trai-cay-cao-cap': '<path d="M4.8 11.1h14.4"/><path d="M5.8 11.1a6.2 6.2 0 0 0 12.4 0"/><path stroke-width="1.5" d="M6.9 13.7h10.2M8.7 15.5h6.6"/><circle cx="9.4" cy="9.7" r="1.8" stroke-width="1.5"/><circle cx="14.6" cy="9.7" r="1.8" stroke-width="1.5"/><circle cx="12" cy="10.1" r="1.8" stroke-width="1.5"/>',
+  // Giỏ quà Tết: the red envelope, flap deep (the curl belongs to the tet occasion)
+  'gio-qua-tet': '<rect x="4.5" y="5.5" width="15" height="13" rx="1.8"/><path d="M4.5 8.4 12 13.6 19.5 8.4"/>',
+  // Quà tặng doanh nghiệp: office block with windows and a door
+  'qua-tang-doanh-nghiep': '<rect x="6.5" y="4.8" width="11" height="14.8" rx="1"/><path stroke-width="1.5" d="M9.4 7.6h1.5v1.5H9.4ZM13.1 7.6h1.5v1.5h-1.5ZM9.4 10.6h1.5v1.5H9.4ZM13.1 10.6h1.5v1.5h-1.5Z"/><path d="M10.7 19.6v-2.6c0-.5.4-.9.9-.9h.8c.5 0 .9.4.9.9v2.6"/><path d="M4.6 19.6h14.8"/>',
+  // Giỏ quà sinh nhật & hoa tươi: three-bloom bouquet in a wrapped cone
+  'gio-qua-sinh-nhat-hoa': '<path d="M8.2 12.6 12 20l3.8-7.4"/><path stroke-width="1.5" d="M9.3 14.6h5.4"/><circle cx="8.6" cy="7.9" r="1.9" stroke-width="1.5"/><circle cx="15.4" cy="7.9" r="1.9" stroke-width="1.5"/><circle cx="12" cy="5" r="1.9" stroke-width="1.5"/><path stroke-width="1.5" d="M9.3 9.8 10.9 12.8M14.7 9.8 13.1 12.8M12 7v5.8"/>',
+  // Hộp quà tặng cao cấp: gift box, lid, ribbon and bow loops
+  'hop-qua-tang-cao-cap': '<rect x="4.6" y="8.6" width="14.8" height="3.2" rx="0.8"/><rect x="6.2" y="11.8" width="11.6" height="7.6" rx="0.8"/><path d="M12 8.6v10.8"/><circle cx="10" cy="5.6" r="1.6" stroke-width="1.5"/><circle cx="14" cy="5.6" r="1.6" stroke-width="1.5"/><path stroke-width="1.5" d="M11 6.9 12 8.6M13 6.9 12 8.6"/>',
+  // Quà khai trương – tân gia: an almond leaf (tài lộc sprig)
+  'qua-khai-truong-tan-gia': '<path d="M19.2 4.8c-7.6.4-13.4 6.2-13.8 14.4 7.6-.4 13.4-6.2 13.8-14.4Z"/><path stroke-width="1.5" d="M6.6 17.6C10.2 13.8 14.6 9.4 18 5.9"/><path stroke-width="1.5" d="M5.4 19.2c-.5.5-1 .9-1.6 1.2"/>',
+  // Set quà Trung Thu: mooncake — stamped quatrefoil on a round cake
+  'set-qua-trung-thu': '<circle cx="12" cy="12.2" r="6.6"/><path stroke-width="1.5" d="M9.9 10.1a2.1 2.1 0 0 1 4.2 0 2.1 2.1 0 0 1 0 4.2 2.1 2.1 0 0 1-4.2 0 2.1 2.1 0 0 1 0-4.2Z"/><circle cx="12" cy="12.2" r="1" stroke-width="1.5"/>',
+};
+
+const glyph = GLYPHS[id];
+---
+
+{glyph && (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width={size}
+    height={size}
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    focusable="false"
+    set:html={glyph}
+  />
+)}

@@ -388,3 +388,29 @@ Mark promoted entries with → where they landed.
   2026-11-21 — this entry is its second application, extended with
   the probe lesson that a mechanism choice can be priced
   deterministically before any code moves.
+
+## 2026-11-22 — Chip/card emoji icons swapped to the LineIcon line-art set
+
+- Observation: the chip/card icon slots rendered the emoji strings
+  stored in the data files' `icon` fields straight into markup
+  (occasions.json entries keyed by `tag`, categories.json by `slug`),
+  while the binding ornament convention (design-language §12,
+  2026-11-21) already required decorative SVG paths — system emoji
+  fonts render glyphs on their own terms, with no theme tinting and no
+  font guarantee (the U+2726 lesson).
+- Change: src/components/LineIcon.astro ships the 19-id line-art set
+  (12 occasion tags + 7 category slugs on one 24×24 grid, hairline
+  botanical strokes in the hero art's language) and the four render
+  sites swap to it — OccasionStrip.astro:35, CategoryGrid.astro:24,
+  ProductGrid.astro:80 and :88 — keyed by the data's own tag/slug
+  values. No data-schema change: the JSON `icon` fields stay in place
+  untouched; rendering simply stops reading them. Decorative-SVG
+  discipline applied per the §12 convention on every glyph: aria-hidden
+  + focusable="false", stroke/fill on currentColor, SVG paths only, no
+  title/desc (the visible Vietnamese label carries the meaning). The
+  remaining inline text emoji (footer contact lines, signature, PDP
+  service bullets) are explicitly out of scope — inline prose
+  decoration, not card-scale iconography.
+- Promoted to → docs/design-language.md §14 (the icon record,
+  extended this session with the icon-style and scope-limit
+  paragraphs); the ornament convention itself stays §12's.
