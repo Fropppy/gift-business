@@ -2,6 +2,7 @@
 import { categories } from '../utils/catalog';
 import { asset } from '../utils/asset';
 import SectionHead from './SectionHead.astro';
+import LineIcon from './LineIcon.astro';
 
 // SEO suite — the three rankable categories have /danh-muc/ landing pages;
 // the other four keep the ?category= filter link (self-canonical there).
@@ -20,7 +21,7 @@ const LANDING_SLUGS = new Set(['gio-qua-tet', 'qua-khai-truong-tan-gia', 'qua-ta
         categories.map((c) => (
           <a class="cat-card" href={LANDING_SLUGS.has(c.slug) ? asset(`/danh-muc/${c.slug}/`) : `${asset('/products/')}?category=${c.slug}`}>
             <span class="cat-ico" aria-hidden="true">
-              {c.icon}
+              <LineIcon id={c.slug} />
             </span>
             <h3>{c.name}</h3>
             <p>{c.description}</p>

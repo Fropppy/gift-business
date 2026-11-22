@@ -1,28 +1,41 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img">
-  <title>Hoa sen, cành quất vàng và mây — tranh botanica Tết của Nhà Mai</title>
+  <title>Huy hiệu sen lõi xanh lam trên nền đêm Tết, mây và cành vàng bao quanh — tranh hero Nhà Mai</title>
   <defs>
-    <radialGradient id="t1halo" cx="0.72" cy="0.36" r="0.6">
-      <stop offset="0" stop-color="#C89B3C" stop-opacity="0.16"/>
+    <!-- field glow: the halo is centred on the medallion so the jewel reads
+         as the scene's single light source (mock A layering: gradient over
+         flat field, strokes layered by opacity) -->
+    <radialGradient id="t1halo" cx="0.5" cy="0.44" r="0.62">
+      <stop offset="0" stop-color="#C89B3C" stop-opacity="0.18"/>
       <stop offset="1" stop-color="#C89B3C" stop-opacity="0"/>
+    </radialGradient>
+    <!-- sapphire core: decor-only, alpha-modulated #1B3F8D, strictly inside
+         the gold rings (validated table: 1.12:1 on field — never UI) -->
+    <radialGradient id="t1jewel" cx="0.5" cy="0.4" r="0.65">
+      <stop offset="0" stop-color="#1B3F8D" stop-opacity="1"/>
+      <stop offset="0.55" stop-color="#1B3F8D" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#1B3F8D" stop-opacity="0.72"/>
     </radialGradient>
   </defs>
 
-  <rect width="1200" height="800" fill="#FBEAE6"/>
+  <rect width="1200" height="800" fill="#10233F"/>
   <rect width="1200" height="800" fill="url(#t1halo)"/>
 
-  <!-- table -->
-  <rect x="0" y="612" width="1200" height="188" fill="#B73927" opacity="0.05"/>
-  <line x1="0" y1="612" x2="1200" y2="612" stroke="#961914" stroke-width="2" opacity="0.3"/>
+  <!-- four-point stars: SectionHead.astro:19 path geometry, never the glyph -->
+  <g fill="#E8C96A">
+    <path transform="translate(206 232) scale(0.55)" opacity="0.6" d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/>
+    <path transform="translate(972 300) scale(0.45)" opacity="0.5" d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/>
+    <path transform="translate(744 660) scale(0.3)" opacity="0.35" d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"/>
+  </g>
 
-  <!-- scattered dots -->
-  <circle cx="150" cy="140" r="6" fill="#C89B3C" opacity="0.5"/>
-  <circle cx="230" cy="95" r="4" fill="#B73927" opacity="0.35"/>
-  <circle cx="955" cy="120" r="5" fill="#B73927" opacity="0.35"/>
-  <circle cx="1055" cy="205" r="7" fill="#C89B3C" opacity="0.45"/>
-  <circle cx="125" cy="420" r="4" fill="#961914" opacity="0.3"/>
+  <!-- scattered dots (mock A, gold + porcelain) -->
+  <circle cx="150" cy="140" r="6" fill="#C89B3C" opacity="0.95"/>
+  <circle cx="230" cy="95" r="4" fill="#FFFDF5" opacity="0.7"/>
+  <circle cx="955" cy="120" r="5" fill="#FFFDF5" opacity="0.65"/>
+  <circle cx="1055" cy="205" r="7" fill="#C89B3C" opacity="0.9"/>
+  <circle cx="125" cy="420" r="4" fill="#C89B3C" opacity="0.8"/>
 
-  <!-- cloud scrollwork, top corners -->
-  <g fill="none" stroke="#C89B3C" stroke-width="2" stroke-linecap="round" opacity="0.75">
+  <!-- cloud scrollwork, top corners (shipped geometry, gold full strength) -->
+  <g fill="none" stroke="#C89B3C" stroke-width="2.4" stroke-linecap="round" opacity="1">
     <path d="M88 132 C 88 106, 110 90, 132 96 C 150 101, 156 120, 144 132 C 135 141, 120 138, 118 126 C 117 118, 124 112, 131 115"/>
     <path d="M156 134 C 164 118, 184 112, 198 122"/>
     <path d="M64 142 C 110 152, 168 152, 212 142"/>
@@ -30,90 +43,122 @@
     <path d="M1044 134 C 1036 118, 1016 112, 1002 122"/>
     <path d="M1136 142 C 1090 152, 1032 152, 988 142"/>
   </g>
-  <g fill="none" stroke="#961914" stroke-width="1.2" stroke-linecap="round" opacity="0.22">
+  <g fill="none" stroke="#FFFDF5" stroke-width="1.4" stroke-linecap="round" opacity="0.55">
     <path d="M88 138 C 88 112, 110 96, 132 102"/>
     <path d="M1112 138 C 1112 112, 1090 96, 1068 102"/>
   </g>
 
-  <!-- shadow -->
-  <ellipse cx="620" cy="640" rx="260" ry="26" fill="#961914" opacity="0.08"/>
-
-  <!-- footed bowl -->
-  <g fill="none" stroke="#961914" stroke-linecap="round">
-    <path d="M500 505 C 512 570, 556 600, 620 600 C 684 600, 728 570, 740 505" stroke-width="2.5"/>
-    <ellipse cx="620" cy="505" rx="120" ry="13" stroke-width="2.5"/>
-    <ellipse cx="620" cy="505" rx="106" ry="9" stroke="#C89B3C" stroke-width="1.2" opacity="0.7"/>
-    <path d="M586 600 L580 612 M654 600 L660 612" stroke-width="2.2"/>
-    <path d="M562 612 L678 612" stroke-width="2.2"/>
+  <!-- side cloud curls at medallion height: fill the mid band, tie the
+       medallion to the canvas sides -->
+  <g fill="none" stroke="#C89B3C" stroke-width="2" stroke-linecap="round" opacity="0.7">
+    <g transform="translate(288 412)">
+      <path d="M0 26 C 0 12, 12 2, 26 6 C 37 9, 41 21, 33 28 C 27 34, 16 31, 15 23 C 14.5 17, 20 13, 25 15.5"/>
+      <path d="M40 30 C 46 20, 58 16, 68 22"/>
+    </g>
+    <g transform="translate(844 412)">
+      <path d="M0 26 C 0 12, 12 2, 26 6 C 37 9, 41 21, 33 28 C 27 34, 16 31, 15 23 C 14.5 17, 20 13, 25 15.5"/>
+      <path d="M40 30 C 46 20, 58 16, 68 22"/>
+    </g>
   </g>
 
-  <!-- lotus in the bowl -->
-  <g stroke="#961914" stroke-width="1.8" stroke-linejoin="round">
-    <path d="M540 302 C 518 298, 500 288, 488 272 C 506 266, 526 278, 540 302 Z" fill="#B73927" fill-opacity="0.08"/>
-    <path d="M540 302 C 562 298, 580 288, 592 272 C 574 266, 554 278, 540 302 Z" fill="#B73927" fill-opacity="0.08"/>
-    <path d="M540 302 C 526 288, 517 268, 518 250 C 531 259, 539 279, 540 302 Z" fill="#B73927" fill-opacity="0.16"/>
-    <path d="M540 302 C 554 288, 563 268, 562 250 C 549 259, 541 279, 540 302 Z" fill="#B73927" fill-opacity="0.16"/>
-    <path d="M540 302 C 533 280, 533 256, 540 238 C 547 256, 547 280, 540 302 Z" fill="#B73927" fill-opacity="0.2"/>
-  </g>
-  <g fill="#C89B3C">
-    <circle cx="540" cy="272" r="3"/>
-    <circle cx="531" cy="282" r="2"/>
-    <circle cx="549" cy="282" r="2"/>
-  </g>
-  <path d="M540 302 C 550 360, 568 440, 596 502" fill="none" stroke="#961914" stroke-width="2.2" stroke-linecap="round"/>
-  <path d="M566 430 C 578 418, 596 414, 610 420 C 602 434, 584 440, 566 430 Z" fill="none" stroke="#961914" stroke-width="1.6" opacity="0.7"/>
-  <path d="M492 352 C 498 410, 522 468, 600 504" fill="none" stroke="#961914" stroke-width="2" stroke-linecap="round"/>
-  <path d="M492 352 C 486 338, 486 324, 492 314 C 498 324, 498 338, 492 352 Z" fill="#B73927" fill-opacity="0.14" stroke="#961914" stroke-width="1.6"/>
+  <!-- table -->
+  <rect x="0" y="612" width="1200" height="188" fill="#C89B3C" opacity="0.07"/>
+  <line x1="0" y1="612" x2="1200" y2="612" stroke="#C89B3C" stroke-width="2" opacity="0.5"/>
 
-  <!-- citrus branch with kumquats -->
-  <g fill="none" stroke="#961914" stroke-linecap="round">
-    <path d="M644 502 C 664 442, 702 392, 756 357 C 800 330, 846 320, 882 324" stroke-width="2.4"/>
-    <path d="M756 357 C 748 338, 738 322, 724 310" stroke-width="1.8"/>
-    <path d="M806 334 C 818 320, 832 310, 848 306" stroke-width="1.8"/>
-    <path d="M706 386 C 702 372, 698 360, 692 348" stroke-width="1.8"/>
-    <path d="M856 322 C 866 324, 876 330, 884 340" stroke-width="1.8"/>
+  <!-- grounded lotus buds, resting on the table line, left -->
+  <g transform="translate(96 531) scale(1.3)" stroke="#C89B3C" opacity="0.85" fill="none" stroke-linecap="round">
+    <path d="M20 56 C 28 40, 28 24, 20 10 C 12 24, 12 40, 20 56 Z" stroke-width="1.6" fill="#C89B3C" fill-opacity="0.10"/>
+    <path d="M44 56 C 50 44, 50 32, 44 22 C 38 32, 38 44, 44 56 Z" stroke-width="1.4" fill="#C89B3C" fill-opacity="0.07"/>
+    <path d="M4 62 C 14 58, 30 58, 58 62" stroke-width="1.6"/>
   </g>
-  <g fill="none" stroke="#961914" stroke-width="1.6" opacity="0.65">
-    <path d="M682 432 C 696 418, 716 412, 734 416 C 726 432, 704 440, 682 432 Z"/>
-    <path d="M742 370 C 754 356, 770 350, 786 354 C 778 368, 758 374, 742 370 Z"/>
-    <path d="M666 452 C 654 440, 638 436, 624 442 C 632 456, 652 462, 666 452 Z"/>
-  </g>
-  <g stroke="#B73927" stroke-width="2" fill="#B73927" fill-opacity="0.12">
-    <circle cx="716" cy="298" r="15"/>
-    <circle cx="856" cy="294" r="13"/>
-    <circle cx="688" cy="334" r="17"/>
-    <circle cx="890" cy="350" r="15"/>
-  </g>
-  <g fill="#C89B3C" opacity="0.55">
-    <path d="M716 281 q 9 -11 21 -8 q -7 11 -21 8 Z"/>
-    <path d="M856 279 q 9 -11 21 -8 q -7 11 -21 8 Z"/>
-    <path d="M688 315 q 9 -11 21 -8 q -7 11 -21 8 Z"/>
-    <path d="M890 333 q 9 -11 21 -8 q -7 11 -21 8 Z"/>
-  </g>
+  <ellipse cx="136" cy="617" rx="44" ry="5" fill="#C89B3C" opacity="0.10"/>
 
-  <!-- floating blossom sprig, mid-left -->
-  <path d="M296 322 C 310 294, 330 274, 354 262" fill="none" stroke="#961914" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-  <g transform="translate(362 254)">
-    <g fill="#B73927" fill-opacity="0.12" stroke="#B73927" stroke-width="1.5">
+  <!-- grounded kumquat sprig, resting on the table line, right -->
+  <g fill="none" stroke="#C89B3C" stroke-width="2" stroke-linecap="round" opacity="0.85">
+    <path d="M1006 611 C 1022 592, 1044 580, 1068 578"/>
+  </g>
+  <circle cx="1032" cy="596" r="13" fill="#C89B3C" fill-opacity="0.14" stroke="#C89B3C" stroke-width="2.2"/>
+  <circle cx="1072" cy="592" r="11" fill="#C89B3C" fill-opacity="0.10" stroke="#C89B3C" stroke-width="1.8" opacity="0.9"/>
+  <path d="M1032 583 q 8 -10 19 -8 q -6 10 -19 8 Z" fill="#C89B3C" opacity="0.8"/>
+  <ellipse cx="1050" cy="617" rx="46" ry="5" fill="#C89B3C" opacity="0.10"/>
+
+  <!-- botanical hairline vines, rooted at the table line, drawn before the
+       medallion so they flow BEHIND the rings (left stem ends under the
+       jewel disc; no unanchored floats) -->
+  <g fill="none" stroke="#C89B3C" stroke-width="1.6" stroke-linecap="round" opacity="0.9">
+    <path d="M428 611 C 400 546, 404 474, 450 424 C 488 382, 534 362, 566 352"/>
+    <path d="M450 424 C 430 400, 424 372, 438 350 C 447 336, 462 332, 474 340"/>
+    <path d="M772 611 C 800 546, 796 474, 750 424 C 712 382, 666 362, 634 352"/>
+    <path d="M750 424 C 770 400, 776 372, 762 350 C 753 336, 738 332, 726 340"/>
+  </g>
+  <g fill="none" stroke="#E8C96A" stroke-width="1.2" stroke-linecap="round" opacity="0.4">
+    <path d="M438 350 C 434 340, 434 330, 440 322"/>
+    <path d="M762 350 C 766 340, 766 330, 760 322"/>
+  </g>
+  <!-- leaves on the vines (almond leaf, shipped-art shape) -->
+  <g fill="#C89B3C" fill-opacity="0.14" stroke="#C89B3C" stroke-width="1.8" stroke-linejoin="round">
+    <path d="M402 566 C 414 552, 432 546, 448 550 C 440 564, 422 570, 402 566 Z"/>
+    <path d="M424 512 C 414 498, 412 480, 422 466 C 434 476, 438 496, 424 512 Z"/>
+    <path d="M452 458 C 458 444, 470 434, 484 432 C 482 446, 470 456, 452 458 Z"/>
+    <path d="M798 566 C 786 552, 768 546, 752 550 C 760 564, 778 570, 798 566 Z"/>
+    <path d="M776 512 C 786 498, 788 480, 778 466 C 766 476, 762 496, 776 512 Z"/>
+    <path d="M748 458 C 742 444, 730 434, 716 432 C 718 446, 730 456, 748 458 Z"/>
+  </g>
+  <!-- kumquat pair hanging from the left vine bend -->
+  <path d="M468 430 C 474 448, 472 466, 462 480" fill="none" stroke="#C89B3C" stroke-width="1.6" stroke-linecap="round" opacity="0.85"/>
+  <circle cx="458" cy="492" r="13" fill="#C89B3C" fill-opacity="0.14" stroke="#C89B3C" stroke-width="2"/>
+  <circle cx="478" cy="500" r="10" fill="#C89B3C" fill-opacity="0.10" stroke="#C89B3C" stroke-width="1.6" opacity="0.9"/>
+  <path d="M458 479 q 8 -10 19 -8 q -6 10 -19 8 Z" fill="#C89B3C" opacity="0.8"/>
+  <!-- lotus bud drooping from the right vine bend -->
+  <path d="M732 430 C 726 448, 728 466, 738 480" fill="none" stroke="#C89B3C" stroke-width="1.6" stroke-linecap="round" opacity="0.85"/>
+  <g stroke="#C89B3C" fill="none" stroke-linejoin="round">
+    <path d="M744 506 C 737 494, 737 478, 744 466 C 751 478, 751 494, 744 506 Z" stroke-width="1.8" fill="#C89B3C" fill-opacity="0.12"/>
+  </g>
+  <!-- blossom crowning the left curl tip, clear of the rings -->
+  <g transform="translate(472 334)">
+    <g fill="#C89B3C" fill-opacity="0.14" stroke="#C89B3C" stroke-width="1.6">
       <ellipse rx="5.5" ry="12" transform="rotate(0) translate(0 -12)"/>
       <ellipse rx="5.5" ry="12" transform="rotate(72) translate(0 -12)"/>
       <ellipse rx="5.5" ry="12" transform="rotate(144) translate(0 -12)"/>
       <ellipse rx="5.5" ry="12" transform="rotate(216) translate(0 -12)"/>
       <ellipse rx="5.5" ry="12" transform="rotate(288) translate(0 -12)"/>
     </g>
-    <circle r="4" fill="#C89B3C"/>
+    <circle r="4" fill="#FFFDF5" opacity="0.85"/>
   </g>
-  <path d="M322 296 C 330 284, 340 278, 350 278 C 348 290, 338 296, 322 296 Z" fill="none" stroke="#B73927" stroke-width="1.5" opacity="0.6"/>
-
-  <!-- gold seal with lotus glyph (no lettering) -->
-  <g>
-    <circle cx="946" cy="566" r="44" fill="#C89B3C" fill-opacity="0.12" stroke="#C89B3C" stroke-width="2.5"/>
-    <circle cx="946" cy="566" r="33" fill="none" stroke="#C89B3C" stroke-width="1.2" opacity="0.7"/>
-    <g fill="none" stroke="#C89B3C" stroke-width="1.6" stroke-linejoin="round">
-      <path d="M946 580 C 940 568, 940 554, 946 544 C 952 554, 952 568, 946 580 Z"/>
-      <path d="M946 580 C 936 572, 929 560, 928 548 C 938 553, 944 564, 946 580 Z"/>
-      <path d="M946 580 C 956 572, 963 560, 964 548 C 954 553, 948 564, 946 580 Z"/>
+  <!-- blossom crowning the right curl tip, clear of the rings -->
+  <g transform="translate(728 334)">
+    <g fill="none" stroke="#C89B3C" stroke-width="1.5" opacity="0.8">
+      <ellipse rx="5" ry="11" transform="rotate(0) translate(0 -11)"/>
+      <ellipse rx="5" ry="11" transform="rotate(72) translate(0 -11)"/>
+      <ellipse rx="5" ry="11" transform="rotate(144) translate(0 -11)"/>
+      <ellipse rx="5" ry="11" transform="rotate(216) translate(0 -11)"/>
+      <ellipse rx="5" ry="11" transform="rotate(288) translate(0 -11)"/>
     </g>
-    <path d="M930 586 L962 586" stroke="#C89B3C" stroke-width="1.6" stroke-linecap="round"/>
+    <circle r="3.5" fill="#E8C96A" opacity="0.85"/>
+  </g>
+
+  <!-- central medallion: gold rings around the luminous sapphire jewel -->
+  <g fill="none" stroke="#C89B3C" stroke-linecap="round">
+    <circle cx="600" cy="372" r="150" stroke-width="1.2" opacity="0.5" stroke-dasharray="2 9"/>
+    <circle cx="600" cy="372" r="122" stroke-width="3"/>
+    <circle cx="600" cy="372" r="108" stroke-width="1.4" opacity="0.85"/>
+  </g>
+  <!-- gold hairline ring seating the jewel -->
+  <circle cx="600" cy="372" r="92" fill="none" stroke="#E8C96A" stroke-width="1.6" opacity="0.95"/>
+  <circle cx="600" cy="372" r="84" fill="url(#t1jewel)"/>
+  <!-- porcelain glint + bright-gold spark: the jewel's light -->
+  <ellipse cx="578" cy="344" rx="20" ry="10" transform="rotate(-24 578 344)" fill="#FFFEF1" opacity="0.28"/>
+  <circle cx="575" cy="341" r="2.5" fill="#E8C96A" opacity="0.8"/>
+  <!-- lotus glyph over the core, brightest hairline gold -->
+  <g fill="none" stroke="#E8C96A" stroke-width="2" stroke-linejoin="round">
+    <path d="M600 420 C 592 400, 592 376, 600 356 C 608 376, 608 400, 600 420 Z"/>
+    <path d="M600 420 C 584 408, 571 391, 569 371 C 585 378, 594 398, 600 420 Z" opacity="0.9"/>
+    <path d="M600 420 C 616 408, 629 391, 631 371 C 615 378, 606 398, 600 420 Z" opacity="0.9"/>
+  </g>
+  <path d="M578 427 L622 427" stroke="#E8C96A" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+  <g fill="#FFFDF5">
+    <circle cx="600" cy="350" r="2.8"/>
+    <circle cx="592" cy="358" r="1.8"/>
+    <circle cx="608" cy="358" r="1.8"/>
   </g>
 </svg>

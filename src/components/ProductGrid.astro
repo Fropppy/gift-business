@@ -3,6 +3,7 @@ import type { Product } from '../utils/catalog';
 import { categories } from '../utils/catalog';
 import ProductCard from './ProductCard.astro';
 import GiftFinder from './GiftFinder.astro';
+import LineIcon from './LineIcon.astro';
 import { fold } from '../utils/search';
 import occasions from '../data/occasions.json';
 import { site } from '../utils/site';
@@ -76,7 +77,7 @@ const searchIndex = products.map((p) => ({
         <span class="filter-label">Dịp tặng:</span>
         {occasions.map((o) => (
           <button class="chip" data-filter-tag={o.tag}>
-            <span aria-hidden="true">{o.icon}</span> {o.name}
+            <span aria-hidden="true"><LineIcon id={o.tag} /></span> {o.name}
           </button>
         ))}
       </div>
@@ -84,7 +85,7 @@ const searchIndex = products.map((p) => ({
         <button class="chip chip--active" data-filter-cat="">Tất cả</button>
         {categories.map((c) => (
           <button class="chip" data-filter-cat={c.slug}>
-            <span aria-hidden="true">{c.icon}</span> {c.name}
+            <span aria-hidden="true"><LineIcon id={c.slug} /></span> {c.name}
           </button>
         ))}
       </div>

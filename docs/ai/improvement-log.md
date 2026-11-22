@@ -349,3 +349,68 @@ Mark promoted entries with → where they landed.
 - Promoted to → rule of thumb: subset claims get checked against the
   Google Fonts CSS API's vietnamese unicode-range block, and any
   palette change is gate-validated on a dry run before it ships.
+
+## 2026-11-22 — Palette validated by dry-run gates, not spot math; the fourth-theme probe priced the append-layer choice
+
+- Observation: the Stage S1 special-layer palette was validated BEFORE
+  implementation by dry-running the real `npm run check:contrast` in
+  three scratch copies — direction A (60 pairs, exit 0), direction B
+  (60 pairs, exit 0), and the fourth-theme probe (80 pairs across 4
+  themes, exit 0) — with the judge re-running every exit rather than
+  inheriting the verdict engineers' claims. The probe also produced
+  the corollary the mechanism decision turned on: a page-wide navy
+  TOKEN theme is feasible only on a near-black #010409 ground — the
+  #10233f sketch ground is mathematically impossible for the gate's
+  binding pairs (white-on-`--tet` and `--tet`-on-bg cross at
+  luminance ≤ 0.00185) — and even there only with a razor-thin
+  `--tet` #ca4e2b (4.53:1 on both binding pairs; pass margin ≈ 0.03
+  in ratio units). That permanent liability, plus the ask-first
+  fourth-theme red line, is the recorded reason the tet-scoped append
+  layer (mechanism c) was chosen and the probe held in reserve.
+  Fraunces was re-verified against the css2 API with a full Chrome UA
+  (one `/* vietnamese */` block, roman + italic; axes
+  `ital,opsz,wght@0,9..144,100..900;1,9..144,100..900`; HTTP 200),
+  per the 2026-11-21 method entry.
+- Change: Stage S1 landed in the working tree — the porcelain swap
+  (#fbeae6 → #fffef1, same-line, 12 tet overrides stay 12), the
+  special-layer append block (navy hero + collection band, validated
+  light inks, gold role inversion, decor-only sapphire), Fraunces in
+  the single css2 request, hero-tet-1/2/tile.svg recomposed (same
+  filenames/aspect), and the hộ-mệnh band lead — plus the docs set
+  (ADR-0012, design-language §13, tet2027-rollback extension). No
+  gate edits. The real-repo four-gate suite ran on the landed tree
+  this session: `npm run build`, `npm run check:contrast` (60 pairs,
+  exit 0), `npm run check:output`, `npm run check:docs`.
+- Promoted to → docs/design-language.md §13 (the validated palette,
+  the dark-fields-stay-moments rule, the sapphire decor-only
+  discipline with its approximate-hex provenance note) and ADR-0012;
+  the dry-run-before-implement rule was already promoted on
+  2026-11-21 — this entry is its second application, extended with
+  the probe lesson that a mechanism choice can be priced
+  deterministically before any code moves.
+
+## 2026-11-22 — Chip/card emoji icons swapped to the LineIcon line-art set
+
+- Observation: the chip/card icon slots rendered the emoji strings
+  stored in the data files' `icon` fields straight into markup
+  (occasions.json entries keyed by `tag`, categories.json by `slug`),
+  while the binding ornament convention (design-language §12,
+  2026-11-21) already required decorative SVG paths — system emoji
+  fonts render glyphs on their own terms, with no theme tinting and no
+  font guarantee (the U+2726 lesson).
+- Change: src/components/LineIcon.astro ships the 19-id line-art set
+  (12 occasion tags + 7 category slugs on one 24×24 grid, hairline
+  botanical strokes in the hero art's language) and the four render
+  sites swap to it — OccasionStrip.astro:35, CategoryGrid.astro:24,
+  ProductGrid.astro:80 and :88 — keyed by the data's own tag/slug
+  values. No data-schema change: the JSON `icon` fields stay in place
+  untouched; rendering simply stops reading them. Decorative-SVG
+  discipline applied per the §12 convention on every glyph: aria-hidden
+  + focusable="false", stroke/fill on currentColor, SVG paths only, no
+  title/desc (the visible Vietnamese label carries the meaning). The
+  remaining inline text emoji (footer contact lines, signature, PDP
+  service bullets) are explicitly out of scope — inline prose
+  decoration, not card-scale iconography.
+- Promoted to → docs/design-language.md §14 (the icon record,
+  extended this session with the icon-style and scope-limit
+  paragraphs); the ornament convention itself stays §12's.

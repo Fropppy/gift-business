@@ -2,6 +2,7 @@
 import occasions from '../data/occasions.json';
 import { asset } from '../utils/asset';
 import SectionHead from './SectionHead.astro';
+import LineIcon from './LineIcon.astro';
 
 // SEO suite — occasions with a matching landing page link there; the rest
 // keep the ?tag= filter deep link (self-canonical on /products/).
@@ -31,7 +32,7 @@ const LANDING_BY_TAG: Record<string, string> = {
             data-months={(o.months ?? []).join(' ')}
           >
             <span class="occ-ico" aria-hidden="true">
-              {o.icon}
+              <LineIcon id={o.tag} />
             </span>
             <span>
               <strong>{o.name}</strong>
