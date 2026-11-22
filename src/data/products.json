@@ -632,6 +632,94 @@
       ],
       "thumbnail": "/images/products/set-qua-trung-thu-sang-trong.svg",
       "inStock": true
+    },
+    {
+      "id": "prod_nm_017",
+      "slug": "cat-tuong-an-khang",
+      "name": "Cát Tường An Khang",
+      "subtitle": "Tết Đinh Mùi 2027",
+      "category": "gio-qua-tet",
+      "description": "Gần gũi mà vẫn giữ trọn nét tinh tế của nghệ thuật thủ công, Cát Tường An Khang mang đến làn gió mới nhẹ nhàng, hiện đại cho mùa Tết. Sự hòa quyện giữa vị trà thơm và các loại hạt, mứt tốt cho sức khỏe là lời chúc bình an thiết thực nhất gửi đến những người trân quý.",
+      "contents": [
+        "Hạt điều bơ và mật ong",
+        "Long nhãn ôm sen",
+        "Hạnh nhân rang bơ",
+        "Cam lát sấy dẻo",
+        "Trà"
+      ],
+      "badge": null,
+      "tags": [
+        "tet",
+        "tet-2027",
+        "doanh-nghiep",
+        "bieu-sep",
+        "tri-an"
+      ],
+      "personalization": {
+        "enabled": true,
+        "type": "handwritten-card",
+        "label": "Lời chúc viết trên thiệp",
+        "maxChars": 120
+      },
+      "price": {
+        "amount": 665000,
+        "currency_code": "vnd"
+      },
+      "options": [
+        {
+          "name": "Màu",
+          "values": [
+            "Đỏ",
+            "Xanh navy"
+          ]
+        }
+      ],
+      "variants": [],
+      "images": [
+        "/images/products/cat-tuong-an-khang.jpg"
+      ],
+      "thumbnail": "/images/products/cat-tuong-an-khang.jpg",
+      "inStock": true
+    },
+    {
+      "id": "prod_nm_018",
+      "slug": "thanh-mai-tu-quy",
+      "name": "Thanh Mai Tứ Quý",
+      "subtitle": "Tết Đinh Mùi 2027",
+      "category": "gio-qua-tet",
+      "description": "Tôn vinh vẻ đẹp thanh cao của loài hoa báo xuân về, Thanh Mai Tứ Quý là sự giao thoa hoàn mỹ giữa kỹ thuật chế tác hiện đại và bảng màu thời thượng. Bốn hộp nhỏ hình lục giác như bốn búp hoa, nằm trong hộp quà chạm hoa xuân tinh xảo. Đại diện cho bốn mùa trong năm đều bình an, xuân hạ thu đông đều tươi tốt",
+      "contents": [
+        "Hạt điều bơ và mật ong",
+        "Long nhãn ôm sen",
+        "Mứt vỏ bưởi",
+        "Cam lát sấy dẻo"
+      ],
+      "badge": null,
+      "tags": [
+        "tet",
+        "tet-2027",
+        "doanh-nghiep",
+        "bieu-sep",
+        "tri-an",
+        "gia-dinh"
+      ],
+      "personalization": {
+        "enabled": true,
+        "type": "handwritten-card",
+        "label": "Lời chúc viết trên thiệp",
+        "maxChars": 120
+      },
+      "price": {
+        "amount": 495000,
+        "currency_code": "vnd"
+      },
+      "options": [],
+      "variants": [],
+      "images": [
+        "/images/products/thanh-mai-tu-quy.jpg"
+      ],
+      "thumbnail": "/images/products/thanh-mai-tu-quy.jpg",
+      "inStock": true
     }
   ]
 }

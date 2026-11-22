@@ -89,7 +89,7 @@ in `src/data/products.json` point BOTH `images[]` and `thumbnail` at the
 placeholder (`src/utils/catalog.ts:71-74`), so the site switches only when
 the JSON points at the new file — dropping the photo in alone does
 nothing. Keep each file modest (~under 300 KB) for mobile data. The exact
-16 filenames are pre-filled in the worksheet below. (Proposal P2-1;
+18 filenames are pre-filled in the worksheet below. (Proposal P2-1;
 per-product share images can follow from the same shoot.)
 
 Hero art works the same way but self-switching: replace
@@ -130,7 +130,7 @@ reliable discovery and measurement path.
 
 ## Product field rules
 
-One file — `src/data/products.json` — drives everything about the 16
+One file — `src/data/products.json` — drives everything about the 18
 products. Rules per field, before you fill in the worksheet:
 
 | Field | Rule | Why / where it lands |
@@ -138,14 +138,14 @@ products. Rules per field, before you fill in the worksheet:
 | `slug` | Never change it. | It IS the page URL (`/products/<slug>/`) and a sitemap row (`scripts/generate-sitemap.mjs` builds the URL list from it). A changed slug silently moves the page and 404s the old URL. |
 | `name` | Keep the buyer's search words in it — "Giỏ quà Tết…", "Giỏ trái cây…", "quà biếu sếp". ≤ ~60 chars. | It becomes the page title, the `h1`, the image alt text, and the Product JSON-LD name. |
 | `subtitle` | One short positioning line. | Shows in the detail page's "Tặng ai" story row and on cards; also leads the meta description (`src/pages/products/[slug].astro:37-38`). |
-| `description` | UNIQUE across all 16, ~120–160 characters, your shop voice. | Card text, product-page body copy, and the JSON-LD description Google reads. Duplicate boilerplate across products wastes all three. |
+| `description` | UNIQUE across all 18, ~70–160 characters, your shop voice (the Tết Đinh Mùi 2027 brochure narratives run longer by design; the meta description clamps to 160 chars). | Card text, product-page body copy, and the JSON-LD description Google reads. Duplicate boilerplate across products wastes all three. |
 | `contents[]` | List exactly what is really in the basket. | Renders in the detail page's "Bên trong giỏ" story row as "Gồm N món: món này · món kia". |
 | `price.amount` | Integer VND only: `850000`, never `850.000` or `850.000₫`. `currency_code` stays `"vnd"`. | `formatVnd()` renders 850000 → 850.000₫ (`src/utils/catalog.ts:66-68`); the JSON-LD Offer also needs the raw number. |
 | `inStock` | `true` / `false`. | Flips the JSON-LD Offer availability InStock/OutOfStock (`src/pages/products/[slug].astro:58`). |
 | `images[]` + `thumbnail` | Point BOTH at `/images/products/<slug>.jpg`. | `productImage()` resolves thumbnail → images[0] → placeholder (`src/utils/catalog.ts:71-74`). |
 | (alt text) | Not a JSON field — it is auto-derived as `Ảnh minh họa: <name>` on the detail page and every card (`src/pages/products/[slug].astro:114`, `src/components/ProductCard.astro:25`). | A descriptive name IS the alt text; write names that describe the actual basket. |
 
-## The 16-product worksheet
+## The 18-product worksheet
 
 Fill in the "real" columns (print or copy this table), then apply them to
 `src/data/products.json` in one sitting — or hand the filled table to an
@@ -171,10 +171,12 @@ agent. Placeholder values are copied verbatim from the current file.
 | 14 | `gio-qua-khai-truong-tai-loc` | Giỏ quà khai trương tài lộc | | 950.000₫ | | `gio-qua-khai-truong-tai-loc.jpg` |
 | 15 | `set-qua-tan-gia-sum-vay` | Set quà tân gia sum vầy | | 550.000₫ | | `set-qua-tan-gia-sum-vay.jpg` |
 | 16 | `set-qua-trung-thu-sang-trong` | Set quà Trung Thu sang trọng | | 890.000₫ | | `set-qua-trung-thu-sang-trong.jpg` |
+| 17 | `cat-tuong-an-khang` | Cát Tường An Khang | | 665.000₫ | | `cat-tuong-an-khang.jpg` |
+| 18 | `thanh-mai-tu-quy` | Thanh Mai Tứ Quý | | 495.000₫ | | `thanh-mai-tu-quy.jpg` |
 
 ### Descriptions
 
-| slug | Description — placeholder | Description — real (unique, ~120–160 chars) |
+| slug | Description — placeholder | Description — real (unique, ~120–160 chars; brochure narratives may run longer) |
 | --- | --- | --- |
 | `gio-trai-cay-nhap-khau-cao-cap` | Nho Mỹ, cherry, việt quất, kiwi xanh… tuyển quả tươi, gói mica màu đỏ sang trọng, hợp biếu sếp và đối tác. | |
 | `gio-trai-cay-sach-viet-nam-cho-gia-dinh` | Ổi ruột đỏ, vú sữa, hồng giòn, xoài cát, táo… quà biếu gia đình vừa đẹp vừa thực. | |
@@ -192,6 +194,8 @@ agent. Placeholder values are copied verbatim from the current file.
 | `gio-qua-khai-truong-tai-loc` | Rượu vang, trà, bánh kèm bình hoa khai trương, chúc thăng hoa, phát tài phát lộc. | |
 | `set-qua-tan-gia-sum-vay` | Trà, hoa khô, nến thơm và rượu vang nhỏ… món quà ấm cúng cho nhà mới. | |
 | `set-qua-trung-thu-sang-trong` | Bộ bánh trung cao cấp 4–6 hộp kèm trà và rượu vang, đóng giỏ biếu khách hàng và đối tác dịp Trung Thu. | |
+| `cat-tuong-an-khang` | Gần gũi mà vẫn giữ trọn nét tinh tế của nghệ thuật thủ công, Cát Tường An Khang mang đến làn gió mới nhẹ nhàng, hiện đại cho mùa Tết. Sự hòa quyện giữa vị trà thơm và các loại hạt, mứt tốt cho sức khỏe là lời chúc bình an thiết thực nhất gửi đến những người trân quý. | |
+| `thanh-mai-tu-quy` | Tôn vinh vẻ đẹp thanh cao của loài hoa báo xuân về, Thanh Mai Tứ Quý là sự giao thoa hoàn mỹ giữa kỹ thuật chế tác hiện đại và bảng màu thời thượng. Bốn hộp nhỏ hình lục giác như bốn búp hoa, nằm trong hộp quà chạm hoa xuân tinh xảo. Đại diện cho bốn mùa trong năm đều bình an, xuân hạ thu đông đều tươi tốt | |
 
 ## Where each edit takes effect
 
@@ -232,3 +236,15 @@ four gates as the required `check` CI context.
 Related: [operations.md → Replacing placeholder content](operations.md#replacing-placeholder-content)
 keeps the shorter all-audiences placeholder table;
 [architecture.md → Site](architecture.md#site) explains the data layer.
+
+## 2026-11-21 — Tết Đinh Mùi 2027 collection start
+
+Two non-wine SKUs went live: `cat-tuong-an-khang` (665.000₫) and
+`thanh-mai-tu-quy` (495.000₫) — rows 17–18 of the worksheet above; the
+guide's counts moved 16 → 18 accordingly. Both carry the new `tet-2027`
+tag; the collection surface is the homepage band ("Bộ sưu tập Tết Đinh Mùi
+2027") plus the filtered catalog at `/products/?tag=tet-2027` — no new
+route or page. The collection's wine-bearing SKUs stay parked pending your
+written compliance sign-off — one pointer line: Luật Phòng, chống tác hại
+của rượu, bia 44/2019 · Luật Quảng cáo 2012 (quảng cáo đồ uống ≥15° bị
+cấm) · Nghị định 24/2020.

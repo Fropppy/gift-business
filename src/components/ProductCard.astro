@@ -35,6 +35,7 @@ const category = categoryBySlug(product.category);
       <p class="card-contents">Gồm {product.contents.length} món</p>
     )}
     <div class="card-foot">
+      <div class="price-rule" aria-hidden="true"><svg class="price-rule__star" viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="10" height="10"><path fill="currentColor" d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z"></path></svg></div>
       <span class="price">{formatVnd(product.price.amount)}</span>
       <a
         class="card-zalo"

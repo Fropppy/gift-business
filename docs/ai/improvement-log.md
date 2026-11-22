@@ -320,3 +320,32 @@ Mark promoted entries with → where they landed.
   (dispatchEvent + synchronous click in one page.evaluate), and a
   post-navigation locator timeout gets a computed-style probe before it is
   treated as a missing element.
+
+## 2026-11-21 — Font-subset claims come from blogs, not the CSS API; palette validated by the real gate on a dry run
+
+- Observation: while picking type for the Tết Đinh Mùi 2027 recast,
+  blog listicles claimed Cinzel and Suranna ship Vietnamese subsets —
+  wrong. Font language support must be verified against the Google
+  Fonts CSS API itself (fetch the css2 URL with a full browser UA and
+  grep for the `/* vietnamese */` `@font-face` block and its
+  unicode-range), never against third-party roundups; a bare
+  `Mozilla/5.0` UA gets the legacy TTF response without subsets (the
+  2026-10-06 preamble in design-language.md already caught that trap
+  once). Separately, the recast's brochure palette was validated by
+  running the real contrast gate (`npm run check:contrast`, exit 0,
+  60 pairs) against a dry-run copy of the token values BEFORE
+  implementation — spot arithmetic on a few pairs would have missed
+  whichever of the 60 the eye doesn't think to check.
+- Change: docs (ADR-0011, design-language §12 + tet material,
+  tet2027-rollback runbook) AND the recast's first code slice in the
+  same tree — tet token value swaps plus the appended tet-scoped
+  ornament block in global.css (tet-divider, price-rule, title caps;
+  base and trung-thu render pixel-identical), the pre-paint
+  hero-token swap in BaseLayout.astro (old onload swap flashed after
+  first paint), .tet-divider markup in SectionHead.astro and
+  .price-rule markup in ProductCard.astro + products/[slug].astro,
+  and three new hero-tet-*.svg art files wired through the hero
+  probe; no gate edits.
+- Promoted to → rule of thumb: subset claims get checked against the
+  Google Fonts CSS API's vietnamese unicode-range block, and any
+  palette change is gate-validated on a dry run before it ships.

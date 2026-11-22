@@ -95,23 +95,23 @@
    --motif-image at the hoa-mai.svg watermark (base-prefixed from JS so
    the public/ URL survives the /gift-business subpath). */
 [data-theme='tet'] {
-  --bg: #fdf3e7;
-  --primary: #c0272d;        /* white ink 5.88:1 */
-  --primary-deep: #a11f26;   /* white ink 7.67:1 */
-  --primary-ink: #ffffff;
+  --bg: #fbeae6;             /* primary ink on bg 7.36:1; cocoa ink 13.51:1 */
+  --primary: #961914;        /* white ink 8.59:1 */
+  --primary-deep: #7c130f;   /* white ink 10.73:1 */
+  --tet: #b73927;            /* price ink on bg 4.97:1, white badge fill 5.79:1 */
   --accent: #c89b3c;         /* decorative gold: seals, ribbons, borders */
-  --accent-strong: #7a611f;  /* gold AS TEXT on #fdf3e7: 5.38:1. NOT #b0872f —
-                                that is 3.01:1 as text here; it is the fill
+  --accent-strong: #7a611f;  /* gold AS TEXT on #fbeae6: 5.06:1. NOT #b0872f —
+                                that is 2.84:1 as text here; it is the fill
                                 value below. */
-  --accent-deep: #6a541d;    /* gold text hover on #fdf3e7: 6.61:1 */
+  --accent-deep: #6a541d;    /* gold text hover on #fbeae6: 6.21:1 */
   --accent-fill: #b0872f;    /* .btn--accent fill, cocoa ink 4.76:1 */
   --accent-fill-hover: #c89b3c; /* Hover fill is LIGHTER here (cocoa ink 6.16:1).
                                 In a dark-ink theme a lighter fill raises
                                 contrast; the base-theme instinct (darker
                                 hover) would lower it. */
   --accent-ink: #2b2118;     /* dark ink on gold fills — white on gold fails AA */
-  --border: #ebd9c3;
-  --border-strong: #dec9ae;
+  --border: #ecd9c9;
+  --border-strong: #dfc7b3;
 }
 
 /* Trung Thu variant (auto September + manual any time): moonlit paper +
@@ -2425,3 +2425,114 @@ a.channel:hover { border-color: var(--accent); box-shadow: var(--shadow-soft); }
 }
 
 .quiz-actions .btn { min-height: 44px; }
+
+/* ============================================================
+   Tết recast stage 1a (2026-11-21) — plan v2 §1
+   (out/tet2027-overhaul-plan.md). APPEND-ONLY per the :1504
+   contract: lines 1-1502 untouched; the tet token block (:97-115)
+   took same-line value swaps only — still 12 overrides, same line
+   count, :root still the 56 documented tokens. Everything below is
+   tet-scoped; both ornaments default to display:none so base and
+   trung-thu render pixel-identical. Star markup is aria-hidden
+   inline SVG with fill="currentColor", shipped by the components —
+   the ✦ never ships as a text glyph (U+2726 is in neither Playfair
+   Display nor Be Vietnam Pro; a text fallback would come from a
+   system or emoji font). No motion, no new :root tokens.
+   ============================================================ */
+
+/* Hidden outside the tet theme; the [data-theme='tet'] rules below
+   win the cascade by specificity and appended-last position
+   (:1504-1516 region contract). */
+.tet-divider,
+.price-rule { display: none; }
+
+/* Rule–star–rule under the section title (SectionHead.astro ships the
+   two .tet-divider__rule spans and the 14×14 .tet-divider__star SVG).
+   Hairlines use the theme border token (the new rose hairline in tet);
+   the star takes the gold-as-text token (5.06:1 on bg). No margins
+   collapse surprises: it is a flex row, not a block. */
+[data-theme='tet'] .tet-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin: var(--space-3) 0;
+}
+
+[data-theme='tet'] .tet-divider__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--border-strong);
+}
+
+[data-theme='tet'] .tet-divider__star {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--accent-strong);
+}
+
+/* Price bracket above .price (tet resolves .price to --tet via :971).
+   The markup is one div holding only the star SVG, so the short
+   hairline is a pseudo-element. flex-basis 100% plus wrap on the two
+   parent rows (.card-foot :942-949, .detail-price :1307-1312 — both
+   frozen, so wrap is set tet-scoped here, never by editing them)
+   drops the bracket onto its own line above the price; the parents'
+   row-gap (0.5rem / 0.7rem) supplies the spacing. */
+[data-theme='tet'] .price-rule {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-basis: 100%;
+  color: var(--tet);
+}
+
+[data-theme='tet'] .price-rule__star {
+  flex: none;
+  width: 10px;
+  height: 10px;
+}
+
+[data-theme='tet'] .price-rule::after {
+  content: '';
+  flex: none;
+  width: 2rem;
+  height: 1px;
+  background: currentColor;
+}
+
+[data-theme='tet'] .card-foot,
+[data-theme='tet'] .detail-price { flex-wrap: wrap; }
+
+/* Caps treatment on section titles, ≥700px only (house breakpoint —
+   the plan's 720px figure is realized at the file's own 700 step).
+   The source text stays mixed case so screen readers announce it
+   correctly (WCAG technique C22 — presentation separated from
+   content via CSS). NEVER reduce line-height here: the shared
+   heading rule (:168-174, line-height 1.2) stays untouched because
+   Vietnamese stacked diacritics (Ẳ, Ặ, Ồ) need the vertical room. */
+@media (min-width: 700px) {
+  [data-theme='tet'] .section-head h2 {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+}
+
+/* ============================================================
+   2026-11-21 — APPENDED for the Tết Đinh Mùi 2027 homepage band
+   (plan v2 stage 2). Additive only: no pre-existing line above is
+   edited, and .tet-band styles nothing but its own background.
+   Markup: <section class="section tet-band"> in src/pages/index.astro
+   (between #gio-noi-bat and the Steps section).
+
+   The band is seasonal CONTENT, not theme-scoped, so it must be
+   tet-visible in EVERY theme. Tokens only: --tet is defined at base
+   :32 and tet :101 (trung-thu inherits base), --bg at base :14,
+   tet :98, trung-thu :121 — so the 6% wash stays light in all
+   themes and body/muted text on it keeps AA contrast (gate pairs,
+   scripts/check-contrast.mjs:84+, are token-level and unaffected
+   by this component rule).
+   ============================================================ */
+.tet-band {
+  background: color-mix(in srgb, var(--tet) 6%, var(--bg));
+}

@@ -19,6 +19,7 @@ One question → one file. Links, never summaries.
 | Is the repo clean security-wise? Baseline, seals, dependabot history? | [docs/security-baseline.md](docs/security-baseline.md) |
 | How does the memory system work? | [docs/ai/memory-system.md](docs/ai/memory-system.md) |
 | Design-system rationale (tokens, themes, WCAG)? | [docs/design-language.md](docs/design-language.md) |
+| How do I roll back the Tết Đinh Mùi 2027 dressing if it regresses live? | [docs/tet2027-rollback.md](docs/tet2027-rollback.md) |
 | Full platform-comparison evidence behind ADR-0001? | [docs/research/ecommerce-platform-research.md](docs/research/ecommerce-platform-research.md) |
 | How to set up the Apps Script webhook? | [apps-script/SETUP.md](apps-script/SETUP.md) |
 | What has been learned, incrementally? | [docs/ai/improvement-log.md](docs/ai/improvement-log.md) |
@@ -29,7 +30,7 @@ One question → one file. Links, never summaries.
 | Command | Purpose |
 | --- | --- |
 | `npm run dev` | Local dev server (http://localhost:4321/gift-business/). |
-| `npm run build` | Build the static site (24 pages) into dist/. |
+| `npm run build` | Build the static site (26 pages) into dist/. |
 | `npm run check:contrast` | WCAG gate: token pairs per theme, rest + hover + focus ring. |
 | `npm run check:output` | dist/ artifact assertions — run AFTER `npm run build`. |
 | `npm run check:docs` | Docs gate: index completeness, links, sections, budgets, ADR/log format. |
